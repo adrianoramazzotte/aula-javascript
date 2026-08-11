@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Módulo 1 · Introdução ao JavaScript — Desenvolvimento em JavaScript</title>
+<meta name="description" content="Fundamentos do JavaScript: história da linguagem, sintaxe, tipos de dados, variáveis e operadores aritméticos, de comparação e lógicos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@100..900&family=JetBrains+Mono:wght@400..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23f7df1e'/><text x='50' y='69' font-family='Helvetica,Arial' font-size='46' font-weight='bold' text-anchor='middle' fill='%2314171d'>JS</text></svg>">
+</head>
+<body>
+
+<div id="progress"></div>
+
+<header class="topbar">
+  <div class="topbar__in">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">JS</span>
+      <span class="brand__txt">
+        <span class="brand__t">Desenvolvimento em JavaScript</span>
+        <span class="brand__s">Unidade 1</span>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="index.html">Início</a>
+      <a href="modulo-1.html" aria-current="page">Módulo 1</a>
+      <a href="modulo-2.html">Módulo 2</a>
+      <a href="modulo-3.html">Módulo 3</a>
+      <a href="modulo-4.html">Módulo 4</a>
+      <a href="referencias.html">Referências</a>
+    </nav>
+    <button class="iconbtn" data-theme-toggle type="button" aria-label="Alternar tema claro/escuro" title="Alternar tema">
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="hero__eyebrow">Módulo 1</span>
+  <h1>Introdução ao JavaScript</h1>
+  <p class="hero__lede">Neste módulo, você conhecerá os fundamentos dessa linguagem: sua história, sua sintaxe, os tipos de variáveis e os operadores que sustentam toda a lógica de um programa.</p>
+  <div class="hero__meta">
+    <span class="chip chip--accent">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 1.9"/></svg>
+      51 minutos
+    </span>
+    <span class="chip">Sintaxe</span>
+    <span class="chip">Tipos de dados</span>
+    <span class="chip">Variáveis</span>
+    <span class="chip">Operadores</span>
+  </div>
+</section>
+<div class="rule"><hr></div>
+
+<div class="shell">
+  <main class="doc">
+
+    <h2 id="introducao"><span class="num">Bloco 01</span>Introdução</h2>
+    <p class="lead">Olá, estudante!</p>
+    <p>Nos dias atuais, o uso de aplicações web se tornou o padrão para grande parte dos sistemas empresariais, e isso se deve à facilidade de implementação desse tipo de sistema, à interoperabilidade e à fácil adaptação dos colaboradores, uma vez que o acesso é feito de maneira padronizada por navegadores web (<em>browsers</em>).</p>
+    <p>Nesse contexto, a necessidade de desenvolvedores de aplicações web proporcionou uma imensa demanda de profissionais de tecnologia da informação com conhecimento nas tecnologias web, como linguagens de marcação, de estilos e de programação. O JavaScript se enquadra nesta última categoria, sendo considerada uma linguagem <strong>vital para o desenvolvimento de sistemas dinâmicos e interativos</strong>.</p>
+    <p>Nos últimos anos, o JavaScript despontou como uma das principais linguagens de programação, com amplas aplicações em diversas áreas. Pronto para adentrar no mundo do desenvolvimento web? Então, vamos lá!</p>
+
+    <div class="note">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
+        O que você vai dominar
+      </div>
+      <p>Ao final deste módulo você saberá executar um script JavaScript, declarar variáveis, reconhecer os tipos de dados da linguagem e combinar operadores aritméticos, de comparação e lógicos para construir expressões.</p>
+    </div>
+
+    <h2 id="tipos-de-dados"><span class="num">Bloco 02</span>Tipos de dados e variáveis</h2>
+    <p>JavaScript é uma linguagem de programação usada em aplicações web e considerada uma linguagem de <em>scripts</em>, <strong>interpretada</strong>, com <strong>tipagem dinâmica e fraca</strong> e com suporte à orientação a objetos (MARIANO; DE MELO-MINARDI, 2017). Além disso, ela possui uma sintaxe simples, o que contribuiu para que uma ampla comunidade de desenvolvedores se formasse. Em geral, JavaScript é utilizada em sinergia com as linguagens HTML e CSS para o desenvolvimento de <em>websites</em> e outros tipos de aplicações web (FLANAGAN, 2011).</p>
+    <p>A princípio, a linguagem JavaScript foi criada para ser executada em ambiente <em>client-side</em>, ou seja, a execução era feita diretamente nos navegadores web dos usuários. Ela surgiu como um complemento para as linguagens que executavam em <em>back-end</em> — diretamente nos servidores web remotos —, trazendo a possibilidade de páginas mais interativas. Recentemente, ferramentas como o <strong>Node.js</strong> têm permitido a execução do JavaScript também em ambiente <em>back-end</em>, o que tem ampliado ainda mais a popularidade da linguagem.</p>
+
+    <h3>Uma breve história do JavaScript</h3>
+    <p>A linguagem JavaScript foi proposta por <strong>Brendan Eich</strong> em meados dos anos 1990, visando torná-la uma linguagem de <em>scripts</em> para ser executada no navegador Netscape. A priori, a linguagem foi chamada de <strong>LiveScript</strong>, mas depois foi renomeada para JavaScript, uma vez que a empresa Netscape trabalhava em colaboração com a Sun Microsystems (empresa que mantinha a linguagem Java).</p>
+    <p>A escolha do nome foi apenas uma jogada de marketing para aproveitar um pouco da popularidade do Java. Entretanto, uma coisa deve ficar clara: <strong>Java e JavaScript não são a mesma coisa!</strong> JavaScript é uma linguagem criada para ser executada em navegadores, enquanto Java é uma linguagem compilada, interpretada em máquina virtual.</p>
+
+    <figure>
+      <img src="img/fig01-java-vs-js.jpg" alt="Diagrama mostrando que JavaScript é diferente de Java, e que JavaScript é equivalente a JS ou ECMAScript.">
+      <figcaption>
+        <b>Figura 1</b> — Java e JavaScript (JS) são duas linguagens de programação distintas. Ao pronunciar o nome do JavaScript de forma reduzida, opte pela sigla <strong>JS</strong> e nunca por chamá-lo de Java. Muitas vezes, JavaScript e ECMAScript (ES) são usados como sinônimos, apesar de ECMAScript ser uma especificação do padrão web, enquanto JavaScript é uma das possíveis implementações.
+        <span class="src">Fonte: elaborada pelo autor.</span>
+      </figcaption>
+    </figure>
+
+    <p>Entre 1996 e 1997, JavaScript foi adotada pela <strong>ECMA</strong> (<em>European Computer Manufacturers Association</em>), uma associação internacional responsável pela padronização de especificações web. A partir de então, surgiu a denominação <strong>ECMAScript</strong> para se referir à especificação padrão da linguagem JavaScript publicada pela norma <strong>ECMA-262</strong>. Desde então, JavaScript passou a ser adotado pela maior parte dos desenvolvedores de navegadores de internet, inclusive a Microsoft, que possuía sua própria linguagem de <em>scripts</em> na época.</p>
+
+    <h3>Executando JavaScript</h3>
+    <p>JavaScript pode ser executado a partir de um navegador web, como Chrome, Firefox, Edge, Opera, Safari e até mesmo o extinto Internet Explorer. A maior parte dos navegadores fornece ferramentas para edição de código JavaScript diretamente do navegador. Por exemplo: o navegador Google Chrome fornece um console de edição na ferramenta de inspecionar.</p>
+
+    <figure>
+      <img src="img/fig02-console-chrome.jpg" alt="Menu de contexto do Chrome com a opção Inspecionar e o painel Console com código JavaScript sendo executado.">
+      <figcaption>
+        <b>Figura 2</b> — Console de edição do Chrome. Pode ser aberto clicando com o botão direito, em “Inspecionar” e, depois, na aba “Console” (ou pressionando <kbd>F12</kbd>). O código JavaScript pode ser executado diretamente no console.
+        <span class="src">Fonte: elaborada pelo autor.</span>
+      </figcaption>
+    </figure>
+
+    <p>Pode-se, ainda, editar código em JavaScript usando uma IDE, como o <strong>VSCode</strong> — Visual Studio Code (<a href="https://code.visualstudio.com" target="_blank" rel="noopener">code.visualstudio.com</a>) — ou o <strong>Sublime Text</strong> (<a href="https://www.sublimetext.com" target="_blank" rel="noopener">sublimetext.com</a>).</p>
+
+    <figure>
+      <img src="img/fig03-vscode.jpg" alt="Tela do editor VSCode com um arquivo JavaScript aberto.">
+      <figcaption>
+        <b>Figura 3</b> — Editando JS no VSCode.
+        <span class="src">Fonte: captura de tela do VSCode elaborada pelo autor.</span>
+      </figcaption>
+    </figure>
+
+    <p>Nesse caso, um <em>script</em> pode ser testado usando-se um navegador web a partir de uma página HTML. Arquivos JavaScript são salvos na extensão <code>.js</code>, bem como é possível incluí-los diretamente em um arquivo HTML usando a tag <code>&lt;script&gt;</code> (FLANAGAN, 2011):</p>
+
+    <div class="snippet" data-numbers="off">
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 1 — index.html</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="text">&lt;script src="meu_primeiro_script.js"&gt;&lt;/script&gt;</code></pre>
+    </div>
+    <p class="caption"><b>Figura 4</b> — O Código 1 carrega um script denominado <code>meu_primeiro_script.js</code> diretamente em um arquivo HTML.</p>
+
+    <h3>Sintaxe da linguagem</h3>
+    <p>Vamos começar criando nosso primeiro <em>script</em> usando JavaScript. Um <em>script</em> é um conjunto de instruções que um computador pode seguir (DUCKETT, 2014). Em um editor de texto, crie um arquivo chamado <code>meu_primeiro_script.js</code> e adicione o seguinte conteúdo:</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 2 — meu_primeiro_script.js</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">// meu primeiro programa JS
+alert("Ola, mundo!");</code></pre>
+    </div>
+
+    <p>Note que, na <strong>linha 1</strong>, temos um <strong>comentário</strong>: um comando que será ignorado na execução do <em>script</em> e que serve para documentar o código. O JavaScript permite que comentários sejam feitos de duas formas: com <code>//</code> ou com <code>/* */</code> (CROCKFORD, 2008).</p>
+    <p>Na <strong>linha 2</strong>, vemos o comando <code>alert</code> com a mensagem “Ola, mundo!”. Veja que essa linha é encerrada com um sinal de ponto e vírgula — um sinal <em>opcional</em> para encerramento de linhas na linguagem JavaScript. Entretanto, para testar esse arquivo, é necessária a ajuda de um arquivo HTML. Crie um arquivo chamado <code>index.html</code> com o seguinte conteúdo:</p>
+
+    <div class="snippet">
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 3 — index.html</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="text">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;script src="meu_primeiro_script.js"&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </div>
+
+    <p>Esse arquivo deverá estar no mesmo diretório do seu primeiro <em>script</em>. Agora, abra o arquivo HTML em um navegador e verá algo parecido com isto:</p>
+
+    <figure>
+      <img src="img/fig07-alert.jpg" alt="Caixa de diálogo do navegador exibindo a mensagem Ola, mundo!.">
+      <figcaption>
+        <b>Figura 7</b> — Meu primeiro <em>script</em>, testado usando o Chrome.
+        <span class="src">Fonte: elaborada pelo autor.</span>
+      </figcaption>
+    </figure>
+
+    <div class="note note--info">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg>
+        Sobre o comando alert
+      </div>
+      <p>O comando <code>alert</code> exibirá uma caixa de diálogo com uma mensagem que continuará sendo exibida enquanto o usuário não clicar no botão <strong>OK</strong>.</p>
+    </div>
+
+    <h3>Variáveis e tipos de dados</h3>
+    <p>Você aprendeu a exibir mensagens na tela, mas e se quiser armazenar essa mensagem para usá-la mais tarde? Poderá fazer isso usando uma <strong>variável</strong>.</p>
+    <p>Variáveis são estruturas de dados que armazenam informações na memória. Pense em uma variável como se fosse uma <em>caixa</em>: você pode guardar uma informação e, depois, acessá-la sempre que necessário. Veja um exemplo:</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 4 — variável de texto</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">// meu primeiro programa JS
+mensagem = "Ola, mundo!";
+alert(mensagem);</code></pre>
+    </div>
+
+    <p>Veja que, após declarar a variável, é possível chamá-la nas linhas seguintes. Observe, ainda, que a variável armazena um texto — e chamamos isso de <strong>strings</strong> ou cadeias de caracteres. Variáveis podem armazenar outros tipos de dados, como números, <em>arrays</em>, objetos e muitos outros tipos.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>Variável</th><th>Explicação</th><th>Exemplo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>String</strong></td><td>Variável de texto que deve ser declarada com apóstrofos ou aspas.</td><td><code>var variavel = 'Ola mundo';</code></td></tr>
+          <tr><td><strong>Numérico</strong></td><td>Numerais inteiros ou flutuantes.</td><td><code>var variavel = 3;</code></td></tr>
+          <tr><td><strong>Boolean</strong></td><td>Variável verdadeira (<code>true</code>) ou falsa (<code>false</code>).</td><td><code>var variavel = true;</code></td></tr>
+          <tr><td><strong>Array</strong></td><td>Coleção de dados sequenciais.</td><td><code>var meuArray = ['um',2,'tres',4];</code></td></tr>
+          <tr><td><strong>Objeto</strong></td><td>Coleção de dados organizados como chaves e valores, que permite outros tipos de dados.</td><td><code>var meuObjeto = { 1: "olá", 2: "tudo bem" }</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="caption"><b>Quadro 1</b> — Tipos de variáveis. <span style="font-style:italic">Fonte: adaptado de Mariano e Melo-Minardi (2017).</span></p>
+
+    <div class="note note--warn">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l9.5 16.5h-19z"/><path d="M12 9.5v4M12 17h.01"/></svg>
+        let, const ou var?
+      </div>
+      <p>Podemos declarar variáveis usando as palavras <code>let</code>, <code>const</code> ou <code>var</code>. Todas as formas permitem armazenar dados, mas a diferença está no <strong>escopo</strong> e na <strong>forma de acesso</strong>. Falaremos mais sobre isso nos próximos módulos.</p>
+    </div>
+
+    <a class="video" href="#" onclick="return false;">
+      <span class="video__ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+      <span>
+        <span class="video__t">Videoaula: Tipos de dados e variáveis</span>
+        <span class="video__s">Uma breve introdução à linguagem JavaScript e aos tipos de variáveis. Para visualizar o objeto, acesse seu material digital.</span>
+      </span>
+    </a>
+
+    <h2 id="operadores-aritmeticos"><span class="num">Bloco 03</span>Operadores aritméticos e de comparação</h2>
+    <p>Você já aprendeu a exibir mensagens por meio do comando <code>alert</code>, e podemos dizer que <code>alert()</code> é uma <strong>função nativa</strong> do JavaScript cujo objetivo é carregar uma caixa de diálogo no navegador. Entretanto, é possível exibirmos uma mensagem de uma forma mais elegante: usando o <strong>console do navegador</strong>. Para isso, substitua o comando <code>alert()</code> por <code>console.log()</code>:</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 5 — console.log</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">// meu primeiro programa JS
+console.log("Ola, mundo!");</code></pre>
+    </div>
+
+    <p>Note que, agora, nada será exibido na tela, mas você pode ver a mensagem acessando o console na ferramenta “inspecionar”.</p>
+
+    <figure>
+      <img src="img/fig10-console-log.jpg" alt="Console do Chrome exibindo a saída de um comando console.log.">
+      <figcaption>
+        <b>Figura 10</b> — Exibindo mensagens usando o console do navegador Chrome. Abra qualquer página em um navegador, clique com o botão direito, vá em “inspecionar” e, depois, em “console”.
+        <span class="src">Fonte: captura de tela do console do Chrome elaborada pelo autor.</span>
+      </figcaption>
+    </figure>
+
+    <h3>Operadores aritméticos</h3>
+    <p>Operadores são símbolos usados para diversos propósitos, como operações matemáticas, lógicas e de comparação. Um exemplo clássico é o <strong>operador de atribuição</strong> — representado, simplesmente, pelo símbolo de igual <code>=</code> — que apresentamos anteriormente, quando declaramos variáveis. Em JavaScript, podemos realizar operações matemáticas usando operadores aritméticos.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th style="width:130px">Operador</th><th>Descrição</th></tr></thead>
+        <tbody>
+          <tr><td><code>+</code></td><td>Soma.</td></tr>
+          <tr><td><code>-</code></td><td>Subtração.</td></tr>
+          <tr><td><code>*</code></td><td>Multiplicação.</td></tr>
+          <tr><td><code>/</code></td><td>Divisão.</td></tr>
+          <tr><td><code>**</code></td><td>Exponenciação.</td></tr>
+          <tr><td><code>%</code></td><td>Módulo (retorna o resto da divisão).</td></tr>
+          <tr><td><code>=</code></td><td>Operador de atribuição.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="caption"><b>Quadro 2</b> — Operadores aritméticos. <span style="font-style:italic">Fonte: adaptado de Mariano e Melo-Minardi (2017).</span></p>
+
+    <p>Para testarmos essas operações, podemos utilizar o console. Experimente executar o bloco a seguir:</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Operações matemáticas no console</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">console.log(2 + 2);    // soma
+console.log(10 - 3);   // subtração
+console.log(4 * 5);    // multiplicação
+console.log(9 / 2);    // divisão
+console.log(2 ** 10);  // exponenciação
+console.log(7 % 2);    // módulo: resto da divisão</code></pre>
+    </div>
+
+    <figure>
+      <img src="img/fig11-aritmeticos.jpg" alt="Console do navegador mostrando resultados de operações matemáticas em JavaScript.">
+      <figcaption>
+        <b>Figura 11</b> — Operações matemáticas usando o console.
+        <span class="src">Fonte: elaborada pelo autor.</span>
+      </figcaption>
+    </figure>
+
+    <p>Note que o operador de atribuição foi incluído, mas ele <strong>não</strong> é um operador matemático de igualdade, e sim um operador usado para aplicar um valor a uma variável. Para se verificar igualdades, é preciso utilizar os <strong>operadores de comparação</strong>.</p>
+
+    <h3>Operadores de comparação</h3>
+    <p>Os operadores de comparação permitem a realização de comparações lógicas entre expressões. Note que aprendemos como realizar operações matemáticas; com os operadores de comparação, podemos verificar se determinadas expressões são verdadeiras (<code>true</code>) ou falsas (<code>false</code>).</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th style="width:130px">Operador</th><th>Descrição</th></tr></thead>
+        <tbody>
+          <tr><td><code>==</code></td><td>Igual.</td></tr>
+          <tr><td><code>===</code></td><td>Igual e do mesmo tipo.</td></tr>
+          <tr><td><code>!=</code></td><td>Diferente.</td></tr>
+          <tr><td><code>!==</code></td><td>Diferente e de tipos diferentes.</td></tr>
+          <tr><td><code>&gt;</code></td><td>Maior que.</td></tr>
+          <tr><td><code>&lt;</code></td><td>Menor que.</td></tr>
+          <tr><td><code>&gt;=</code></td><td>Maior ou igual.</td></tr>
+          <tr><td><code>&lt;=</code></td><td>Menor ou igual.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="caption"><b>Quadro 3</b> — Operadores de comparação. <span style="font-style:italic">Fonte: adaptado de Mariano e Melo-Minardi (2017).</span></p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Operações comparativas no console</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">console.log(2 + 2 &gt; 5);   // false
+console.log(2 + 2 == 4);  // true</code></pre>
+    </div>
+
+    <figure>
+      <img src="img/fig12-comparacao.jpg" alt="Console do navegador mostrando resultados de operações de comparação em JavaScript.">
+      <figcaption>
+        <b>Figura 12</b> — Operações comparativas usando o console.
+        <span class="src">Fonte: elaborada pelo autor.</span>
+      </figcaption>
+    </figure>
+
+    <p>Aqui, verificamos se a expressão <code>2+2</code> dá um resultado maior que 5 (o que é falso), e note que o console retornou <code>false</code>; depois, verificamos se <code>2+2</code> é igual a 4 (o que é verdadeiro, do inglês <em>true</em>).</p>
+    <p>Uma comparação retornará uma variável do tipo <strong>booleana</strong>, que poderá ser <code>true</code> ou <code>false</code>. Nos próximos módulos, você aprenderá a importância de realizar essas comparações para alterar o fluxo de execução do programa. Mas, em primeiro lugar, você precisa conhecer os operadores lógicos.</p>
+
+    <a class="video" href="#" onclick="return false;">
+      <span class="video__ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+      <span>
+        <span class="video__t">Videoaula: Operadores aritméticos e de comparação</span>
+        <span class="video__s">Conheça alguns dos operadores matemáticos e lógicos da linguagem JavaScript. Para visualizar o objeto, acesse seu material digital.</span>
+      </span>
+    </a>
+
+    <h2 id="operadores-logicos"><span class="num">Bloco 04</span>Operadores lógicos</h2>
+    <p>Os operadores lógicos, como o próprio nome diz, permitem a realização de operações lógicas, isto é, operações que envolvem comparar duas ou mais expressões — com exceção do operador <strong>NOT</strong>, que reverte a expressão. Existem três principais operadores lógicos em JavaScript: <strong>AND</strong>, <strong>OR</strong> e <strong>NOT</strong>.</p>
+
+    <div class="tablewrap">
+      <table class="truth">
+        <thead>
+          <tr><th>Entrada #1</th><th>Entrada #2</th><th>AND</th><th>OR</th><th>NOT</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td class="v0">0</td><td class="v0">0</td><td class="v1">1</td></tr>
+          <tr><td>1</td><td>0</td><td class="v0">0</td><td class="v1">1</td><td>1 (AND) / 0 (OR)</td></tr>
+          <tr><td>0</td><td>1</td><td class="v0">0</td><td class="v1">1</td><td>1 (AND) / 0 (OR)</td></tr>
+          <tr><td>1</td><td>1</td><td class="v1">1</td><td class="v1">1</td><td class="v0">0</td></tr>
+          <tr><td>1</td><td>—</td><td>—</td><td>—</td><td class="v0">0</td></tr>
+          <tr><td>0</td><td>—</td><td>—</td><td>—</td><td class="v1">1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="caption"><b>Tabela 1</b> — Operadores lógicos: tabela verdade. <code>1</code> é equivalente a <code>true</code> (verdadeiro) e <code>0</code> é equivalente a <code>false</code> (falso). <span style="font-style:italic">Fonte: elaborada pelo autor.</span></p>
+
+    <p>Para ilustrar, nos exemplos a seguir vamos utilizar uma expressão bastante simples: vamos declarar uma variável numérica e verificar se ela é par ou ímpar. Podemos fazer isso usando o operador de módulo <code>%</code>, que retorna o resto de uma divisão inteira — se o número dividido por 2 tiver resto 0, será par; se tiver resto 1, será ímpar.</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 6 — par ou ímpar</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">x = 1;
+
+// expressões
+expressao_1 = (x % 2 == 0)   // é par?
+expressao_2 = (x % 2 == 1)   // é ímpar?
+
+console.log(expressao_1)     // false
+console.log(expressao_2)     // true</code></pre>
+    </div>
+
+    <p>Veja que, nesse caso, apenas a segunda expressão é verdadeira. Vamos comparar, agora, as duas ao mesmo tempo.</p>
+
+    <h3>Operador AND <span class="kw">&amp;&amp;</span></h3>
+    <p>O operador <strong>AND</strong> (“e”) avalia se as duas expressões são válidas <em>ao mesmo tempo</em>. Se pelo menos uma das expressões for falsa, o resultado sempre será falso. Para o operador AND em JavaScript, usamos os símbolos <code>&amp;&amp;</code>.</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 7 — operador AND</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">x = 1;
+
+// expressões
+expressao_1 = (x % 2 == 0)   // é par?
+expressao_2 = (x % 2 == 1)   // é ímpar?
+
+console.log(expressao_1 &amp;&amp; expressao_2)   // false</code></pre>
+    </div>
+
+    <h3>Operador OR <span class="kw">||</span></h3>
+    <p>O operador <strong>OR</strong> (“ou”) avalia se uma <em>ou</em> outra expressão é válida. Se pelo menos uma das expressões for verdadeira, a comparação sempre resultará em verdadeiro. Para o operador OR em JavaScript, usamos os símbolos <code>||</code>.</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 8 — operador OR</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">x = 1;
+
+// expressões
+expressao_1 = (x % 2 == 0)   // é par?
+expressao_2 = (x % 2 == 1)   // é ímpar?
+
+console.log(expressao_1 || expressao_2)   // true</code></pre>
+    </div>
+
+    <h3>Operador NOT <span class="kw">!</span></h3>
+    <p>O operador <strong>NOT</strong> (“não”) inverte o resultado da expressão e pode ser inserido com o símbolo <code>!</code>.</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 9 — operador NOT</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">x = 1;
+// expressões
+expressao_1 = (x % 2 == 0)   // é par?
+expressao_2 = (x % 2 == 1)   // é ímpar?
+
+console.log(!expressao_1)    // true
+console.log(!expressao_2)    // false
+
+// combinado com AND e OR
+console.log(!(expressao_1 &amp;&amp; expressao_2))   // true
+console.log(!(expressao_1 || expressao_2))   // false</code></pre>
+    </div>
+
+    <p>Note, aqui, que foram utilizados parênteses para isolar a combinação entre expressões. Observe que podemos usar o operador NOT várias vezes. Por exemplo:</p>
+
+    <div class="snippet" data-numbers="off">
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Figura 17 — negação de duas expressões</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">console.log(!expressao_1 &amp;&amp; !expressao_2)   // false</code></pre>
+    </div>
+
+    <div class="note note--warn">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l9.5 16.5h-19z"/><path d="M12 9.5v4M12 17h.01"/></svg>
+        Atenção à posição do NOT
+      </div>
+      <p>Preste atenção na posição em que inserimos o operador NOT. Nesse caso, verificamos se a expressão 1 <em>e</em> a expressão 2 são falsas — note que o operador de negação inverte a comparação feita. O resultado, nesse caso, foi <code>false</code>.</p>
+    </div>
+
+    <a class="video" href="#" onclick="return false;">
+      <span class="video__ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+      <span>
+        <span class="video__t">Videoaula: Operadores lógicos</span>
+        <span class="video__s">Aprenda a realizar comparações usando operadores lógicos do JavaScript. Para visualizar o objeto, acesse seu material digital.</span>
+      </span>
+    </a>
+
+    <h2 id="estudo-de-caso"><span class="num">Bloco 05</span>Estudo de caso</h2>
+
+    <div class="panel panel--case">
+      <div class="panel__hd">
+        <div class="panel__k">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          Desafio profissional
+        </div>
+        <h3>O sistema de seleção de estagiários</h3>
+      </div>
+      <div class="panel__bd">
+        <p>A empresa de publicidade e desenvolvimento de sites <strong>“A”</strong>, que atende a muitos clientes em várias áreas, contratou você como <strong>desenvolvedor web front-end júnior</strong>. Cabe a você auxiliar no suporte aos sistemas existentes e no desenvolvimento de novos projetos. Essa empresa possui uma série de aplicações web, tanto para gestão de projetos internos quanto para a interação com o cliente. Apesar de atuar há muitos anos no mercado, a empresa possui uma equipe pequena, focada em tecnologia da informação, e deseja, agora, expandir seu time.</p>
+        <p>Seu primeiro desafio é corrigir um problema no <strong>sistema de seleção de estagiários</strong>. O processo seletivo possui duas etapas; a primeira se trata de uma prova realizada online. Entretanto, as regras de estágio possuem algumas exigências:</p>
+        <ul>
+          <li>estudantes devem ter cursado, pelo menos, <strong>três períodos</strong> de um curso de nível superior;</li>
+          <li>e atingir a <strong>nota mínima de 70%</strong> na prova online de seleção.</li>
+        </ul>
+        <p>Caso os estudantes atinjam a nota mínima, serão selecionados para uma entrevista presencial. No entanto, a equipe de recursos humanos detectou que alguns estudantes que não estavam qualificados estavam sendo classificados pelo sistema. Dois casos chamaram a atenção:</p>
+        <ol>
+          <li>um aluno do <strong>5º semestre</strong> acertou <strong>10 questões em 20</strong> e foi aprovado;</li>
+          <li>outro aluno, que tirou <strong>16/20</strong>, estava apenas no <strong>2º período</strong> — logo, não deveria ter sido aprovado, mas o sistema aprovou.</li>
+        </ol>
+        <p>Analise o fragmento de código do sistema de seleção e investigue os motivos para a aprovação incorreta para a segunda etapa. Por fim, escreva quais modificações precisam ser implementadas no código para que os requisitos iniciais sejam alcançados.</p>
+
+        <div class="snippet">
+          <div class="snippet__bar">
+            <div class="snippet__dots"><i></i><i></i><i></i></div>
+            <span class="snippet__name">Código 9 — selecao.js (com defeito)</span>
+            <div class="snippet__acts"></div>
+          </div>
+          <pre><code data-lang="js">// determina aprovados para a segunda etapa
+function primeiraEtapa(acertos_na_prova,
+                       semestres_cursados){
+    /*
+    * Help:
+    * acertos_na_prova recebe a quantidade de acertos na prova
+    * semestres_cursados: semestres cursados
+    */
+    // regras para aprovação
+    const total_de_questoes = 20
+    const nota_minima_aprovacao = 0.7
+    const minimo_semestres = 3
+
+    // calcula a nota %
+    let nota = acertos_na_prova / total_de_questoes
+
+    // calcula se vai ser aprovado ou não
+    if((nota &gt; nota_minima_aprovacao) ||
+              (semestres_cursados &gt;= minimo_semestres)){
+         return "Aprovado";
+    }
+    else{
+         return "Reprovado";
+    }
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="resolucao"><span class="num">Bloco 06</span>Resolução do estudo de caso</h2>
+
+    <p>O código acima apresenta uma função que calcula se um estudante foi aprovado ou não para o processo seletivo de estágio. Ainda não vimos funções no curso, mas o conhecimento de como criar funções não será necessário para resolver esse problema — apenas o conhecimento de <strong>operadores lógicos e comparativos</strong>.</p>
+
+    <p>Primeiro, atente-se às regras de aprovação:</p>
+    <ul>
+      <li>A nota deve ser de, pelo menos, 70% — logo, a nota deve ser <strong>maior ou igual</strong> a <code>0.7</code>.</li>
+      <li>O aluno deve ter cursado, pelo menos, 3 semestres — logo, o valor da variável que armazena os semestres cursados deve ser <strong>maior ou igual</strong> a <code>3</code>.</li>
+    </ul>
+    <p>Convertendo essas regras para expressões, temos:</p>
+    <ul>
+      <li><code>nota &gt;= 0.7</code></li>
+      <li><code>semestres_cursados &gt;= 3</code></li>
+    </ul>
+
+    <p>Agora, vamos analisar as <strong>linhas 18 a 21</strong>, em que temos as expressões que definem se o aluno foi aprovado ou não para a entrevista:</p>
+
+    <div class="snippet" data-start="18">
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 10 — trecho com defeito</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">if((nota &gt; nota_minima_aprovacao) ||
+          (semestres_cursados &gt;= minimo_semestres)){
+     return "Aprovado";
+ }</code></pre>
+    </div>
+
+    <div class="note note--danger">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+        Dois erros identificados
+      </div>
+      <ol>
+        <li>Na <strong>linha 18</strong>, o operador deveria ser <code>&gt;=</code> — do jeito que está, um aluno com exatamente 70% seria reprovado.</li>
+        <li>Também na <strong>linha 18</strong>: como as duas regras são <em>obrigatórias</em>, o operador que as separa deveria ser <strong>AND</strong> (<code>&amp;&amp;</code>) e não <strong>OR</strong> (<code>||</code>).</li>
+      </ol>
+    </div>
+
+    <div class="panel panel--sol">
+      <div class="panel__hd">
+        <div class="panel__k">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+          Código corrigido
+        </div>
+        <h3>Portanto, o correto seria</h3>
+      </div>
+      <div class="panel__bd">
+        <div class="snippet" data-start="18">
+          <div class="snippet__bar">
+            <div class="snippet__dots"><i></i><i></i><i></i></div>
+            <span class="snippet__name">Código 11 — trecho corrigido</span>
+            <div class="snippet__acts"></div>
+          </div>
+          <pre><code data-lang="js">if((nota &gt;= nota_minima_aprovacao) &amp;&amp;
+           (semestres_cursados &gt;= minimo_semestres)){
+     return "Aprovado";
+ }</code></pre>
+        </div>
+        <p>Teste a função completa e corrigida com os dois casos relatados pelo RH:</p>
+        <div class="snippet" data-run>
+          <div class="snippet__bar">
+            <div class="snippet__dots"><i></i><i></i><i></i></div>
+            <span class="snippet__name">Verificação dos dois casos</span>
+            <div class="snippet__acts"></div>
+          </div>
+          <pre><code data-lang="js">function primeiraEtapa(acertos_na_prova, semestres_cursados){
+    const total_de_questoes = 20
+    const nota_minima_aprovacao = 0.7
+    const minimo_semestres = 3
+
+    let nota = acertos_na_prova / total_de_questoes
+
+    if((nota &gt;= nota_minima_aprovacao) &amp;&amp;
+       (semestres_cursados &gt;= minimo_semestres)){
+        return "Aprovado";
+    }
+    else{
+        return "Reprovado";
+    }
+}
+
+// Caso 1: 10 acertos em 20 (50%), 5º semestre
+console.log("Caso 1:", primeiraEtapa(10, 5));   // Reprovado
+// Caso 2: 16 acertos em 20 (80%), 2º semestre
+console.log("Caso 2:", primeiraEtapa(16, 2));   // Reprovado
+// Candidato válido: 14 acertos (70%), 4º semestre
+console.log("Caso 3:", primeiraEtapa(14, 4));   // Aprovado</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <a class="video" href="#" onclick="return false;">
+      <span class="video__ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+      <span>
+        <span class="video__t">Resolução do Estudo de Caso</span>
+        <span class="video__s">Para visualizar o objeto, acesse seu material digital.</span>
+      </span>
+    </a>
+
+    <h2 id="saiba-mais"><span class="num">Complemento</span>Saiba mais</h2>
+    <div class="panel panel--more">
+      <div class="panel__bd">
+        <ul class="links">
+          <li>
+            <b>Artigo — Introdução ao JavaScript</b>
+            <span>Neste artigo, você aprenderá os fundamentos da linguagem JavaScript, que é uma linguagem de script geralmente usada em aplicações <em>client-side</em>.</span>
+            <a href="https://bit.ly/3mX5H39" target="_blank" rel="noopener">https://bit.ly/3mX5H39</a> — Acesso em: 15 dez. 2021.
+          </li>
+          <li>
+            <b>Videoaula — Introdução ao JavaScript (YouTube)</b>
+            <span>Nessa videoaula, você verá, na prática, como construir suas primeiras aplicações com JavaScript.</span>
+            <a href="https://bit.ly/3n51ESj" target="_blank" rel="noopener">https://bit.ly/3n51ESj</a> — Acesso em: 15 dez. 2021.
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 id="revisao"><span class="num">Síntese</span>Revisão rápida</h2>
+    <div class="grid">
+      <div class="card"><span class="card__k">// comentário</span><p>Linhas ignoradas na execução. Use <code>//</code> para uma linha e <code>/* */</code> para blocos.</p></div>
+      <div class="card"><span class="card__k">alert() e console.log()</span><p>A primeira exibe uma caixa de diálogo; a segunda escreve no console do navegador.</p></div>
+      <div class="card"><span class="card__k">var / let / const</span><p>Três formas de declarar variáveis; diferem no escopo e na forma de acesso.</p></div>
+      <div class="card"><span class="card__k">%</span><p>Módulo: devolve o resto da divisão. Base para testar se um número é par ou ímpar.</p></div>
+      <div class="card"><span class="card__k">== vs ===</span><p><code>==</code> compara apenas o valor; <code>===</code> compara valor <em>e</em> tipo.</p></div>
+      <div class="card"><span class="card__k">&amp;&amp; · || · !</span><p>AND exige as duas; OR aceita uma; NOT inverte o resultado da expressão.</p></div>
+    </div>
+
+  </main>
+
+  <aside class="toc">
+    <div class="toc__t">Neste módulo</div>
+    <ol></ol>
+  </aside>
+</div>
+
+<nav class="pager">
+  <a href="index.html">
+    <div class="k">← Anterior</div>
+    <div class="t">Sumário da Unidade</div>
+  </a>
+  <a href="modulo-2.html" class="next">
+    <div class="k">Próxima →</div>
+    <div class="t">Módulo 2 · Estruturas condicionais</div>
+  </a>
+</nav>
+
+<footer class="sitefoot">
+  <p>Desenvolvimento em JavaScript · Unidade 1 — Livro Didático · <span data-year></span></p>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

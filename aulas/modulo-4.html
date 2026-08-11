@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Módulo 4 · Estruturas de dados — Desenvolvimento em JavaScript</title>
+<meta name="description" content="Arrays, funções e objetos em JavaScript: declaração, métodos de manipulação, arrow functions e percurso de objetos com for...in.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@100..900&family=JetBrains+Mono:wght@400..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23f7df1e'/><text x='50' y='69' font-family='Helvetica,Arial' font-size='46' font-weight='bold' text-anchor='middle' fill='%2314171d'>JS</text></svg>">
+</head>
+<body>
+
+<div id="progress"></div>
+
+<header class="topbar">
+  <div class="topbar__in">
+    <a class="brand" href="index.html">
+      <span class="brand__mark">JS</span>
+      <span class="brand__txt">
+        <span class="brand__t">Desenvolvimento em JavaScript</span>
+        <span class="brand__s">Unidade 1</span>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="index.html">Início</a>
+      <a href="modulo-1.html">Módulo 1</a>
+      <a href="modulo-2.html">Módulo 2</a>
+      <a href="modulo-3.html">Módulo 3</a>
+      <a href="modulo-4.html" aria-current="page">Módulo 4</a>
+      <a href="referencias.html">Referências</a>
+    </nav>
+    <button class="iconbtn" data-theme-toggle type="button" aria-label="Alternar tema claro/escuro" title="Alternar tema">
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="hero__eyebrow">Módulo 4</span>
+  <h1>Estruturas de dados</h1>
+  <p class="hero__lede">Neste módulo, você vai aprender a declarar e manipular <em>arrays</em> e objetos usando JavaScript e, também, a declarar suas próprias funções.</p>
+  <div class="hero__meta">
+    <span class="chip chip--accent">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 1.9"/></svg>
+      50 minutos
+    </span>
+    <span class="chip">Arrays</span>
+    <span class="chip">Funções</span>
+    <span class="chip">Objetos</span>
+    <span class="chip">Arrow functions</span>
+  </div>
+</section>
+<div class="rule"><hr></div>
+
+<div class="shell">
+  <main class="doc">
+
+    <h2 id="introducao"><span class="num">Bloco 01</span>Introdução</h2>
+    <p class="lead">Olá, estudante!</p>
+    <p>Estruturas de dados sequenciais permitem o armazenamento de <strong>conjuntos de dados</strong> em uma variável JavaScript. Há dois principais tipos de estruturas de dados sequenciais na linguagem:</p>
+
+    <div class="grid">
+      <div class="card"><span class="card__k">Arrays</span><p>Coleções de valores <strong>ordenados sequencialmente</strong>, acessados por um índice numérico.</p></div>
+      <div class="card"><span class="card__k">Objetos</span><p>Coleções de dados agrupados por <strong>chave-valor</strong>, acessados pelo nome da propriedade.</p></div>
+      <div class="card"><span class="card__k">Funções</span><p>Blocos declarados uma vez e executados apenas quando <strong>chamados</strong>, com entrada e retorno.</p></div>
+    </div>
+
+    <p>Neste módulo, você vai aprender a declarar e manipular <em>arrays</em> e objetos usando JavaScript e, também, a declarar funções — blocos de códigos que são declarados inicialmente, mas executados apenas quando chamados dentro do código, e que permitem o recebimento de valores como parâmetros de entrada, além do envio de informações de volta para o fluxo principal do código. Bons estudos!</p>
+
+    <h2 id="arrays"><span class="num">Bloco 02</span>Conceito e manipulação de array</h2>
+    <p><em>Arrays</em> são conjuntos de dados sequenciais armazenados em uma única variável, e os valores dentro de um <em>array</em> são denominados <strong>elementos</strong>. Os valores em <em>arrays</em> são declarados entre colchetes, separados por vírgulas, e os elementos podem ser acessados a partir da sua posição, denominada <strong>índice</strong> (FLANAGAN, 2011).</p>
+
+    <div class="snippet" data-numbers="off">
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 1 — declarando um array</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">meu_primeiro_array = ["abacate", "biscoito", "casa"];</code></pre>
+    </div>
+
+    <p>Nesse caso, o <em>array</em> recebe uma coleção com três elementos: <code>abacate</code>, <code>biscoito</code> e <code>casa</code>, que devem ser separados por vírgula e podem ser de diversos tipos, desde <em>strings</em> a valores numéricos. Podemos acessar cada elemento da seguinte forma:</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 2 — acessando pelo índice</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">var meu_primeiro_array = ["abacate", "biscoito", "casa"]
+
+console.log(meu_primeiro_array[0])   // abacate
+console.log(meu_primeiro_array[1])   // biscoito
+console.log(meu_primeiro_array[2])   // casa</code></pre>
+    </div>
+
+    <div class="note note--warn">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l9.5 16.5h-19z"/><path d="M12 9.5v4M12 17h.01"/></svg>
+        A contagem começa do zero
+      </div>
+      <p>Note que o primeiro elemento, <code>abacate</code>, é encontrado na <strong>posição 0</strong> do <em>array</em>, e não na posição 1. Em JavaScript — e em muitas outras linguagens — a contagem começa da posição 0.</p>
+    </div>
+
+    <h3>Tamanho do array: a propriedade length</h3>
+    <p>Para obtermos o tamanho total de elementos em um <em>array</em>, usamos a propriedade <code>length</code>:</p>
+
+    <div class="snippet" data-numbers="off" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 3 — length</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">var meu_primeiro_array = ["abacate", "biscoito", "casa"]
+console.log(meu_primeiro_array.length)   // 3</code></pre>
+    </div>
+
+    <div class="note note--info">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg>
+        Propriedade ou método?
+      </div>
+      <p><strong>Propriedades</strong> são características de um objeto JavaScript, logo, não precisam ser declaradas seguidas de parênteses — diferentemente dos <strong>métodos</strong>, que requerem parênteses.</p>
+    </div>
+
+    <h3>Recortando um array: slice()</h3>
+    <p>Se quisermos buscar um conjunto de elementos desse <em>array</em> (um <em>subarray</em>), podemos usar o método <code>slice()</code>, informando como entradas: (1) a posição de início e (2) a posição final — será considerada a posição <em>anterior</em> a esse índice para composição do <em>subarray</em>.</p>
+
+    <div class="snippet" data-numbers="off">
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Assinatura do método</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="text">ARRAY.slice(início, posição posterior ao fim)</code></pre>
+    </div>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 4 — slice()</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">var meu_primeiro_array = ["abacate", "biscoito", "casa"]
+
+dois_primeiros_elementos = meu_primeiro_array.slice(0,2)
+console.log(dois_primeiros_elementos)   // [ 'abacate', 'biscoito' ]
+
+dois_ultimos_elementos = meu_primeiro_array.slice(1,3)
+console.log(dois_ultimos_elementos)     // [ 'biscoito', 'casa' ]</code></pre>
+    </div>
+
+    <h3>Adicionando elementos: push() e unshift()</h3>
+    <p>Podemos, ainda, criar <em>arrays</em> vazios declarando um nome de variável que receba colchetes vazios — <code>novo_array = []</code> — e preenchê-lo usando a função <code>push()</code>, que receberá como argumento o valor correspondente ao novo elemento:</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 5 — push()</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">// declarando um array vazio
+novo_array = []
+
+// adicionando um novo item
+novo_array.push("alicate")
+console.log(novo_array)   // [ 'alicate' ]
+
+// adicionando 2 novos itens
+novo_array.push("bola")
+novo_array.push("cavalo")
+
+console.log(novo_array)   // [ 'alicate', 'bola', 'cavalo' ]</code></pre>
+    </div>
+
+    <h3>Removendo elementos: pop() e shift()</h3>
+    <p>Por outro lado, podemos remover elementos usando o método <code>pop()</code>, que remove o <strong>último</strong> elemento e retorna o valor, que pode ser armazenado em uma variável:</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 6 — pop()</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">novo_array = ["alicate", "bola", "cavalo"]
+
+valor_removido = novo_array.pop()   // remove o último elemento
+console.log(valor_removido)         // cavalo
+console.log(novo_array)             // [ 'alicate', 'bola' ]</code></pre>
+    </div>
+
+    <p>Para apagar o <strong>primeiro</strong> elemento, é possível utilizar o método <code>shift()</code>:</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 7 — shift()</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">novo_array = ["alicate", "bola"]
+
+console.log(novo_array)   // [ 'alicate', 'bola' ]
+novo_array.shift()        // apaga o primeiro elemento
+console.log(novo_array)   // [ 'bola' ]</code></pre>
+    </div>
+
+    <p>Da mesma forma, podemos adicionar elementos no começo usando <code>unshift()</code>:</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 8 — unshift()</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">novo_array = ["bola"]
+
+novo_array.unshift("avestruz")
+console.log(novo_array)   // [ 'avestruz', 'bola' ]</code></pre>
+    </div>
+
+    <h3>Removendo do meio: indexOf() e splice()</h3>
+    <p>Também podemos remover elementos específicos de um <em>array</em> — como um elemento que se encontra no meio, e não apenas nas extremidades. Entretanto, para especificar esse elemento, é preciso, em primeiro lugar, saber sua posição. Para isso, usamos o método <code>indexOf()</code> em combinação com o método <code>splice()</code>:</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 9 — indexOf() e splice()</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">lista = ["a", "b", "c", "d", "e"]   // nova lista com 5 elementos
+
+indice_de_c = lista.indexOf("c")    // descobre o índice de "c"
+console.log(indice_de_c)            // 2
+
+console.log(lista[indice_de_c])     // confirmando que o item está certo (retorna c)
+
+lista.splice(indice_de_c, 1)        // removendo apenas o elemento "c"
+console.log(lista)                  // [ 'a', 'b', 'd', 'e' ]</code></pre>
+    </div>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th style="width:150px">Método</th><th>O que faz</th></tr></thead>
+        <tbody>
+          <tr><td><code>indexOf()</code></td><td>Retorna o índice de um determinado elemento enviado como argumento. Perceba que a letra <strong>“O”</strong> de <code>indexOf</code> está em maiúsculo.</td></tr>
+          <tr><td><code>splice()</code></td><td>Remove elementos a partir de uma determinada posição passada como primeiro argumento; o segundo argumento indica <em>quantos</em> elementos queremos remover.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Ordenando: sort()</h3>
+    <p>Por fim, para ordenar um <em>array</em>, é possível usar o método <code>sort()</code>:</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 10 — sort() alfabético</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">lista_numerica = [42, 16, 8, 15, 23, 4]
+
+lista_numerica.sort()         // ordenando alfabeticamente
+console.log(lista_numerica)   // [ 15, 16, 23, 4, 42, 8 ]</code></pre>
+    </div>
+
+    <div class="note note--warn">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l9.5 16.5h-19z"/><path d="M12 9.5v4M12 17h.01"/></svg>
+        Uma ordenação inesperada
+      </div>
+      <p>Nesse caso, a ordenação foi feita <strong>incorretamente</strong>, pois o método <code>sort()</code> ordena <em>alfabeticamente</em> — com base no código ASCII. Para ordenar numericamente, é preciso informar um critério de comparação.</p>
+    </div>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 11 — sort() numérico</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">lista_numerica = [42, 16, 8, 15, 23, 4]
+
+lista_numerica.sort((a, b) =&gt; a - b)   // ordenando numericamente
+console.log(lista_numerica)            // [ 4, 8, 15, 16, 23, 42 ]</code></pre>
+    </div>
+
+    <p>A sintaxe ficou um pouco mais complicada ao incorporarmos o símbolo <code>=&gt;</code>, tratando-se de uma <strong>arrow function</strong>. Entretanto, para entender isso, é necessário, em primeiro lugar, saber o que são funções.</p>
+
+    <a class="video" href="#" onclick="return false;">
+      <span class="video__ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+      <span>
+        <span class="video__t">Videoaula: Conceito e manipulação de array</span>
+        <span class="video__s">Arrays são coleções de dados sequenciais indexadas numericamente pela ordem de entrada. Para visualizar o objeto, acesse seu material digital.</span>
+      </span>
+    </a>
+
+    <h2 id="funcoes"><span class="num">Bloco 03</span>Funções</h2>
+    <p>Funções (<code>function</code>) são blocos de códigos que <strong>não</strong> são imediatamente executados quando um <em>script</em> é interpretado; eles só são executados ou invocados quando ocorre uma chamada pelo nome da função seguido de parênteses (CROCKFORD, 2008; MARIANO; MELO-MINARDI, 2017).</p>
+    <p>Sim, já vimos muitas funções, como <code>alert()</code>, que é uma função <strong>nativa</strong> (<em>built-in</em>) e exibe uma caixa de diálogo na tela, assim como alguns métodos — <code>slice()</code>, <code>splice()</code>, <code>push()</code> e <code>pop()</code> — usados para manipulação de <em>arrays</em>. Os <strong>métodos</strong> são funções aplicadas no contexto de um objeto específico; o que muda é a forma como são chamados: digitando o nome da variável seguido de um ponto, o nome do método e parênteses.</p>
+
+    <div class="snippet">
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 12 — sintaxe básica de uma função</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="text">// declaração da função
+function NOME-DA-FUNÇÃO(parâmetros de entrada){
+       comandos
+}
+// chamada da função
+NOME-DA-FUNÇÃO(ARGUMENTOS DE ENTRADA)</code></pre>
+    </div>
+
+    <p>Em resumo, funções são blocos de código que contêm uma série de comandos pré-desenvolvidos usados para reduzir o tempo gasto na resolução de um problema. Imagine, por exemplo, que queremos ordenar um <em>array</em>: há muitas formas de fazer isso (muitos algoritmos), mas vamos resolver de um modo bem simples — analisar cada elemento da lista e compará-lo com todos os outros para ver qual é o menor e, assim, movê-lo para o começo da lista.</p>
+
+    <div class="note note--info">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg>
+        Selection sort
+      </div>
+      <p>Essa estratégia de ordenação é denominada <strong>selection sort</strong> e não é o melhor algoritmo para essa tarefa, pois sempre fará comparações de todos contra todos, tendo uma complexidade <strong>O(n²)</strong>. Viu como você teria de se preocupar com muitos detalhes para ordenar um simples <em>array</em>? Vimos anteriormente que bastaria usar o método <code>sort()</code> — e isso destaca como funções permitem que você não se preocupe com problemas de soluções já bem estabelecidas e foque naquilo que está realmente tentando resolver.</p>
+    </div>
+
+    <h3>Criando as suas próprias funções</h3>
+    <p>De fato, perceba que usamos apenas funções já definidas pelo JavaScript. Entretanto, podemos criar nossas próprias funções. Em JavaScript há muitas formas de declarar funções; por exemplo, elas podem ser declaradas com a palavra reservada <code>function</code> (FLANAGAN, 2011):</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 13 — função soma</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">function soma(a, b){
+       return a+b        // esta linha não é executada até a função ser chamada
+}
+
+resultado = soma(2, 3)   // chamada da função (argumentos de entrada: 2 e 3)
+console.log(resultado)   // 5
+
+console.log(soma(10, 10)) // 20</code></pre>
+    </div>
+
+    <p>Aqui, criamos uma simples função que soma dois números. Nossa função se chama <code>soma</code> e recebe dois parâmetros: <code>a</code> e <code>b</code>. Dentro do bloco, a função faz uma única coisa: retorna o valor da soma de <code>a</code> e <code>b</code>.</p>
+
+    <ol class="steps">
+      <li><b>A função não roda sozinha</b><span>Ao executarmos esse código, o conteúdo do bloco da função não é executado imediatamente. Uma função só será executada quando for feita a <strong>chamada</strong> (apresentada na linha 5).</span></li>
+      <li><b>Reaproveitamento de código</b><span>Podemos fazer quantas chamadas de função quisermos (como ilustrado na linha 8). Por isso, dizemos que funções são estruturas que permitem o reaproveitamento de código.</span></li>
+      <li><b>Parâmetros e argumentos</b><span>Na chamada da função, enviamos dois <strong>argumentos</strong>, que foram aplicados aos <strong>parâmetros</strong> declarados. No exemplo, o parâmetro <code>a</code> recebeu o primeiro argumento (2), enquanto <code>b</code> recebeu o segundo (3).</span></li>
+      <li><b>A palavra return</b><span>Permite que o resultado da soma seja retornado ao mesmo ponto da chamada. O uso de <code>return</code> é <strong>opcional</strong>: poderíamos, por exemplo, apenas imprimir o resultado diretamente na função.</span></li>
+      <li><b>Os parênteses são obrigatórios</b><span>As funções poderiam, ainda, não possuir parâmetros; entretanto, na chamada da função, deve-se <strong>sempre</strong> incluir os parênteses.</span></li>
+    </ol>
+
+    <h3>Curiosidades ⇒ arrow functions</h3>
+    <p><em>Arrow functions</em> (funções de seta) são uma notação JavaScript introduzida no <strong>ECMAScript versão 6 (ES6)</strong> para declarar funções. Elas foram criadas com o objetivo de tornar o JavaScript mais simples — apesar de alguns desenvolvedores discordarem disso. Por exemplo, a função:</p>
+
+    <div class="snippet" data-numbers="off">
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Notação tradicional</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">function soma(a, b){
+       return a+b
+}</code></pre>
+    </div>
+
+    <p>…poderia ser declarada usando-se <em>arrow functions</em>:</p>
+
+    <div class="snippet" data-numbers="off" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Notação com arrow function</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">soma = (a, b) =&gt; a+b
+
+console.log(soma(2, 3))   // 5</code></pre>
+    </div>
+
+    <p>Neste bloco, você aprendeu a declarar suas próprias funções em JavaScript. Agora, você está apto a estender as funcionalidades básicas da linguagem e criar suas próprias funções, que poderão ser reaproveitadas.</p>
+
+    <a class="video" href="#" onclick="return false;">
+      <span class="video__ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+      <span>
+        <span class="video__t">Videoaula: Funções</span>
+        <span class="video__s">Conheça algumas funções nativas (<em>built-in</em>) e aprenda a criar as suas próprias. Para visualizar o objeto, acesse seu material digital.</span>
+      </span>
+    </a>
+
+    <h2 id="objetos"><span class="num">Bloco 04</span>Objetos</h2>
+    <p>Objetos são um tipo de dado fundamental para a linguagem JavaScript; eles armazenam coleções de <strong>chaves e valores</strong> denominados <strong>propriedades</strong>. Aqui, devemos fazer um adendo: o conceito de objetos JavaScript é equivalente ao conceito de <em>hash</em>, <em>dicionário</em> ou <em>array associativo</em> em outras linguagens de programação (FLANAGAN, 2011).</p>
+
+    <h3>Criando objetos</h3>
+    <p>Você pode criar um objeto utilizando o comando <code>new Object()</code>; entretanto, há formas mais simples utilizando chaves. Veja como a sintaxe pode ser construída:</p>
+
+    <div class="snippet" data-numbers="off">
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Sintaxe mínima</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">meu_primeiro_objeto = { "chave": "valor" }</code></pre>
+    </div>
+
+    <p>Note que chaves e valores são separados por <strong>dois pontos</strong>. Além disso, é possível inserir múltiplos pares de chave e valor, desde que estejam separados por vírgula:</p>
+
+    <div class="snippet">
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 14 — múltiplos pares</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">objeto = {
+       "chave1":"valor",
+       "chave2":"valor",
+       "chave3":"valor"
+}</code></pre>
+    </div>
+
+    <div class="note note--warn">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l9.5 16.5h-19z"/><path d="M12 9.5v4M12 17h.01"/></svg>
+        Chaves devem ser únicas
+      </div>
+      <p>A chave deve ser única, ou seja, <strong>não se pode ter duas chaves com o mesmo nome</strong> em um mesmo objeto.</p>
+    </div>
+
+    <h3>Consultando uma chave</h3>
+    <p>Há duas formas de acessar valores individualmente em um objeto:</p>
+    <ol>
+      <li><strong>Usando ponto</strong> (<code>nome-objeto.propriedade</code>): deve-se chamar o nome do objeto seguido da propriedade que se deseja acessar.</li>
+      <li><strong>Usando colchetes</strong> (<code>nome-objeto['propriedade']</code>): deve-se chamar o nome do objeto seguido da propriedade desejada entre colchetes e aspas.</li>
+    </ol>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 15 — duas formas de acesso</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">objeto = {
+     "chave1":1,
+     "chave2":2,
+     "chave3":3
+}
+
+// 1ª forma de acesso
+valor_chave_1 = objeto.chave1
+console.log("O valor da chave1 é", valor_chave_1)   // O valor da chave1 é 1
+
+// 2ª forma de acesso
+valor_chave_2 = objeto['chave2']
+console.log("O valor da chave2 é", valor_chave_2)   // O valor da chave2 é 2</code></pre>
+    </div>
+
+    <p>Observe que, no exemplo prévio, as chaves apontam para valores numéricos — mas os objetos aceitam dados de <strong>todos os tipos</strong>, como valores booleanos, <em>strings</em>, números, <em>arrays</em> e, até mesmo, outros objetos. Agora, veja um exemplo um pouco mais complexo:</p>
+
+    <div class="snippet">
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 16 — objeto aninhado</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">objeto = {
+        "chave1":{ "camada1_1":5 },
+        "chave2":['abacate', 'bola', 'cavalo']
+}</code></pre>
+    </div>
+
+    <p>Aqui, temos um objeto com duas chaves. A primeira recebe como valor <strong>outro objeto</strong>, que possui uma única chave <code>camada1_1</code>. Para acessar o valor nessa chave específica, pode-se executar o seguinte código:</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Acessando a camada interna</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">objeto = {
+        "chave1":{ "camada1_1":5 },
+        "chave2":['abacate', 'bola', 'cavalo']
+}
+
+// Acessando o valor da chave "camada1_1"
+valor_1 = objeto.chave1.camada1_1
+console.log(valor_1)   // 5</code></pre>
+    </div>
+
+    <p>Na <code>chave2</code>, nosso objeto recebe um <em>array</em> com três valores. Note que <strong>não</strong> podemos usar a notação de ponto nesse caso, pois <em>arrays</em> são acessados usando-se o índice; assim sendo, podemos usar a notação de colchetes. No exemplo a seguir, usamos esse tipo de notação para coletar o segundo elemento do <em>array</em> da <code>chave2</code> — note que o segundo elemento é indexado na posição 1:</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Acessando um item do array interno</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">objeto = {
+        "chave1":{ "camada1_1":5 },
+        "chave2":['abacate', 'bola', 'cavalo']
+}
+
+// Imprimindo o 2º elemento do array da chave2
+valor_2 = objeto.chave2[1]
+console.log(valor_2)   // bola</code></pre>
+    </div>
+
+    <h3>Percorrendo um objeto</h3>
+    <p>Podemos percorrer um objeto inteiro com o auxílio de um laço de repetição. Observe o exemplo a seguir:</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">Código 17 — for...in</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">objeto = {
+       "chave1":{ "camada1_1":5 },
+       "chave2":['abacate', 'bola', 'cavalo']
+}
+for(i in objeto){
+       chave = i                     // coleta a chave
+       valor = objeto[i]             // pega o valor correspondente à chave
+       console.log(chave, "-&gt;", valor) // imprime chave e valor atual
+}</code></pre>
+    </div>
+
+    <div class="output"><span class="output__t">Saída no console</span>chave1 -&gt; { camada1_1: 5 }
+chave2 -&gt; [ 'abacate', 'bola', 'cavalo' ]</div>
+
+    <p>Note que usamos a palavra reservada <code>in</code> para recuperar todas as chaves no objeto. Nesse caso, a cada rodada do laço <code>for</code>, uma nova chave será avaliada pelo bloco.</p>
+
+    <a class="video" href="#" onclick="return false;">
+      <span class="video__ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+      <span>
+        <span class="video__t">Videoaula: Objetos</span>
+        <span class="video__s">Veja como ler e declarar seus próprios objetos, além de algumas funções para manipulá-los. Para visualizar o objeto, acesse seu material digital.</span>
+      </span>
+    </a>
+
+    <h2 id="estudo-de-caso"><span class="num">Bloco 05</span>Estudo de caso</h2>
+
+    <div class="panel panel--case">
+      <div class="panel__hd">
+        <div class="panel__k">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          Desafio profissional
+        </div>
+        <h3>Cada candidato no seu horário</h3>
+      </div>
+      <div class="panel__bd">
+        <p>A equipe de recursos humanos da Empresa A está encantada com os <em>scripts</em> que você tem construído para auxiliar no processo de seleção dos novos estagiários. Assim, após requisitar a criação de um sistema que determinasse o horário de entrevistas para candidatos à vaga de estágio, a equipe pediu que você <strong>selecione o horário que cada candidato fará a entrevista</strong>.</p>
+        <p>Para isso, ela lhe passou uma lista com os <strong>24 indivíduos</strong> selecionados na primeira fase e pediu que os ordene <strong>em ordem alfabética</strong>. Os nomes dos pré-selecionados são:</p>
+
+        <div class="snippet">
+          <div class="snippet__bar">
+            <div class="snippet__dots"><i></i><i></i><i></i></div>
+            <span class="snippet__name">Lista de pré-selecionados</span>
+            <div class="snippet__acts"></div>
+          </div>
+          <pre><code data-lang="js">"José da Silva",
+"Antônio de Sá",
+"Felipe Augusto",
+"Carla Moreira",
+"Pedro Malta",
+"Maria Sousa",
+"Marta da Silva",
+"Fausto Augusto",
+"Silvio Sávio",
+"Maísa Silva",
+"Lucas Lopes",
+"Zenildo Santos",
+"Bruno Lucas",
+"Luana Melo",
+"Felipe Santos",
+"Flávio Miguel",
+"Lauro Maria",
+"Juca dos Santos",
+"Luciana Carla",
+"Felipe Silva",
+"André Manuel",
+"Pedro Parker",
+"Ana Maria",
+"Thiago Melo"</code></pre>
+        </div>
+
+        <p>A partir disso, construa um <em>script</em> que defina o horário de entrevista de cada um deles usando o seu editor de códigos. As entrevistas devem ser definidas pela ordem alfabética e começar às <strong>9h</strong> e terminar às <strong>17h</strong>. Cada entrevista deve ter, no máximo, <strong>15 minutos</strong>. Não devem ser marcadas entrevistas entre <strong>12h e 14h</strong>.</p>
+      </div>
+    </div>
+
+    <h2 id="resolucao"><span class="num">Bloco 06</span>Resolução do estudo de caso</h2>
+    <p>Podemos construir esse código <strong>adaptando</strong> o exemplo apresentado no estudo de caso passado. Observe:</p>
+
+    <div class="snippet" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">agenda-nominal.js</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">var hora = 9
+var minutos = 15
+var total_entrevistas = 0
+const saida = 17
+
+var entrevistados = [
+      "José da Silva",
+      "Antonio de Sá",
+      "Felipe Augusto",
+      "Carla Moreira",
+      "Pedro Malta",
+      "Maria Sousa",
+      "Marta da Silva",
+      "Fausto Augusto",
+      "Silvio Sávio",
+      "Maísa Silva",
+      "Lucas Lopes",
+      "Zenildo Santos",
+      "Bruno Lucas",
+      "Luana Melo",
+      "Felipe Santos",
+      "Flávio Miguel",
+      "Lauro Maria",
+      "Juca dos Santos",
+      "Luciana Carla",
+      "Felipe Silva",
+      "André Manuel",
+      "Pedro Parker",
+      "Ana Maria",
+      "Thiago Melo"
+]
+
+// ordenando os entrevistados em ordem alfabética
+entrevistados.sort()
+
+for(i = hora; i &lt; saida; i=i+1){
+      if((i == 12)||(i==13)){
+             continue
+      }
+      for(j = 0; j &lt; 60; j = j+minutos){
+             total_entrevistas++;
+             if(j == 0){
+                    console.log(i+":"+j+"0",
+                      "=&gt;", entrevistados[total_entrevistas - 1])
+             }
+             else{
+                    console.log(i+":"+j,
+                      "=&gt;", entrevistados[total_entrevistas - 1])
+             }
+      }
+}</code></pre>
+    </div>
+
+    <div class="note note--ok">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+        O detalhe do índice
+      </div>
+      <p>Note que podemos declarar a lista de indivíduos como um <em>array</em> (linhas 6 a 31). Na hora de imprimir os resultados, devemos apontar a posição do <em>array</em> e <strong>subtrair um</strong>. Isso é necessário uma vez que usamos nosso contador para começar a contagem do 1 (a primeira entrevista ocorre às 9:00), enquanto o <em>array</em> é indexado a partir da posição zero.</p>
+    </div>
+
+    <p>Ao executar esse código, você verá o seguinte resultado:</p>
+
+    <div class="output output--cols"><span class="output__t">Saída no console</span>9:00 =&gt; Ana Maria
+9:15 =&gt; André Manuel
+9:30 =&gt; Antonio de Sá
+9:45 =&gt; Bruno Lucas
+10:00 =&gt; Carla Moreira
+10:15 =&gt; Fausto Augusto
+10:30 =&gt; Felipe Augusto
+10:45 =&gt; Felipe Santos
+11:00 =&gt; Felipe Silva
+11:15 =&gt; Flávio Miguel
+11:30 =&gt; José da Silva
+11:45 =&gt; Juca dos Santos
+14:00 =&gt; Lauro Maria
+14:15 =&gt; Luana Melo
+14:30 =&gt; Lucas Lopes
+14:45 =&gt; Luciana Carla
+15:00 =&gt; Maria Sousa
+15:15 =&gt; Marta da Silva
+15:30 =&gt; Maísa Silva
+15:45 =&gt; Pedro Malta
+16:00 =&gt; Pedro Parker
+16:15 =&gt; Silvio Sávio
+16:30 =&gt; Thiago Melo
+16:45 =&gt; Zenildo Santos</div>
+
+    <a class="video" href="#" onclick="return false;">
+      <span class="video__ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+      <span>
+        <span class="video__t">Resolução do Estudo de Caso</span>
+        <span class="video__s">Para visualizar o objeto, acesse seu material digital.</span>
+      </span>
+    </a>
+
+    <h2 id="saiba-mais"><span class="num">Complemento</span>Saiba mais</h2>
+    <div class="panel panel--more">
+      <div class="panel__bd">
+        <ul class="links">
+          <li>
+            <b>Arrays (MDN Web Docs)</b>
+            <span>Neste link, você vai saber mais sobre <em>arrays</em> em JavaScript e conhecer métodos e propriedades que podem ser usados para manipulá-los.</span>
+            <a href="https://mzl.la/3HL4aVW" target="_blank" rel="noopener">https://mzl.la/3HL4aVW</a> — Acesso em: 17 dez. 2021.
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 id="revisao"><span class="num">Síntese</span>Métodos de array em uma página</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th style="width:150px">Método</th><th>Ação</th><th>Onde atua</th></tr></thead>
+        <tbody>
+          <tr><td><code>push()</code></td><td>Adiciona um elemento.</td><td>Fim</td></tr>
+          <tr><td><code>pop()</code></td><td>Remove um elemento e o retorna.</td><td>Fim</td></tr>
+          <tr><td><code>unshift()</code></td><td>Adiciona um elemento.</td><td>Início</td></tr>
+          <tr><td><code>shift()</code></td><td>Remove um elemento.</td><td>Início</td></tr>
+          <tr><td><code>slice(a, b)</code></td><td>Copia um trecho sem alterar o original.</td><td>Qualquer</td></tr>
+          <tr><td><code>splice(i, n)</code></td><td>Remove <code>n</code> elementos a partir do índice <code>i</code>.</td><td>Qualquer</td></tr>
+          <tr><td><code>indexOf(v)</code></td><td>Retorna o índice do valor <code>v</code>.</td><td>Qualquer</td></tr>
+          <tr><td><code>sort()</code></td><td>Ordena (alfabeticamente por padrão).</td><td>Todo o array</td></tr>
+          <tr><td><code>length</code></td><td><em>Propriedade</em>: quantidade de elementos.</td><td>Todo o array</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <aside class="toc">
+    <div class="toc__t">Neste módulo</div>
+    <ol></ol>
+  </aside>
+</div>
+
+<nav class="pager">
+  <a href="modulo-3.html">
+    <div class="k">← Anterior</div>
+    <div class="t">Módulo 3 · Estruturas de repetição</div>
+  </a>
+  <a href="referencias.html" class="next">
+    <div class="k">Próxima →</div>
+    <div class="t">Referências da Unidade</div>
+  </a>
+</nav>
+
+<footer class="sitefoot">
+  <p>Desenvolvimento em JavaScript · Unidade 1 — Livro Didático · <span data-year></span></p>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
