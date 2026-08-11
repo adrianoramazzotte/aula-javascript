@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plano de desenvolvimento · Mercado — Guia em 10 etapas</title>
+<meta name="description" content="Guia operacional para desenvolver o marketplace Mercado em dez etapas: objetivo, passos, comandos, arquivos e critérios de conclusão de cada uma.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@100..900&family=JetBrains+Mono:wght@400..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="aulas/assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%232f7d5d'/><text x='50' y='70' font-family='Helvetica,Arial' font-size='52' font-weight='bold' text-anchor='middle' fill='%23fff'>P</text></svg>">
+</head>
+<body>
+
+<div id="progress"></div>
+
+<header class="topbar">
+  <div class="topbar__in">
+    <a class="brand" href="projetos.html">
+      <span class="brand__mark">JS</span>
+      <span class="brand__txt">
+        <span class="brand__t">Projeto Mercado</span>
+        <span class="brand__s">Plano de desenvolvimento</span>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="projetos.html">Projetos</a>
+      <a href="especificacao-mercado.html">Especificação</a>
+      <a href="plano-desenvolvimento-mercado.html" aria-current="page">Plano</a>
+      <a href="projeto-saas-mercado.html">Contexto</a>
+    </nav>
+    <button class="iconbtn" data-theme-toggle type="button" aria-label="Alternar tema claro/escuro" title="Alternar tema">
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="hero__eyebrow">Guia operacional · versão 1.0</span>
+  <h1>Plano de desenvolvimento em 10 etapas</h1>
+  <p class="hero__lede">Este documento existe para responder a uma pergunta específica: <em>“voltei ao projeto depois de duas semanas — o que eu faço agora?”</em> Cada etapa traz objetivo, pré-requisitos, passos na ordem de execução, comandos, arquivos a criar e um critério objetivo de conclusão.</p>
+  <div class="hero__meta">
+    <span class="chip chip--accent">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      10 etapas
+    </span>
+    <span class="chip">Marco na etapa 5</span>
+    <span class="chip">Critérios verificáveis</span>
+  </div>
+</section>
+<div class="rule"><hr></div>
+
+<div class="shell">
+  <aside class="toc">
+    <div class="toc__t">Etapas</div>
+    <ol></ol>
+  </aside>
+
+  <main class="doc">
+
+    <!-- ============================================================ -->
+    <h2 id="como-usar"><span class="num">Antes de tudo</span>Como usar este plano</h2>
+
+    <p class="lead">Três documentos governam o projeto, e cada um responde a uma pergunta diferente. Confundi-los é a forma mais rápida de se perder.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Documento</th><th>Responde</th><th>Muda quando</th></tr></thead>
+        <tbody>
+          <tr><td><a href="especificacao-mercado.html"><b>Especificação</b></a></td><td><b>O quê</b> e <b>por quê</b> — requisitos, regras, modelo de dados</td><td>Só com mudança de escopo acordada</td></tr>
+          <tr><td><b>Plano</b> (este)</td><td><b>Em que ordem</b> e <b>como</b> — etapas, passos, comandos</td><td>Quando a ordem de trabalho muda</td></tr>
+          <tr><td><code>PROGRESSO.md</code></td><td><b>Onde parei</b> — etapa atual, o que já está pronto</td><td>A cada sessão de trabalho</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Rotina ao retomar o projeto</h3>
+    <ol class="steps">
+      <li><b>Leia <code>PROGRESSO.md</code></b><span>Ele diz qual é a etapa corrente e o que ficou pela metade. É a primeira coisa a abrir, sempre.</span></li>
+      <li><b>Abra a etapa correspondente neste plano</b><span>Cada etapa é autocontida: você não precisa reler as anteriores para trabalhar na atual.</span></li>
+      <li><b>Confirme que o ambiente sobe</b><span><code>docker compose up -d</code> e <code>npm run start:dev</code>. Se não subir, resolver isso é a tarefa — não avance por cima de ambiente quebrado.</span></li>
+      <li><b>Rode os testes antes de escrever código</b><span>Saber se a suíte já estava vermelha ao chegar evita horas caçando um defeito que não é seu.</span></li>
+      <li><b>Trabalhe na próxima tarefa não marcada</b><span>Uma tarefa por vez, um <i>commit</i> por tarefa concluída.</span></li>
+      <li><b>Ao encerrar, atualize <code>PROGRESSO.md</code></b><span>Marque o que concluiu e escreva em uma linha onde parou. Este passo é o que torna a retomada possível — não o pule por estar com pressa.</span></li>
+    </ol>
+
+    <div class="note note--info">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg>
+        Onde o código vai morar
+      </div>
+      <p>O sistema será desenvolvido na pasta <code>mercado/</code> <strong>deste mesmo repositório</strong>, aproveitando as branches <code>dev</code>, <code>hml</code> e <code>main</code> e a proteção já configuradas. O material didático continua onde está; nada se mistura.</p>
+      <p style="margin-bottom:0">A alternativa é um repositório separado — mais limpo em um projeto profissional, porém exige refazer branches, proteção e acessos dos alunos. Se optar por separar, o único trecho deste plano que muda é o passo 1 da etapa 0.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="convencoes"><span class="num">Regras da casa</span>Convenções do projeto</h2>
+
+    <h3>Branches e commits</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Item</th><th>Regra</th></tr></thead>
+        <tbody>
+          <tr><td>Trabalho do dia a dia</td><td>Sempre em <code>dev</code>. A <code>main</code> é protegida e só o professor atualiza.</td></tr>
+          <tr><td>Promoção</td><td><code>dev</code> → <code>hml</code> ao fechar uma etapa; <code>hml</code> → <code>main</code> quando homologado.</td></tr>
+          <tr><td>Mensagem de commit</td><td><code>tipo(escopo): descrição no imperativo</code> — ex.: <code>feat(auth): adiciona rotação de refresh token</code></td></tr>
+          <tr><td>Tipos</td><td><code>feat</code>, <code>fix</code>, <code>refactor</code>, <code>test</code>, <code>docs</code>, <code>chore</code></td></tr>
+          <tr><td>Tamanho</td><td>Um commit por tarefa concluída. Commit que muda cinco coisas não é revisável nem reversível.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Banco de dados</h3>
+    <ul>
+      <li><code>synchronize: false</code> <b>sempre</b>, em todos os ambientes. Toda alteração de esquema é uma migração versionada.</li>
+      <li>Nome da migração descreve a intenção: <code>1712000000000-CreateUsersTable.ts</code>.</li>
+      <li>Migração nunca é editada depois de aplicada em <code>hml</code> ou <code>main</code> — corrige-se com uma nova.</li>
+      <li>Toda migração tem <code>down()</code> funcional, testado ao menos uma vez.</li>
+      <li>Dinheiro em <code>DECIMAL(10,2)</code>, com transformador explícito no TypeORM para virar número.</li>
+    </ul>
+
+    <h3>Código</h3>
+    <ul>
+      <li>TypeScript em modo <code>strict</code>. <code>any</code> exige comentário justificando.</li>
+      <li>Regra de negócio mora no <i>service</i>. <i>Controller</i> só recebe, valida e devolve.</li>
+      <li>Toda entrada passa por DTO com <code>class-validator</code>; <code>ValidationPipe</code> global com <code>whitelist</code> e <code>forbidNonWhitelisted</code>.</li>
+      <li>Nada de consulta sem paginação em rota de listagem.</li>
+      <li>Nome de variável e função em inglês; comentário e mensagem ao usuário em português.</li>
+    </ul>
+
+    <h3>Definição de pronto de uma tarefa</h3>
+    <ul>
+      <li>Critérios de aceite do requisito atendidos.</li>
+      <li>Teste de unidade na regra de negócio e teste de integração no caminho principal.</li>
+      <li>Verificação de permissão testada, inclusive a tentativa de acessar recurso de outro dono.</li>
+      <li><code>npm run lint</code> e <code>npm test</code> passando.</li>
+      <li><code>PROGRESSO.md</code> atualizado.</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="mapa"><span class="num">Visão geral</span>Mapa das dez etapas</h2>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Etapa</th><th>Título</th><th>Requisitos</th><th>Ao final, é possível demonstrar</th></tr></thead>
+        <tbody>
+          <tr><td><b>0</b></td><td>Fundação</td><td>—</td><td>Aplicação sobe e <code>/health</code> responde com banco conectado</td></tr>
+          <tr><td><b>1</b></td><td>Identidade e acesso</td><td>RF-01, RNF-01</td><td>Cadastro, login e rota protegida por papel</td></tr>
+          <tr><td><b>2</b></td><td>Lojas e catálogo</td><td>RF-02, RF-09</td><td>Vendedor aprovado publica um produto com variações</td></tr>
+          <tr><td><b>3</b></td><td>Vitrine SSR e SEO</td><td>RNF-04</td><td>Navegação pública com busca, filtros e URL amigável</td></tr>
+          <tr><td><b>4</b></td><td>Carrinho</td><td>RF-03</td><td>Carrinho com itens de duas lojas, preservado no login</td></tr>
+          <tr><td><b>5</b></td><td>Checkout e pagamento</td><td>RF-04, RF-05</td><td><b>Uma venda completa, do carrinho ao pedido pago</b></td></tr>
+          <tr><td><b>6</b></td><td>Operação do vendedor</td><td>RF-05, RF-09</td><td>Vendedor separa, envia e informa rastreio</td></tr>
+          <tr><td><b>7</b></td><td>Reputação e notificações</td><td>RF-06, RF-08</td><td>Comprador avalia; vendedor recebe push</td></tr>
+          <tr><td><b>8</b></td><td>Administração e relatórios</td><td>RF-07</td><td>GMV, comissão e curva ABC com dados reais</td></tr>
+          <tr><td><b>9</b></td><td>PWA, desempenho e produção</td><td>RNF-02, 03, 04</td><td>Aplicação instalável, Lighthouse ≥ 90, em produção</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note note--warn">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        Não pule a ordem
+      </div>
+      <p>As etapas foram ordenadas por dependência técnica, não por preferência. Carrinho sem catálogo não tem o que guardar; checkout sem carrinho não tem o que cobrar. A única flexibilidade real está nas etapas 7 e 8, que podem trocar de lugar.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="etapa-0"><span class="num">Etapa 0</span>Fundação</h2>
+
+    <p><b>Objetivo:</b> ter um projeto que sobe, conecta no banco e roda no CI — antes de qualquer regra de negócio.</p>
+    <p><b>Entregável:</b> <code>GET /health</code> retornando 200 com o estado da conexão com o banco.</p>
+
+    <h3>Passos</h3>
+    <ol class="steps">
+      <li>
+        <b>Criar o projeto</b>
+        <span>Na branch <code>dev</code>, criar a pasta <code>mercado/</code> com o Nest CLI.</span>
+      </li>
+      <li>
+        <b>Instalar as dependências de base</b>
+        <span>Configuração, TypeORM, driver MySQL e validação.</span>
+      </li>
+      <li>
+        <b>Subir MySQL e Redis em Docker</b>
+        <span>Um <code>docker-compose.yml</code> com os dois serviços e volume nomeado para os dados não sumirem.</span>
+      </li>
+      <li>
+        <b>Configuração tipada por ambiente</b>
+        <span><code>ConfigModule</code> global validando as variáveis na inicialização. Faltando variável obrigatória, a aplicação não sobe — falha cedo e explícita.</span>
+      </li>
+      <li>
+        <b>TypeORM com <code>synchronize: false</code></b>
+        <span>Um <code>data-source.ts</code> exclusivo para o CLI de migrações e os scripts <code>migration:generate</code>, <code>migration:run</code> e <code>migration:revert</code> no <code>package.json</code>.</span>
+      </li>
+      <li>
+        <b>Primeira migração</b>
+        <span>Criar a tabela <code>users</code>. É o teste real de que a cadeia entidade → migração → banco funciona.</span>
+      </li>
+      <li>
+        <b>Endpoint <code>/health</code></b>
+        <span>Executa <code>SELECT 1</code> e devolve o estado. É o que o provedor de nuvem vai consultar depois.</span>
+      </li>
+      <li>
+        <b>Qualidade e CI</b>
+        <span>ESLint, Prettier, Jest configurado e um <i>workflow</i> do GitHub Actions rodando <i>lint</i>, teste e <i>build</i> em todo <i>push</i>.</span>
+      </li>
+    </ol>
+
+    <div class="snippet" data-numbers="off">
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">terminal — etapa 0</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="text">git switch dev
+
+npm i -g @nestjs/cli
+nest new mercado --package-manager npm
+cd mercado
+
+npm i @nestjs/config @nestjs/typeorm typeorm mysql2
+npm i class-validator class-transformer
+npm i -D @types/node
+
+# depois de criar docker-compose.yml
+docker compose up -d
+
+npm run migration:generate -- src/database/migrations/CreateUsersTable
+npm run migration:run
+
+npm run start:dev
+curl -s localhost:3000/health</code></pre>
+    </div>
+
+    <h3>Arquivos criados</h3>
+    <ul>
+      <li><code>mercado/docker-compose.yml</code> — MySQL 8 e Redis 7</li>
+      <li><code>mercado/.env.example</code> — todas as variáveis, sem valores reais</li>
+      <li><code>mercado/src/config/</code> — configuração tipada e validação de ambiente</li>
+      <li><code>mercado/src/database/data-source.ts</code> — fonte de dados do CLI</li>
+      <li><code>mercado/src/database/migrations/</code> — primeira migração</li>
+      <li><code>mercado/src/modules/health/</code> — <i>controller</i> e <i>service</i></li>
+      <li><code>.github/workflows/ci.yml</code> — <i>lint</i>, teste e <i>build</i></li>
+    </ul>
+
+    <h3>Concluída quando</h3>
+    <ul>
+      <li><code>docker compose up -d</code> sobe banco e Redis sem erro.</li>
+      <li><code>npm run migration:run</code> cria a tabela <code>users</code> em um banco vazio.</li>
+      <li><code>npm run migration:revert</code> desfaz a migração sem deixar resíduo.</li>
+      <li><code>GET /health</code> devolve 200; com o banco derrubado, devolve 503.</li>
+      <li>O CI está verde no GitHub.</li>
+      <li><code>.env</code> está no <code>.gitignore</code> e nenhum segredo foi versionado.</li>
+    </ul>
+
+    <div class="note note--danger">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        A armadilha desta etapa
+      </div>
+      <p>É tentador ligar <code>synchronize: true</code> “só para começar rápido”. Quem faz isso descobre, três semanas depois, que precisa gerar a primeira migração a partir de um banco que já divergiu — e que uma coluna com dados de teste sumiu numa reinicialização. Configure migrações agora, quando custa quinze minutos.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="etapa-1"><span class="num">Etapa 1</span>Identidade e acesso</h2>
+
+    <p><b>Objetivo:</b> cadastrar usuários, autenticar com JWT e proteger rotas por papel.<br>
+       <b>Requisitos:</b> RF-01, RNF-01.1 a 01.11.<br>
+       <b>Pré-requisito:</b> etapa 0 concluída.</p>
+
+    <h3>Passos</h3>
+    <ol class="steps">
+      <li><b>Entidades</b><span><code>User</code> (com <code>role</code> e <code>status</code>), <code>RefreshToken</code> e <code>Address</code>, cada uma com sua migração.</span></li>
+      <li><b>Hash de senha</b><span>Argon2id em um serviço isolado. A senha nunca aparece em log, em resposta de API ou em <i>fixture</i> de teste.</span></li>
+      <li><b>Cadastro e verificação de e-mail</b><span>Token de uso único com 24 h de validade. O envio pode ser um <i>log</i> no console nesta etapa — o provedor real entra na etapa 7.</span></li>
+      <li><b>Login e emissão de tokens</b><span><i>Access</i> de 15 min e <i>refresh</i> de 7 dias, com o <i>hash</i> do <i>refresh</i> guardado no banco.</span></li>
+      <li><b>Rotação e detecção de reuso</b><span>Cada uso do <i>refresh</i> invalida o anterior. Reapresentação de token já usado derruba todas as sessões do usuário.</span></li>
+      <li><b>Guards e decorators</b><span><code>JwtAuthGuard</code>, <code>RolesGuard</code>, <code>@Roles()</code> e <code>@CurrentUser()</code> em <code>src/common/</code>. Serão usados em todas as etapas seguintes.</span></li>
+      <li><b>Recuperação de senha</b><span>Token de 1 h, invalidado no uso. A resposta é idêntica para e-mail existente e inexistente, para não revelar quem tem conta.</span></li>
+      <li><b>Limitação de tentativas</b><span><code>@nestjs/throttler</code> global, com limite mais rígido em login, cadastro e recuperação.</span></li>
+      <li><b>Seed do administrador</b><span>Um <i>script</i> cria o primeiro admin a partir de variáveis de ambiente. Admin não se cadastra pela interface.</span></li>
+    </ol>
+
+    <h3>Concluída quando</h3>
+    <ul>
+      <li>Cadastro com e-mail repetido devolve 409.</li>
+      <li>Login devolve o par de tokens; <code>/auth/refresh</code> rotaciona e invalida o anterior.</li>
+      <li>Reusar um <i>refresh token</i> já consumido derruba todas as sessões — <b>com teste automatizado</b>.</li>
+      <li>Rota anotada com <code>@Roles('admin')</code> devolve 403 para comprador autenticado.</li>
+      <li>Seis tentativas de login erradas em sequência devolvem 429.</li>
+      <li>Nenhuma resposta da API contém <code>password_hash</code>.</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="etapa-2"><span class="num">Etapa 2</span>Lojas e catálogo</h2>
+
+    <p><b>Objetivo:</b> vendedor com loja aprovada publica produtos com variações e imagens.<br>
+       <b>Requisitos:</b> RF-02, RF-09.1 a 09.4.<br>
+       <b>Pré-requisito:</b> etapa 1 — o dono do recurso vem do token.</p>
+
+    <h3>Passos</h3>
+    <ol class="steps">
+      <li><b>Entidades do domínio</b><span><code>Store</code>, <code>Category</code> (auto-relacionada), <code>Product</code>, <code>ProductVariant</code> e <code>ProductImage</code>, com as migrações e os índices de <code>slug</code>, <code>status</code> e chaves estrangeiras.</span></li>
+      <li><b>Abertura e aprovação de loja</b><span>Solicitação pelo comprador, fila de aprovação para o administrador, mudança de papel para <code>seller</code> na aprovação.</span></li>
+      <li><b>Guard de dono do recurso</b><span><code>StoreOwnerGuard</code> compara o <code>storeId</code> do token com o do recurso acessado. <b>Toda</b> rota de vendedor passa por ele.</span></li>
+      <li><b>CRUD de produto</b><span>Criação em <code>rascunho</code>, edição, exclusão lógica e listagem restrita à própria loja.</span></li>
+      <li><b>Variações</b><span>SKU único, atributos em JSON, preço e estoque próprios. Produto sem variação ganha uma variação padrão implícita — decidir isso aqui evita dois caminhos de código no checkout.</span></li>
+      <li><b>Imagens</b><span><i>Upload</i> para armazenamento de objetos, conversão para WebP e geração de miniatura com <code>sharp</code>. Nada gravado no disco do servidor de aplicação.</span></li>
+      <li><b>Publicação validada</b><span>A transição <code>rascunho → publicado</code> só ocorre com título, imagem, preço maior que zero, categoria e loja aprovada. A mensagem de erro aponta o campo pendente.</span></li>
+      <li><b>Seed de categorias</b><span>Uma árvore inicial de categorias, para não travar o desenvolvimento das próximas etapas.</span></li>
+    </ol>
+
+    <h3>Concluída quando</h3>
+    <ul>
+      <li>Vendedor da loja A recebe 403 ao editar produto da loja B — <b>com teste automatizado</b>.</li>
+      <li>Produto sem imagem não publica, e o erro diz qual campo falta.</li>
+      <li>Loja pendente não consegue publicar produto.</li>
+      <li><i>Upload</i> devolve URL pública funcional, com miniatura gerada.</li>
+      <li>Exclusão de produto é lógica: some da listagem, permanece consultável por id.</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="etapa-3"><span class="num">Etapa 3</span>Vitrine SSR e SEO</h2>
+
+    <p><b>Objetivo:</b> páginas públicas renderizadas no servidor, encontráveis por busca.<br>
+       <b>Requisitos:</b> RNF-04 completo, RF-02.2 e 02.7.<br>
+       <b>Pré-requisito:</b> etapa 2 — é preciso ter produto publicado para exibir.</p>
+
+    <h3>Passos</h3>
+    <ol class="steps">
+      <li><b>Motor de views</b><span>Configurar Handlebars no <code>main.ts</code>, com <i>layout</i> base, <i>partials</i> de cabeçalho e rodapé, e <i>helpers</i> de formatação de moeda e data.</span></li>
+      <li><b>Rotas públicas</b><span><code>/</code> (vitrine), <code>/c/:slug</code> (categoria), <code>/produto/:slug</code> e <code>/loja/:slug</code>, em um módulo <code>web</code> separado dos <i>controllers</i> de API.</span></li>
+      <li><b>Busca e filtros</b><span>Índice <code>FULLTEXT</code> em título e descrição; filtros por categoria, faixa de preço, loja e nota; ordenação e paginação — sempre com limite máximo.</span></li>
+      <li><b><i>Slugs</i></b><span>Gerados do título, únicos, imutáveis após a publicação. Mudança de título mantém o <i>slug</i> antigo para não quebrar links já indexados.</span></li>
+      <li><b>Metadados</b><span><code>&lt;title&gt;</code> e <i>description</i> únicos por página, Open Graph, Twitter Card e <i>canonical</i> em páginas filtradas ou paginadas.</span></li>
+      <li><b>Dados estruturados</b><span>JSON-LD de <code>Product</code>, <code>Offer</code>, <code>AggregateRating</code> e <code>BreadcrumbList</code> na página de produto.</span></li>
+      <li><b>Sitemap e robots</b><span><code>/sitemap.xml</code> gerado dos produtos publicados e <code>/robots.txt</code> bloqueando carrinho, checkout, conta e área administrativa.</span></li>
+      <li><b>Imagens responsivas</b><span><code>srcset</code>, dimensões explícitas para não gerar deslocamento de layout, e carregamento diferido abaixo da dobra.</span></li>
+    </ol>
+
+    <h3>Concluída quando</h3>
+    <ul>
+      <li><code>curl</code> na página de produto devolve HTML com título, preço e descrição — <b>sem executar JavaScript</b>.</li>
+      <li>A URL é <code>/produto/tenis-corrida-azul-42</code>, não <code>/produto?id=7311</code>.</li>
+      <li>O validador de dados estruturados do Google aceita a página sem erro.</li>
+      <li><code>/sitemap.xml</code> lista apenas produtos publicados.</li>
+      <li>Lighthouse na página de produto: SEO ≥ 90 e desempenho ≥ 80 com dados de exemplo.</li>
+      <li>A vitrine é usável em tela de 360 px, sem rolagem horizontal.</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="etapa-4"><span class="num">Etapa 4</span>Carrinho</h2>
+
+    <p><b>Objetivo:</b> carrinho persistente, com itens de várias lojas, que sobrevive ao login.<br>
+       <b>Requisitos:</b> RF-03.<br>
+       <b>Pré-requisito:</b> etapa 3 — o botão de comprar nasce na página de produto.</p>
+
+    <h3>Passos</h3>
+    <ol class="steps">
+      <li><b>Entidades</b><span><code>Cart</code> (com <code>user_id</code> nulo ou <code>session_id</code>) e <code>CartItem</code>, com restrição de unicidade por carrinho e variação.</span></li>
+      <li><b>Sessão de visitante</b><span>Identificador em <i>cookie</i> <code>HttpOnly</code>, <code>Secure</code> e <code>SameSite=Lax</code>, criado na primeira adição ao carrinho.</span></li>
+      <li><b>Operações</b><span>Adicionar, alterar quantidade, remover e esvaziar — sempre validando existência, publicação e estoque da variação.</span></li>
+      <li><b>Mesclagem no login</b><span>Ao autenticar, o carrinho do visitante é incorporado ao da conta: mesma variação soma quantidades, respeitando o estoque disponível.</span></li>
+      <li><b>Revalidação a cada exibição</b><span>Preço e disponibilidade vêm do banco. Mudança desde a inclusão gera aviso explícito antes de seguir para o checkout.</span></li>
+      <li><b>Agrupamento por loja</b><span>A resposta e a tela agrupam por loja, cada grupo com subtotal e frete próprios.</span></li>
+      <li><b>Frete por tabela</b><span>Tabela por região configurada por loja, mais opção de retirada. Integração real com transportadora está fora do MVP.</span></li>
+      <li><b>Expiração</b><span>Rotina que remove carrinhos de visitante sem atividade há 30 dias.</span></li>
+    </ol>
+
+    <h3>Concluída quando</h3>
+    <ul>
+      <li>Adicionar como visitante, fazer login e encontrar o item lá — <b>com teste automatizado</b>.</li>
+      <li>Requisição com preço adulterado no corpo é ignorada: o valor usado é o do banco.</li>
+      <li>Carrinho com itens de duas lojas mostra dois subtotais e dois fretes.</li>
+      <li>Produto despublicado depois de adicionado aparece marcado e bloqueia o checkout.</li>
+      <li>Quantidade acima do estoque é rejeitada com mensagem clara.</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="etapa-5"><span class="num">Etapa 5</span>Checkout e pagamento <span class="chip chip--accent">marco</span></h2>
+
+    <p><b>Objetivo:</b> transformar carrinho em pedido pago, com estoque baixado corretamente.<br>
+       <b>Requisitos:</b> RF-04 completo, RF-05.1 a 05.4.<br>
+       <b>Pré-requisito:</b> etapa 4 e conta de teste no gateway já criada.</p>
+
+    <div class="note note--ok">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+        Esta é a etapa que define o projeto
+      </div>
+      <p>Ao final dela existe um sistema que <strong>vende</strong>. Reserve mais tempo do que parece necessário: é aqui que moram concorrência, transação, integração externa e processamento assíncrono — os quatro assuntos difíceis do projeto, todos juntos.</p>
+    </div>
+
+    <h3>Passos</h3>
+    <ol class="steps">
+      <li><b>Entidades</b><span><code>Order</code>, <code>SubOrder</code>, <code>OrderItem</code>, <code>Payment</code> e <code>OrderStatusHistory</code>. <code>OrderItem</code> guarda <i>snapshot</i> de título e preço unitário.</span></li>
+      <li><b>Fluxo do checkout</b><span>Identificação, endereço, frete por loja, resumo e pagamento — cada passo validado no servidor, sem confiar no estado do cliente.</span></li>
+      <li><b>Criação transacional do pedido</b><span>Em <b>uma única transação</b>: criar pedido, criar um subpedido por loja, gravar itens e reservar estoque com <code>SELECT ... FOR UPDATE</code> na variação. Falhou qualquer parte, tudo volta atrás.</span></li>
+      <li><b>Idempotência na entrada</b><span>Chave de idempotência única por tentativa de checkout: duplo clique devolve o mesmo pedido, não cria outro.</span></li>
+      <li><b>Integração com o gateway</b><span>Cartão tokenizado no navegador; a API recebe só o <i>token</i>. Pix devolve o código de pagamento. Nenhum dado de cartão passa pelo servidor.</span></li>
+      <li><b><i>Webhook</i></b><span>Verificar a assinatura, registrar o <i>payload</i> bruto, checar se o evento já foi processado e só então confirmar. Em desenvolvimento, expor o endereço local com <code>ngrok</code>.</span></li>
+      <li><b>Confirmação</b><span>Aprovado o pagamento: efetivar a baixa de estoque, calcular comissão e líquido por subpedido, mover para <code>pago</code> e registrar no histórico.</span></li>
+      <li><b>Expiração da reserva</b><span>Tarefa a cada 5 minutos cancela pedidos não pagos há mais de 30 minutos e devolve o estoque — sempre reconferindo se o pagamento não entrou nesse intervalo.</span></li>
+      <li><b>Testes do caminho crítico</b><span>Compra completa de ponta a ponta; <i>webhook</i> duplicado; e duas compras simultâneas da última unidade.</span></li>
+    </ol>
+
+    <h3>Concluída quando</h3>
+    <ul>
+      <li>Uma compra completa funciona de ponta a ponta com o gateway em modo de teste.</li>
+      <li>Reenviar o mesmo <i>webhook</i> não confirma o pedido duas vezes nem baixa o estoque duas vezes.</li>
+      <li>Duas requisições simultâneas pela última unidade: uma conclui, a outra recebe erro — e <b>o estoque nunca fica negativo</b>.</li>
+      <li>Pedido não pago é cancelado pela rotina e o estoque volta.</li>
+      <li>Mudar o preço do produto depois da compra não altera o valor do pedido já criado.</li>
+      <li>Nenhum dado de cartão aparece no banco ou nos <i>logs</i>.</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="etapa-6"><span class="num">Etapa 6</span>Operação do vendedor</h2>
+
+    <p><b>Objetivo:</b> fechar o ciclo operacional — o vendedor separa, envia e o comprador acompanha.<br>
+       <b>Requisitos:</b> RF-05.1 a 05.6, RF-09.5 a 09.8.<br>
+       <b>Pré-requisito:</b> etapa 5 — só há o que operar se houver pedido pago.</p>
+
+    <h3>Passos</h3>
+    <ol class="steps">
+      <li><b>Máquina de estados</b><span>Um serviço central valida cada transição contra o mapa da especificação. Transição inválida lança exceção; a interface apenas reflete o que o serviço permite.</span></li>
+      <li><b>Painel do vendedor</b><span>Lista de subpedidos por estado, detalhe com itens e endereço, ações de avançar estado e campo de código de rastreio.</span></li>
+      <li><b>Linha do tempo do comprador</b><span>Histórico de cada subpedido, com data, estado e rastreio quando houver.</span></li>
+      <li><b>Cancelamento e devolução</b><span>Cancelar só antes do envio; depois disso o caminho é devolução, com estorno via gateway e reversão de comissão e estoque.</span></li>
+      <li><b>Estoque do vendedor</b><span>Tela de ajuste de estoque por variação e alerta de estoque baixo.</span></li>
+      <li><b>Extrato</b><span>Por período: pedidos, valor bruto, comissão retida e líquido a receber.</span></li>
+    </ol>
+
+    <h3>Concluída quando</h3>
+    <ul>
+      <li>Tentar pular de <code>pago</code> direto para <code>entregue</code> é rejeitado pelo serviço — <b>com teste automatizado</b>.</li>
+      <li>Vendedor A não enxerga nem altera subpedido da loja B.</li>
+      <li>Cancelamento devolve o estoque e reverte a comissão.</li>
+      <li>Todo estado registra autor, data e motivo no histórico.</li>
+      <li>O extrato bate com a soma dos subpedidos do período.</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="etapa-7"><span class="num">Etapa 7</span>Reputação e notificações</h2>
+
+    <p><b>Objetivo:</b> avaliações confiáveis e comunicação automática com as duas pontas.<br>
+       <b>Requisitos:</b> RF-06 e RF-08 completos.<br>
+       <b>Pré-requisito:</b> etapa 6 — só avalia quem recebeu.</p>
+
+    <h3>Passos</h3>
+    <ol class="steps">
+      <li><b>Avaliação verificada</b><span>Vínculo com <code>order_item_id</code> único: só avalia quem comprou aquele item e cujo subpedido está <code>entregue</code>. Uma avaliação por item.</span></li>
+      <li><b>Média desnormalizada</b><span>Recalcular e gravar média e contagem em produto e loja a cada avaliação. A vitrine lê o campo pronto, nunca agrega em tempo real.</span></li>
+      <li><b>Resposta e moderação</b><span>Uma resposta pública por avaliação; denúncia por qualquer usuário; fila de moderação para o administrador ocultar.</span></li>
+      <li><b>Infraestrutura de fila</b><span>BullMQ sobre Redis, com repetição em espera exponencial, no máximo 3 tentativas e fila de fracassos.</span></li>
+      <li><b>E-mail transacional</b><span>Provedor real (Resend, SendGrid ou SES) e <i>templates</i> versionados. Migrar para cá os e-mails simulados da etapa 1.</span></li>
+      <li><b>Push PWA</b><span>Chaves VAPID, inscrição pelo <i>service worker</i>, entidade <code>push_subscriptions</code> e remoção automática de inscrição inválida (410).</span></li>
+      <li><b>Momento de pedir permissão</b><span>Solicitar autorização de push <b>depois</b> de uma ação relevante — como concluir uma compra — nunca ao abrir o site.</span></li>
+      <li><b>Preferências</b><span>Por canal e por tipo de evento. Avisos de segurança e de transação não são desativáveis.</span></li>
+      <li><b>Isolamento de falhas</b><span>Erro de envio nunca derruba operação de negócio: o pedido se confirma mesmo que o e-mail falhe.</span></li>
+    </ol>
+
+    <h3>Concluída quando</h3>
+    <ul>
+      <li>Quem não comprou não consegue avaliar — <b>com teste automatizado</b>.</li>
+      <li>Avaliar duas vezes o mesmo item de pedido é rejeitado.</li>
+      <li>A média do produto muda ao registrar nova avaliação.</li>
+      <li>Derrubar o provedor de e-mail não impede a confirmação de um pedido.</li>
+      <li>Push chega ao vendedor em uma venda real de teste.</li>
+      <li>Desativar um tipo de notificação interrompe aquele envio e só aquele.</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="etapa-8"><span class="num">Etapa 8</span>Administração e relatórios</h2>
+
+    <p><b>Objetivo:</b> dar ao operador da plataforma visão e controle.<br>
+       <b>Requisitos:</b> RF-07 completo, RF-09.4 e 09.7.<br>
+       <b>Pré-requisito:</b> etapa 6 — relatório sem dado real não se valida.</p>
+
+    <h3>Passos</h3>
+    <ol class="steps">
+      <li><b>Área administrativa</b><span>Rotas sob <code>/admin</code>, protegidas por papel e excluídas da indexação no <code>robots.txt</code>.</span></li>
+      <li><b>Visão geral</b><span>GMV, comissão apurada, número de pedidos, ticket médio e taxa de cancelamento, com filtro de período.</span></li>
+      <li><b>Relatórios detalhados</b><span>Vendas por período com comparação, produtos mais vendidos, curva ABC por faturamento, ranking de vendedores e painel operacional de pedidos parados.</span></li>
+      <li><b>Moderação</b><span>Filas de lojas pendentes, avaliações denunciadas e produtos sinalizados, cada uma com ação em um clique.</span></li>
+      <li><b>Gestão</b><span>Bloqueio de usuário, alteração de papel, suspensão de loja e ajuste de comissão global ou por loja — tudo registrado em auditoria.</span></li>
+      <li><b>Exportação</b><span>CSV em todo relatório, gerado em fila quando o volume exigir.</span></li>
+      <li><b>Desempenho das consultas</b><span>Índices por data e por loja. Acima de 50 mil pedidos, tabela de agregados diários alimentada por rotina.</span></li>
+    </ol>
+
+    <h3>Concluída quando</h3>
+    <ul>
+      <li>Comprador e vendedor recebem 403 em qualquer rota <code>/admin</code>.</li>
+      <li>O GMV do relatório bate com a soma manual dos pedidos pagos do período.</li>
+      <li>Alterar o preço de um produto <b>não</b> altera o faturamento de meses anteriores.</li>
+      <li>Suspender uma loja despublica seus produtos e preserva os pedidos em andamento.</li>
+      <li>O CSV abre corretamente com acentuação e separador de decimais brasileiros.</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="etapa-9"><span class="num">Etapa 9</span>PWA, desempenho e produção</h2>
+
+    <p><b>Objetivo:</b> transformar a aplicação que funciona em aplicação pronta para uso real.<br>
+       <b>Requisitos:</b> RNF-02, RNF-03 e RNF-04.8 a 04.10.<br>
+       <b>Pré-requisito:</b> etapas 0 a 8 concluídas.</p>
+
+    <h3>Passos</h3>
+    <ol class="steps">
+      <li><b>PWA</b><span><code>manifest.webmanifest</code> com ícones de 192 e 512 px, <i>service worker</i> com cache de casca e estáticos, e página offline.</span></li>
+      <li><b>Regra de cache</b><span>Estáticos com <i>cache-first</i>; carrinho, checkout, conta e pedidos <b>sempre</b> da rede. Preço em cache é defeito grave.</span></li>
+      <li><b>Auditoria de consultas</b><span>Ligar o <i>log</i> de SQL e percorrer as telas principais caçando N+1. Corrigir com <code>relations</code> ou <i>join</i> explícito.</span></li>
+      <li><b>Índices e desempenho</b><span>Revisar o plano de execução das consultas mais frequentes e criar os índices faltantes.</span></li>
+      <li><b>Teste de carga</b><span>k6 ou Artillery simulando 200 usuários simultâneos e 50 pedidos por minuto, medindo o p95.</span></li>
+      <li><b>Endurecimento de segurança</b><span><code>helmet</code>, CSP restritiva, CSRF nos formulários SSR, revisão dos limites de requisição e <code>npm audit</code> zerado em vulnerabilidades altas.</span></li>
+      <li><b>Acessibilidade</b><span>Navegação completa por teclado, foco visível, contraste conferido e leitura com leitor de tela nas telas de compra.</span></li>
+      <li><b>Implantação</b><span>Provisionar produção, configurar variáveis, rodar migrações antes de subir a versão, apontar domínio com HTTPS e ativar backup diário.</span></li>
+      <li><b>Observabilidade</b><span><i>Logs</i> estruturados sem dado pessoal, monitoramento de erros e alerta de indisponibilidade no <code>/health</code>.</span></li>
+      <li><b>Restauração testada</b><span>Restaurar um backup em ambiente separado ao menos uma vez. Backup não testado não é backup.</span></li>
+    </ol>
+
+    <h3>Concluída quando</h3>
+    <ul>
+      <li>A aplicação é instalável pelo navegador em desktop e celular.</li>
+      <li>Sem rede, a página offline aparece — e o checkout nunca é servido do cache.</li>
+      <li>Lighthouse ≥ 90 nas quatro categorias na página de produto.</li>
+      <li>Teste de carga com p95 dentro das metas do RNF-02.1.</li>
+      <li>Produção no ar com HTTPS, domínio próprio e backup diário funcionando.</li>
+      <li>Uma compra real de ponta a ponta foi feita em produção.</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="progresso"><span class="num">Controle</span>Registro de progresso</h2>
+
+    <p>O arquivo <code>PROGRESSO.md</code>, na raiz do repositório, é a memória do projeto entre sessões. Ele tem três blocos: onde o trabalho parou, a lista de etapas com o que está concluído, e as decisões que já foram tomadas.</p>
+
+    <div class="snippet" data-numbers="off">
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">PROGRESSO.md — formato</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="text">## Estado atual
+Etapa: 1 — Identidade e acesso
+Última sessão: 2026-08-18
+Parei em: rotação de refresh token implementada, falta o teste de reuso
+Próximo passo: escrever o teste que reapresenta token consumido
+
+## Etapas
+- [x] 0 — Fundação
+- [ ] 1 — Identidade e acesso
+      - [x] Entidades User, RefreshToken, Address
+      - [x] Hash Argon2id
+      - [ ] Detecção de reuso de refresh token
+- [ ] 2 — Lojas e catálogo</code></pre>
+    </div>
+
+    <div class="note note--warn">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        A linha mais importante do arquivo
+      </div>
+      <p>É a <b>“Parei em”</b>. Marcar caixinhas diz o que foi feito; essa linha diz o que estava acontecendo na cabeça de quem escreveu o código. Sem ela, retomar custa uma hora de leitura para reconstruir o contexto — e essa hora se paga em cada interrupção do projeto.</p>
+    </div>
+
+    <h3>Quando uma etapa termina</h3>
+    <ol>
+      <li>Rodar <code>npm run lint</code> e <code>npm test</code> — tudo verde.</li>
+      <li>Percorrer a lista “Concluída quando” da etapa, item por item, executando de fato cada verificação.</li>
+      <li>Atualizar <code>PROGRESSO.md</code>.</li>
+      <li><i>Commit</i> e <i>push</i> em <code>dev</code>.</li>
+      <li>Promover para <code>hml</code> e validar no ambiente de homologação.</li>
+      <li>Só então começar a etapa seguinte.</li>
+    </ol>
+
+    <h3>Se algo der errado no meio</h3>
+    <p>Encontrou um defeito de uma etapa anterior? Corrija na hora, com <i>commit</i> próprio do tipo <code>fix</code>, e registre em <code>PROGRESSO.md</code>. Não abra uma lista paralela de pendências: lista de dívida técnica que ninguém lê é dívida que ninguém paga.</p>
+    <p>Descobriu que um requisito da especificação está errado ou incompleto? Atualize a <a href="especificacao-mercado.html">especificação</a> <b>antes</b> de implementar diferente. Código que diverge do documento sem que o documento mude é a origem mais comum de discussão sobre o que havia sido combinado.</p>
+
+    <div class="panel panel--case">
+      <div class="panel__hd">
+        <span class="panel__k">Comece agora</span>
+        <h3 style="margin:6px 0 0">A primeira hora do projeto</h3>
+      </div>
+      <div class="panel__bd">
+        <p style="margin-bottom:0"><code>git switch dev</code> → <code>nest new mercado</code> → <code>docker-compose.yml</code> com MySQL → TypeORM com <code>synchronize: false</code> → migração criando <code>users</code> → <code>GET /health</code> respondendo. Com isso funcionando, a etapa 0 está mais da metade feita e o projeto saiu do papel.</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<nav class="pager">
+  <a href="especificacao-mercado.html">
+    <span class="k">Anterior</span>
+    <span class="t">Especificação · o que construir</span>
+  </a>
+  <a class="next" href="projetos.html">
+    <span class="k">Voltar</span>
+    <span class="t">Todas as opções de projeto</span>
+  </a>
+</nav>
+
+<footer class="sitefoot">
+  <p>Projeto Mercado · Plano de desenvolvimento v1.0 — <span data-year></span></p>
+  <p>Ao encerrar cada sessão de trabalho, atualize <code>PROGRESSO.md</code>.</p>
+</footer>
+
+<script src="aulas/assets/app.js"></script>
+</body>
+</html>

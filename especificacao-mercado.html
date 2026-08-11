@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Especificação · Mercado — Marketplace multivendedor</title>
+<meta name="description" content="Documento de especificação do projeto Mercado: marketplace multivendedor em Nest.js, MySQL e TypeORM. Escopo, perfis, requisitos funcionais e não funcionais, arquitetura, modelo de dados e fluxos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@100..900&family=JetBrains+Mono:wght@400..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="aulas/assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%232b5f9e'/><text x='50' y='70' font-family='Helvetica,Arial' font-size='52' font-weight='bold' text-anchor='middle' fill='%23fff'>M</text></svg>">
+</head>
+<body>
+
+<div id="progress"></div>
+
+<header class="topbar">
+  <div class="topbar__in">
+    <a class="brand" href="projetos.html">
+      <span class="brand__mark">JS</span>
+      <span class="brand__txt">
+        <span class="brand__t">Projeto Mercado</span>
+        <span class="brand__s">Especificação técnica</span>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="aulas/index.html">Aulas</a>
+      <a href="projetos.html">Projetos</a>
+      <a href="especificacao-mercado.html" aria-current="page">Especificação</a>
+      <a href="plano-desenvolvimento-mercado.html">Plano</a>
+      <a href="projeto-saas-mercado.html">Contexto</a>
+    </nav>
+    <button class="iconbtn" data-theme-toggle type="button" aria-label="Alternar tema claro/escuro" title="Alternar tema">
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="hero__eyebrow">Documento de especificação · versão 1.0</span>
+  <h1>Mercado — Marketplace multivendedor</h1>
+  <p class="hero__lede">Especificação funcional e técnica do sistema que será desenvolvido: uma plataforma de comércio eletrônico em que vários vendedores anunciam produtos e compradores adquirem em um único carrinho, com pagamento integrado, gestão de pedidos e painel administrativo.</p>
+  <div class="hero__meta">
+    <span class="chip chip--accent">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v18H6.5A2.5 2.5 0 0 0 4 19.5z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H19"/></svg>
+      Documento guia
+    </span>
+    <span class="chip">Nest.js</span>
+    <span class="chip">MySQL + TypeORM</span>
+    <span class="chip">SSR + PWA</span>
+    <span class="chip">Cloud</span>
+  </div>
+</section>
+<div class="rule"><hr></div>
+
+<div class="shell">
+  <aside class="toc">
+    <div class="toc__t">Neste documento</div>
+    <ol></ol>
+  </aside>
+
+  <main class="doc">
+
+    <div class="note note--warn">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        Mudança de escopo em relação ao estudo inicial
+      </div>
+      <p>A página <a href="projeto-saas-mercado.html">SaaS para Mercado</a> descreve um sistema de <strong>PDV e estoque para minimercado físico</strong> — frente de caixa, lotes, validade, FEFO. Este documento especifica outra coisa: um <strong>marketplace de e-commerce multivendedor</strong>. As duas soluções compartilham o vocabulário de varejo (produto, estoque, pedido), mas resolvem problemas diferentes e não devem ser confundidas durante o desenvolvimento. Daqui em diante, “o sistema” é o marketplace.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="introducao"><span class="num">Seção 01</span>Introdução e objetivo do sistema</h2>
+
+    <p class="lead">O Mercado é uma plataforma web de comércio eletrônico que conecta vendedores independentes a compradores finais, operando como intermediária da venda e da cobrança.</p>
+
+    <h3>1.1 Contexto</h3>
+    <p>Pequenos comerciantes que hoje vendem por redes sociais e aplicativos de mensagem enfrentam três limitações estruturais: não têm vitrine encontrável por busca, não têm um meio de pagamento que dê segurança ao comprador desconhecido, e não têm registro do que foi vendido. O comprador, do outro lado, precisa confiar em um perfil sem histórico, pagar por transferência sem garantia e acompanhar a entrega por conversa.</p>
+    <p>Uma plataforma que centraliza vitrine, pagamento e reputação resolve os três lados ao mesmo tempo: o vendedor ganha alcance e recebimento garantido, o comprador ganha proteção e histórico verificável, e a plataforma se remunera por comissão sobre as vendas.</p>
+
+    <h3>1.2 Objetivo</h3>
+    <p>Desenvolver um sistema web, responsivo e instalável como PWA, que permita:</p>
+    <ul>
+      <li>a <strong>vendedores</strong> cadastrarem uma loja, publicarem produtos e gerirem seus pedidos;</li>
+      <li>a <strong>compradores</strong> encontrarem produtos, montarem um carrinho com itens de vendedores diferentes, pagarem em uma única transação e acompanharem a entrega;</li>
+      <li>a <strong>administradores</strong> moderarem o conteúdo, acompanharem indicadores e operarem a plataforma.</li>
+    </ul>
+
+    <h3>1.3 Objetivos mensuráveis do MVP</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Indicador</th><th>Meta do MVP</th><th>Como medir</th></tr></thead>
+        <tbody>
+          <tr><td>Conclusão de checkout</td><td>≥ 60% dos carrinhos iniciados chegam ao pagamento aprovado</td><td>Razão entre pedidos pagos e carrinhos com checkout iniciado</td></tr>
+          <tr><td>Tempo de publicação de produto</td><td>≤ 3 minutos do início ao anúncio publicado</td><td>Cronometragem com cinco vendedores reais</td></tr>
+          <tr><td>Desempenho da vitrine</td><td>LCP abaixo de 2,5 s em 4G simulado</td><td>Lighthouse na página de listagem e de produto</td></tr>
+          <tr><td>Confiabilidade do pagamento</td><td>Zero pedidos pagos sem baixa de estoque correspondente</td><td>Conciliação diária entre transações e pedidos</td></tr>
+          <tr><td>Cobertura de avaliações</td><td>≥ 25% dos pedidos entregues recebem avaliação</td><td>Avaliações ÷ pedidos entregues</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>1.4 Glossário</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Termo</th><th>Significado neste documento</th></tr></thead>
+        <tbody>
+          <tr><td><b>Loja</b></td><td>Entidade comercial de um vendedor dentro da plataforma. Um vendedor tem exatamente uma loja no MVP.</td></tr>
+          <tr><td><b>Anúncio / Produto</b></td><td>Item publicado por uma loja, com preço, estoque e imagens próprios.</td></tr>
+          <tr><td><b>Variação</b></td><td>Combinação vendável de um produto (tamanho, cor), com SKU, preço e estoque próprios.</td></tr>
+          <tr><td><b>Pedido</b></td><td>Resultado de um checkout. Agrupa o pagamento único do comprador.</td></tr>
+          <tr><td><b>Subpedido</b></td><td>Parte do pedido pertencente a uma única loja. É a unidade que o vendedor enxerga, separa e envia.</td></tr>
+          <tr><td><b>GMV</b></td><td><i>Gross Merchandise Volume</i> — valor total transacionado, antes da comissão.</td></tr>
+          <tr><td><b>Comissão</b></td><td>Percentual retido pela plataforma sobre o valor do subpedido.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="escopo"><span class="num">Seção 02</span>Escopo funcional detalhado</h2>
+
+    <p>O escopo está dividido em módulos. Cada módulo é uma fatia entregável — funciona de ponta a ponta e pode ser demonstrada isoladamente.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Módulo</th><th>O que entrega</th><th>Depende de</th></tr></thead>
+        <tbody>
+          <tr><td><b>M1 · Identidade</b></td><td>Cadastro, login, verificação de e-mail, recuperação de senha, perfis e permissões</td><td>—</td></tr>
+          <tr><td><b>M2 · Catálogo</b></td><td>Categorias, produtos, variações, imagens, busca e filtros, página pública do produto</td><td>M1</td></tr>
+          <tr><td><b>M3 · Lojas</b></td><td>Cadastro de loja, aprovação pelo administrador, vitrine da loja, comissão</td><td>M1</td></tr>
+          <tr><td><b>M4 · Carrinho</b></td><td>Carrinho persistente, itens de várias lojas, cálculo de subtotais e frete</td><td>M2</td></tr>
+          <tr><td><b>M5 · Checkout e pagamento</b></td><td>Endereço, resumo, integração com gateway, confirmação por webhook</td><td>M4</td></tr>
+          <tr><td><b>M6 · Pedidos</b></td><td>Pedido e subpedidos, máquina de estados, rastreio, cancelamento e reembolso</td><td>M5</td></tr>
+          <tr><td><b>M7 · Reputação</b></td><td>Avaliação de produto e de loja, moderação, resposta do vendedor</td><td>M6</td></tr>
+          <tr><td><b>M8 · Notificações</b></td><td>E-mail transacional e push PWA, preferências do usuário, fila de envio</td><td>M1</td></tr>
+          <tr><td><b>M9 · Administração</b></td><td>Painel, relatórios, moderação, gestão de usuários e lojas</td><td>M6</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>2.1 Fora do escopo do MVP</h3>
+    <p>Registrar o que não se faz é tão importante quanto registrar o que se faz — é o que impede o projeto de crescer sem entregar.</p>
+    <ul>
+      <li><strong>Emissão de nota fiscal.</strong> A obrigação fiscal é de cada vendedor. A plataforma emite apenas o recibo da comissão, na fase 2.</li>
+      <li><strong>Cálculo de frete por transportadora real</strong> (Correios, Melhor Envio). O MVP usa tabela de frete por região configurada pela loja, mais opção de retirada.</li>
+      <li><strong>Split de pagamento automático</strong> entre plataforma e vendedores. O MVP registra o valor a repassar; o repasse é operacional.</li>
+      <li><strong>Chat entre comprador e vendedor.</strong> O contato acontece por e-mail no MVP.</li>
+      <li><strong>Aplicativo nativo.</strong> A entrega móvel é o próprio PWA instalável.</li>
+      <li><strong>Cupons, cashback e programa de fidelidade.</strong></li>
+      <li><strong>Múltiplas lojas por vendedor</strong> e múltiplos idiomas ou moedas.</li>
+    </ul>
+
+    <div class="note note--info">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg>
+        Critério de entrada no MVP
+      </div>
+      <p>Uma funcionalidade entra no MVP se, sem ela, <strong>não é possível concluir uma venda real do começo ao fim</strong>. Cupom de desconto não impede uma venda; checkout com pagamento, sim.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="perfis"><span class="num">Seção 03</span>Perfis de usuários</h2>
+
+    <p>O sistema tem três papéis (<i>roles</i>). O papel é atributo do usuário e determina o que ele pode fazer; o controle é aplicado no servidor, nunca apenas escondendo botões na interface.</p>
+
+    <h3>3.1 Comprador</h3>
+    <p>Usuário final que navega e compra. É o papel atribuído por padrão a todo cadastro novo.</p>
+    <ul>
+      <li>Navega no catálogo, busca e filtra produtos sem estar autenticado.</li>
+      <li>Monta carrinho como visitante; ao entrar na conta, o carrinho de visitante é incorporado ao da conta.</li>
+      <li>Cadastra endereços de entrega, conclui checkout e paga.</li>
+      <li>Acompanha seus pedidos, solicita cancelamento e avalia o que recebeu.</li>
+      <li>Gerencia dados pessoais, senha e preferências de notificação.</li>
+    </ul>
+
+    <h3>3.2 Vendedor</h3>
+    <p>Comerciante que mantém uma loja. Um comprador se torna vendedor solicitando abertura de loja, que passa por aprovação do administrador.</p>
+    <ul>
+      <li>Cadastra e edita os dados da loja: nome, descrição, logotipo, política de entrega e devolução, tabela de frete.</li>
+      <li>Cria, edita, publica, despublica e remove <strong>seus próprios</strong> produtos e variações.</li>
+      <li>Controla preço e estoque, e recebe alerta de estoque baixo.</li>
+      <li>Vê apenas os <strong>subpedidos da própria loja</strong>: separa, marca como enviado, informa código de rastreio.</li>
+      <li>Responde publicamente às avaliações recebidas.</li>
+      <li>Acompanha faturamento, comissão retida e valor a receber.</li>
+    </ul>
+
+    <h3>3.3 Administrador</h3>
+    <p>Operador da plataforma. Não é criado por autocadastro: o primeiro administrador nasce de uma <i>seed</i> de banco e os demais são promovidos por outro administrador.</p>
+    <ul>
+      <li>Aprova, suspende e reprova lojas.</li>
+      <li>Modera produtos e avaliações denunciadas.</li>
+      <li>Gerencia categorias do catálogo e a taxa de comissão, global ou por loja.</li>
+      <li>Consulta todos os pedidos e intervém em disputas, podendo estornar.</li>
+      <li>Acessa relatórios consolidados de GMV, comissão, pedidos e vendedores.</li>
+      <li>Gerencia usuários: bloqueio, desbloqueio e alteração de papel.</li>
+    </ul>
+
+    <h3>3.4 Matriz de permissões</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Ação</th><th>Visitante</th><th>Comprador</th><th>Vendedor</th><th>Admin</th></tr></thead>
+        <tbody>
+          <tr><td>Ver catálogo e página de produto</td><td>✔</td><td>✔</td><td>✔</td><td>✔</td></tr>
+          <tr><td>Adicionar ao carrinho</td><td>✔</td><td>✔</td><td>✔</td><td>✔</td></tr>
+          <tr><td>Concluir checkout</td><td>—</td><td>✔</td><td>✔</td><td>✔</td></tr>
+          <tr><td>Criar e editar produto</td><td>—</td><td>—</td><td>✔ <span class="hint">(só da própria loja)</span></td><td>✔</td></tr>
+          <tr><td>Ver subpedido</td><td>—</td><td>—</td><td>✔ <span class="hint">(só da própria loja)</span></td><td>✔</td></tr>
+          <tr><td>Avaliar produto</td><td>—</td><td>✔ <span class="hint">(só o que comprou e recebeu)</span></td><td>✔</td><td>✔</td></tr>
+          <tr><td>Responder avaliação</td><td>—</td><td>—</td><td>✔</td><td>✔</td></tr>
+          <tr><td>Aprovar loja · moderar · estornar</td><td>—</td><td>—</td><td>—</td><td>✔</td></tr>
+          <tr><td>Relatórios da plataforma</td><td>—</td><td>—</td><td>Só da própria loja</td><td>✔</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note note--danger">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        Autorização por dono do recurso
+      </div>
+      <p>Checar o papel não basta. Um vendedor autenticado tem papel <code>seller</code> e, com isso, permissão de editar produtos — mas precisa ser barrado ao editar o produto de <em>outra</em> loja. Toda consulta e toda escrita de vendedor precisa filtrar por <code>store_id</code> do usuário do token. Essa é a falha de segurança mais comum em marketplaces, conhecida como <i>broken object level authorization</i>.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="requisitos-funcionais"><span class="num">Seção 04</span>Requisitos funcionais</h2>
+
+    <p>Cada requisito tem identificador estável (<span class="kw">RF-XX</span>), prioridade e critérios de aceite verificáveis. A prioridade segue MoSCoW: <b>M</b> obrigatório no MVP, <b>S</b> desejável, <b>C</b> opcional.</p>
+
+    <h3>RF-01 · Cadastro e autenticação de usuários <span class="chip chip--accent">M</span></h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Item</th><th>Descrição</th></tr></thead>
+        <tbody>
+          <tr><td>RF-01.1</td><td>Cadastro com nome, e-mail e senha. E-mail é único no sistema.</td></tr>
+          <tr><td>RF-01.2</td><td>Senha com no mínimo 8 caracteres, armazenada com <i>hash</i> Argon2id ou bcrypt (custo ≥ 12). A senha em texto puro nunca é gravada nem registrada em log.</td></tr>
+          <tr><td>RF-01.3</td><td>Verificação de e-mail por token de uso único com validade de 24 h. Enquanto não verificado, o usuário navega e compra, mas não abre loja.</td></tr>
+          <tr><td>RF-01.4</td><td>Login devolve <i>access token</i> JWT (15 min) e <i>refresh token</i> (7 dias) com rotação a cada uso.</td></tr>
+          <tr><td>RF-01.5</td><td>Recuperação de senha por token de uso único, validade de 1 h, invalidado após o uso. A resposta é idêntica para e-mail existente ou não.</td></tr>
+          <tr><td>RF-01.6</td><td>Logout invalida o <i>refresh token</i> da sessão. “Sair de todos os dispositivos” invalida todos.</td></tr>
+          <tr><td>RF-01.7</td><td>Bloqueio temporário após 5 tentativas de login malsucedidas em 15 minutos, por conta e por IP.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Critérios de aceite</h4>
+    <ul>
+      <li><b>Dado</b> um e-mail já cadastrado, <b>quando</b> alguém tenta se cadastrar com ele, <b>então</b> a resposta é 409 e nenhum usuário novo é criado.</li>
+      <li><b>Dado</b> um <i>refresh token</i> já utilizado, <b>quando</b> ele é reapresentado, <b>então</b> a sessão inteira é invalidada — sinal de token roubado.</li>
+      <li><b>Dado</b> um <i>access token</i> expirado, <b>quando</b> uma rota protegida é chamada, <b>então</b> a resposta é 401 com código que permita ao cliente renovar e repetir.</li>
+    </ul>
+
+    <h3>RF-02 · Gestão de produtos (CRUD) <span class="chip chip--accent">M</span></h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Item</th><th>Descrição</th></tr></thead>
+        <tbody>
+          <tr><td>RF-02.1</td><td><b>Criar:</b> título, descrição, categoria, imagens (1 a 8), preço, estoque, peso e dimensões. Nasce no estado <code>rascunho</code>.</td></tr>
+          <tr><td>RF-02.2</td><td><b>Ler:</b> listagem pública paginada com filtros por categoria, faixa de preço, loja e nota mínima, e ordenação por relevância, preço ou lançamento.</td></tr>
+          <tr><td>RF-02.3</td><td><b>Atualizar:</b> qualquer campo, sempre restrito ao dono. Alteração de preço não afeta pedidos já criados.</td></tr>
+          <tr><td>RF-02.4</td><td><b>Remover:</b> exclusão lógica (<code>deleted_at</code>). Produto com histórico de venda nunca é apagado fisicamente.</td></tr>
+          <tr><td>RF-02.5</td><td><b>Variações:</b> um produto pode ter variações com SKU, preço e estoque próprios. Sem variação, o produto é a própria unidade vendável.</td></tr>
+          <tr><td>RF-02.6</td><td><b>Publicação:</b> transição <code>rascunho → publicado</code> exige título, ao menos uma imagem, preço maior que zero, categoria e loja aprovada.</td></tr>
+          <tr><td>RF-02.7</td><td><b>Busca textual</b> por título e descrição, com índice <code>FULLTEXT</code> do MySQL.</td></tr>
+          <tr><td>RF-02.8</td><td><b>Imagens</b> armazenadas em serviço de objetos (S3 ou compatível), nunca no sistema de arquivos do servidor de aplicação. Limite de 5 MB, convertidas para WebP com miniatura.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Critérios de aceite</h4>
+    <ul>
+      <li><b>Dado</b> um vendedor A, <b>quando</b> ele tenta editar produto da loja B, <b>então</b> a resposta é 403 e nada é alterado.</li>
+      <li><b>Dado</b> um produto sem imagem, <b>quando</b> se tenta publicá-lo, <b>então</b> a operação falha com mensagem indicando o campo pendente.</li>
+      <li><b>Dado</b> um produto já vendido, <b>quando</b> o vendedor o remove, <b>então</b> ele some da vitrine mas continua visível no histórico do pedido.</li>
+    </ul>
+
+    <h3>RF-03 · Carrinho de compras <span class="chip chip--accent">M</span></h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Item</th><th>Descrição</th></tr></thead>
+        <tbody>
+          <tr><td>RF-03.1</td><td>Carrinho persistente no banco, vinculado ao usuário autenticado ou a um identificador de sessão do visitante gravado em <i>cookie</i> <code>HttpOnly</code>.</td></tr>
+          <tr><td>RF-03.2</td><td>Ao autenticar, o carrinho de visitante é mesclado ao do usuário; quantidades do mesmo item são somadas e limitadas ao estoque.</td></tr>
+          <tr><td>RF-03.3</td><td>Operações: adicionar, alterar quantidade, remover item e esvaziar.</td></tr>
+          <tr><td>RF-03.4</td><td>Itens de <b>lojas diferentes</b> convivem no mesmo carrinho e são exibidos agrupados por loja, com subtotal e frete próprios.</td></tr>
+          <tr><td>RF-03.5</td><td>Preço e disponibilidade são <b>reconsultados no servidor</b> a cada exibição. Divergência em relação ao momento da inclusão gera aviso explícito.</td></tr>
+          <tr><td>RF-03.6</td><td>Item indisponível permanece visível, marcado e bloqueado para o checkout, em vez de sumir sem explicação.</td></tr>
+          <tr><td>RF-03.7</td><td>Carrinho de visitante expira em 30 dias sem atividade; o do usuário autenticado não expira.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note note--danger">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7v6c0 5 4.2 8.6 10 9 5.8-.4 10-4 10-9V7z"/></svg>
+        Preço nunca vem do cliente
+      </div>
+      <p>O navegador envia <em>o que</em> e <em>quanto</em> — identificador da variação e quantidade. <strong>Jamais o preço.</strong> O valor é sempre lido do banco no servidor, no momento do cálculo. Aceitar preço vindo do cliente permite que qualquer pessoa compre por um centavo alterando a requisição.</p>
+    </div>
+
+    <h3>RF-04 · Checkout e integração com meios de pagamento <span class="chip chip--accent">M</span></h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Item</th><th>Descrição</th></tr></thead>
+        <tbody>
+          <tr><td>RF-04.1</td><td>Checkout em etapas: identificação, endereço de entrega, frete por loja, resumo e pagamento.</td></tr>
+          <tr><td>RF-04.2</td><td>Meios aceitos no MVP: <b>cartão de crédito</b> e <b>Pix</b>, via gateway (Mercado Pago ou Stripe).</td></tr>
+          <tr><td>RF-04.3</td><td>Dados de cartão são capturados por componente do gateway e <b>nunca trafegam nem são gravados</b> no servidor da aplicação. A API recebe apenas o <i>token</i> do gateway.</td></tr>
+          <tr><td>RF-04.4</td><td>Ao confirmar, o sistema cria o pedido em <code>aguardando_pagamento</code>, reserva o estoque e envia a cobrança ao gateway.</td></tr>
+          <tr><td>RF-04.5</td><td>A confirmação é assíncrona: a fonte de verdade é o <b>webhook</b> do gateway, com assinatura verificada e tratamento idempotente por identificador do evento.</td></tr>
+          <tr><td>RF-04.6</td><td>Reserva de estoque expira em 30 minutos sem pagamento; o pedido é cancelado e o estoque devolvido por rotina agendada.</td></tr>
+          <tr><td>RF-04.7</td><td>Pagamento recusado mantém o pedido e permite nova tentativa dentro da janela de reserva.</td></tr>
+          <tr><td>RF-04.8</td><td>Toda requisição de criação de pedido carrega chave de idempotência para que duplo clique não gere pedido duplicado.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Critérios de aceite</h4>
+    <ul>
+      <li><b>Dado</b> um webhook de aprovação recebido duas vezes, <b>quando</b> processado, <b>então</b> o pedido é confirmado uma única vez e o estoque baixado uma única vez.</li>
+      <li><b>Dado</b> um pedido não pago em 30 minutos, <b>quando</b> a rotina executa, <b>então</b> ele é cancelado e o estoque volta a ficar disponível.</li>
+      <li><b>Dado</b> dois compradores disputando a última unidade, <b>quando</b> ambos finalizam ao mesmo tempo, <b>então</b> um conclui e o outro recebe erro de estoque insuficiente — nunca estoque negativo.</li>
+    </ul>
+
+    <h3>RF-05 · Gestão de pedidos e status <span class="chip chip--accent">M</span></h3>
+    <p>Um pedido agrupa o pagamento; os <b>subpedidos</b> agrupam a operação de cada loja. O comprador vê um pedido com várias entregas; cada vendedor vê apenas o seu subpedido.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Estado do subpedido</th><th>Significado</th><th>Transições válidas</th></tr></thead>
+        <tbody>
+          <tr><td><code>aguardando_pagamento</code></td><td>Pedido criado, cobrança pendente</td><td>→ pago, cancelado</td></tr>
+          <tr><td><code>pago</code></td><td>Pagamento confirmado pelo webhook</td><td>→ em_separacao, cancelado</td></tr>
+          <tr><td><code>em_separacao</code></td><td>Vendedor confirmou e está preparando</td><td>→ enviado, cancelado</td></tr>
+          <tr><td><code>enviado</code></td><td>Despachado, com código de rastreio</td><td>→ entregue</td></tr>
+          <tr><td><code>entregue</code></td><td>Confirmado pelo comprador ou após prazo</td><td>→ devolucao_solicitada</td></tr>
+          <tr><td><code>cancelado</code></td><td>Cancelado por qualquer parte antes do envio</td><td>estado final</td></tr>
+          <tr><td><code>devolucao_solicitada</code></td><td>Comprador abriu devolução</td><td>→ reembolsado, entregue</td></tr>
+          <tr><td><code>reembolsado</code></td><td>Estorno concluído pelo gateway</td><td>estado final</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ul>
+      <li>RF-05.1 — Toda transição registra autor, data e motivo em histórico imutável.</li>
+      <li>RF-05.2 — Transição inválida é rejeitada pelo serviço, não apenas escondida na tela.</li>
+      <li>RF-05.3 — Cancelamento só é possível <b>antes</b> do envio; depois disso, o caminho é devolução.</li>
+      <li>RF-05.4 — Cancelamento e reembolso devolvem o estoque das variações envolvidas.</li>
+      <li>RF-05.5 — O comprador acompanha a linha do tempo de cada subpedido, com código de rastreio quando houver.</li>
+      <li>RF-05.6 — Cada mudança de estado dispara notificação (RF-08).</li>
+    </ul>
+
+    <h3>RF-06 · Avaliações e feedback de produtos <span class="chip chip--accent">M</span></h3>
+    <ul>
+      <li>RF-06.1 — Só pode avaliar quem <b>comprou</b> o item e cujo subpedido está <code>entregue</code>. Uma avaliação por item de pedido.</li>
+      <li>RF-06.2 — Avaliação tem nota de 1 a 5 e comentário opcional de até 1.000 caracteres.</li>
+      <li>RF-06.3 — A média e a contagem ficam <b>desnormalizadas</b> no produto e na loja, recalculadas a cada avaliação — a vitrine não pode depender de agregação em tempo real.</li>
+      <li>RF-06.4 — O vendedor pode publicar uma resposta pública por avaliação.</li>
+      <li>RF-06.5 — Qualquer usuário pode denunciar uma avaliação; denunciada, ela entra na fila de moderação do administrador, que pode ocultá-la.</li>
+      <li>RF-06.6 — O autor pode editar sua avaliação em até 7 dias; depois disso, fica imutável.</li>
+      <li>RF-06.7 — A listagem exibe distribuição por nota e permite filtrar por quantidade de estrelas.</li>
+    </ul>
+
+    <h3>RF-07 · Painel administrativo com relatórios <span class="chip chip--accent">M</span></h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Relatório</th><th>Conteúdo</th><th>Filtros</th></tr></thead>
+        <tbody>
+          <tr><td>Visão geral</td><td>GMV, comissão apurada, número de pedidos, ticket médio, taxa de cancelamento</td><td>Período</td></tr>
+          <tr><td>Vendas por período</td><td>Série diária de pedidos e valor, com comparação ao período anterior</td><td>Período, loja, categoria</td></tr>
+          <tr><td>Produtos</td><td>Mais vendidos, curva ABC por faturamento, itens sem venda</td><td>Período, categoria</td></tr>
+          <tr><td>Vendedores</td><td>Ranking por GMV, nota média, prazo médio de envio, taxa de cancelamento</td><td>Período</td></tr>
+          <tr><td>Operacional</td><td>Pedidos parados por estado, pagamentos pendentes, devoluções abertas</td><td>Estado, loja</td></tr>
+          <tr><td>Moderação</td><td>Lojas aguardando aprovação, avaliações denunciadas, produtos sinalizados</td><td>Tipo</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li>RF-07.1 — Todo relatório é exportável em CSV.</li>
+      <li>RF-07.2 — Valores monetários seguem o <b>momento da venda</b>, nunca o preço atual do produto.</li>
+      <li>RF-07.3 — O vendedor acessa a mesma estrutura de relatórios, restrita à própria loja.</li>
+      <li>RF-07.4 — Consultas agregadas usam índices por data e por loja; acima de 50 mil pedidos, tabela de agregados diários.</li>
+    </ul>
+
+    <h3>RF-08 · Notificações (e-mail e push PWA) <span class="chip chip--accent">M</span></h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Evento</th><th>Destinatário</th><th>Canais</th></tr></thead>
+        <tbody>
+          <tr><td>Cadastro realizado</td><td>Comprador</td><td>E-mail (verificação)</td></tr>
+          <tr><td>Recuperação de senha</td><td>Usuário</td><td>E-mail</td></tr>
+          <tr><td>Pagamento aprovado</td><td>Comprador e vendedor</td><td>E-mail + push</td></tr>
+          <tr><td>Pedido enviado</td><td>Comprador</td><td>E-mail + push</td></tr>
+          <tr><td>Pedido entregue</td><td>Comprador</td><td>Push (convite a avaliar)</td></tr>
+          <tr><td>Novo pedido na loja</td><td>Vendedor</td><td>E-mail + push</td></tr>
+          <tr><td>Estoque baixo</td><td>Vendedor</td><td>E-mail</td></tr>
+          <tr><td>Loja aprovada ou reprovada</td><td>Vendedor</td><td>E-mail</td></tr>
+          <tr><td>Nova avaliação recebida</td><td>Vendedor</td><td>Push</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li>RF-08.1 — E-mail transacional por provedor externo (Resend, SendGrid ou SES), com <i>templates</i> versionados no repositório.</li>
+      <li>RF-08.2 — Push por Web Push API com chaves VAPID e <i>service worker</i>; a permissão é pedida <b>depois</b> de uma ação relevante, nunca ao abrir o site.</li>
+      <li>RF-08.3 — Envio sempre assíncrono, por fila, com repetição em espera exponencial e no máximo 3 tentativas.</li>
+      <li>RF-08.4 — Falha de notificação <b>nunca</b> derruba a operação de negócio: o pedido é confirmado mesmo que o e-mail falhe.</li>
+      <li>RF-08.5 — O usuário controla, por canal e por tipo, o que deseja receber. Notificações de segurança e de transação não são desativáveis.</li>
+      <li>RF-08.6 — Inscrições push inválidas (410 do serviço) são removidas automaticamente.</li>
+    </ul>
+
+    <h3>RF-09 · Suporte a múltiplos vendedores <span class="chip chip--accent">M</span></h3>
+    <ul>
+      <li>RF-09.1 — Solicitação de abertura de loja com nome, CNPJ ou CPF, descrição, contato e dados bancários para repasse.</li>
+      <li>RF-09.2 — Loja nasce em <code>pendente</code> e só publica produtos após aprovação do administrador.</li>
+      <li>RF-09.3 — Cada loja tem vitrine pública própria, com seus produtos e sua reputação.</li>
+      <li>RF-09.4 — Comissão percentual global, com possibilidade de valor específico por loja.</li>
+      <li>RF-09.5 — Ao confirmar o pagamento, o sistema calcula e registra, por subpedido, o valor bruto, a comissão e o líquido a repassar.</li>
+      <li>RF-09.6 — Extrato do vendedor com pedidos, comissões e saldo a receber por período.</li>
+      <li>RF-09.7 — Loja suspensa tem produtos despublicados automaticamente, mas mantém os pedidos em andamento até a conclusão.</li>
+      <li>RF-09.8 — O frete é calculado <b>por loja</b>: um carrinho com três lojas gera três fretes e três entregas.</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="requisitos-nao-funcionais"><span class="num">Seção 05</span>Requisitos não funcionais</h2>
+
+    <h3>5.1 Segurança <span class="chip chip--accent">RNF-01</span></h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Item</th><th>Requisito</th></tr></thead>
+        <tbody>
+          <tr><td>RNF-01.1</td><td><b>Senhas</b> com Argon2id (preferencial) ou bcrypt custo ≥ 12, com <i>salt</i> por usuário.</td></tr>
+          <tr><td>RNF-01.2</td><td><b>JWT</b> assinado em HS256 com segredo de 256 bits em variável de ambiente, ou RS256 se houver necessidade de verificação externa. <i>Payload</i> contém <code>sub</code>, <code>role</code>, <code>storeId</code>, <code>exp</code> — e nunca dado sensível.</td></tr>
+          <tr><td>RNF-01.3</td><td><b>Refresh token</b> armazenado com <i>hash</i> no banco, com rotação e detecção de reuso.</td></tr>
+          <tr><td>RNF-01.4</td><td><b>Transporte</b> exclusivamente por HTTPS, com HSTS habilitado. Cookies <code>Secure</code>, <code>HttpOnly</code> e <code>SameSite=Lax</code>.</td></tr>
+          <tr><td>RNF-01.5</td><td><b>Dados em repouso:</b> criptografia do volume do banco e dos objetos de armazenamento. Dados bancários do vendedor cifrados em coluna, com chave gerenciada fora do banco.</td></tr>
+          <tr><td>RNF-01.6</td><td><b>Validação de entrada</b> em todo <i>endpoint</i> com DTO e <code>class-validator</code>, com <code>whitelist</code> e <code>forbidNonWhitelisted</code> ativos.</td></tr>
+          <tr><td>RNF-01.7</td><td><b>SQL injection:</b> uso exclusivo do <i>query builder</i> ou de parâmetros do TypeORM. Concatenação de string em SQL é proibida.</td></tr>
+          <tr><td>RNF-01.8</td><td><b>XSS:</b> escape automático no motor de <i>templates</i>, Content-Security-Policy restritiva e sanitização de HTML vindo de descrição de produto.</td></tr>
+          <tr><td>RNF-01.9</td><td><b>CSRF:</b> token sincronizado nos formulários SSR que usam sessão por cookie.</td></tr>
+          <tr><td>RNF-01.10</td><td><b>Rate limiting</b> global e reforçado em login, cadastro, recuperação de senha e checkout.</td></tr>
+          <tr><td>RNF-01.11</td><td><b>Segredos</b> apenas em variáveis de ambiente. Nenhuma credencial versionada; <code>.env</code> no <code>.gitignore</code>.</td></tr>
+          <tr><td>RNF-01.12</td><td><b>LGPD:</b> consentimento no cadastro, exportação e exclusão de dados pessoais mediante solicitação, e anonimização em vez de exclusão quando houver pedido associado.</td></tr>
+          <tr><td>RNF-01.13</td><td><b>Auditoria</b> de ações sensíveis: mudança de papel, aprovação de loja, estorno e alteração de comissão.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>5.2 Performance e escalabilidade <span class="chip chip--accent">RNF-02</span></h3>
+    <ul>
+      <li>RNF-02.1 — Tempo de resposta p95 abaixo de <b>300 ms</b> em leitura de catálogo e abaixo de <b>800 ms</b> no checkout, medido no servidor.</li>
+      <li>RNF-02.2 — Suportar <b>200 usuários simultâneos</b> e 50 pedidos por minuto sem degradação, verificado em teste de carga (k6 ou Artillery).</li>
+      <li>RNF-02.3 — Toda listagem é paginada, com limite máximo de 50 itens por página. Não existe rota que retorne coleção inteira.</li>
+      <li>RNF-02.4 — Índices obrigatórios em chaves estrangeiras, <code>slug</code>, <code>status</code>, <code>created_at</code> e nas colunas de filtro do catálogo.</li>
+      <li>RNF-02.5 — Consultas de listagem não podem gerar N+1: uso de <code>relations</code> ou <i>join</i> explícito, verificado com <i>log</i> de SQL em desenvolvimento.</li>
+      <li>RNF-02.6 — Cache de leitura (Redis) para vitrine, categorias e página de produto, com invalidação na escrita. Entra quando o tempo de resposta exigir, não antes.</li>
+      <li>RNF-02.7 — Imagens servidas por CDN, em WebP, com <code>srcset</code> e carregamento diferido.</li>
+      <li>RNF-02.8 — A aplicação é <i>stateless</i>: nenhuma sessão em memória do processo, permitindo escalar horizontalmente atrás de um balanceador.</li>
+      <li>RNF-02.9 — Trabalhos pesados — e-mail, push, geração de relatório, processamento de imagem — rodam em fila, fora do ciclo da requisição.</li>
+      <li>RNF-02.10 — Pool de conexões do banco dimensionado e monitorado; conexão vazada é falha bloqueante.</li>
+    </ul>
+
+    <h3>5.3 Usabilidade e responsividade <span class="chip chip--accent">RNF-03</span></h3>
+    <ul>
+      <li>RNF-03.1 — Concepção <i>mobile-first</i>, com pontos de quebra em 480, 768 e 1024 px. Nenhuma tela rola horizontalmente.</li>
+      <li>RNF-03.2 — Alvos de toque com no mínimo 44 × 44 px.</li>
+      <li>RNF-03.3 — Acessibilidade WCAG 2.1 nível AA: contraste mínimo de 4,5:1, navegação completa por teclado, foco visível, HTML semântico e <i>labels</i> associados.</li>
+      <li>RNF-03.4 — Toda ação assíncrona tem estado visível de carregamento, sucesso e erro. Nenhum botão fica sem resposta.</li>
+      <li>RNF-03.5 — Mensagens de erro dizem o que fazer, não apenas o que falhou: “O CEP precisa ter 8 dígitos”, não “Dados inválidos”.</li>
+      <li>RNF-03.6 — Formulários preservam o que foi digitado quando a validação falha.</li>
+      <li>RNF-03.7 — Fluxo de compra em no máximo <b>quatro passos</b> a partir da página do produto.</li>
+      <li>RNF-03.8 — Suporte aos navegadores nas duas últimas versões de Chrome, Firefox, Safari e Edge.</li>
+    </ul>
+
+    <h3>5.4 SEO básico e PWA <span class="chip chip--accent">RNF-04</span></h3>
+    <ul>
+      <li>RNF-04.1 — Páginas públicas — vitrine, categoria, produto e loja — renderizadas no servidor, com HTML completo na primeira resposta.</li>
+      <li>RNF-04.2 — URLs legíveis com <i>slug</i>: <code>/produto/tenis-corrida-azul-42</code>, e não <code>/produto?id=7311</code>.</li>
+      <li>RNF-04.3 — <code>&lt;title&gt;</code> e <code>&lt;meta name="description"&gt;</code> únicos por página, gerados a partir do conteúdo.</li>
+      <li>RNF-04.4 — Open Graph e Twitter Card para pré-visualização em redes sociais e mensageiros.</li>
+      <li>RNF-04.5 — Dados estruturados JSON-LD nos tipos <code>Product</code>, <code>Offer</code>, <code>AggregateRating</code> e <code>BreadcrumbList</code>.</li>
+      <li>RNF-04.6 — <code>sitemap.xml</code> gerado dinamicamente com os produtos publicados, e <code>robots.txt</code> bloqueando carrinho, checkout, conta e área administrativa.</li>
+      <li>RNF-04.7 — <i>Canonical</i> em páginas com filtro e paginação, evitando conteúdo duplicado.</li>
+      <li>RNF-04.8 — <code>manifest.webmanifest</code> com nome, ícones (192 e 512 px), cor de tema e <code>display: standalone</code>.</li>
+      <li>RNF-04.9 — <i>Service worker</i> com cache de casca da aplicação e de estáticos, e página offline. <b>Nunca</b> serve conteúdo em cache para carrinho, checkout ou pedidos.</li>
+      <li>RNF-04.10 — Core Web Vitals: LCP &lt; 2,5 s, CLS &lt; 0,1 e INP &lt; 200 ms, com Lighthouse ≥ 90 em desempenho, acessibilidade, boas práticas e SEO na página de produto.</li>
+    </ul>
+
+    <div class="note note--warn">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        O <i>service worker</i> e o preço
+      </div>
+      <p>Cachear a página de produto acelera a navegação e cria um problema sério: o comprador vê preço antigo. A regra é cachear <strong>casca e estáticos</strong> (CSS, JS, fontes, ícones) com estratégia <i>cache-first</i>, e sempre buscar da rede o que tem preço, estoque ou dado pessoal.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 id="requisitos-tecnicos"><span class="num">Seção 06</span>Requisitos técnicos</h2>
+
+    <h3>6.1 Arquitetura geral</h3>
+    <p>O sistema é um <b>monólito modular em Nest.js</b>: uma única aplicação, um único <i>deploy</i>, um único banco — organizada em módulos com fronteiras claras, de modo que qualquer módulo possa ser extraído no futuro sem reescrita.</p>
+
+    <div class="snippet snippet--plain" data-numbers="off">
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">arquitetura</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code>Navegador (PWA)
+   │  HTML renderizado no servidor + fetch para as rotas de API
+   ▼
+┌─────────────────────────────────────────────────────────┐
+│  Aplicação Nest.js (monólito modular)                   │
+│                                                         │
+│  Camada web        Views SSR  ·  Controllers REST       │
+│  Camada domínio    Services   ·  Regras de negócio      │
+│  Camada dados      Repositories (TypeORM)  ·  Entities  │
+│                                                         │
+│  Transversal       Auth/JWT · Guards · Interceptors     │
+│                    Filters  · Validation · Logger       │
+└─────────────────────────────────────────────────────────┘
+   │              │                │              │
+   ▼              ▼                ▼              ▼
+ MySQL 8      Fila/Redis      Gateway de      Armazenamento
+ (TypeORM)    (BullMQ)        pagamento       de objetos (S3)
+</code></pre>
+    </div>
+
+    <h3>6.2 Pilha tecnológica</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Camada</th><th>Tecnologia</th><th>Justificativa</th></tr></thead>
+        <tbody>
+          <tr><td>Runtime</td><td>Node.js 20 LTS</td><td>Suporte de longo prazo durante todo o projeto</td></tr>
+          <tr><td>Linguagem</td><td>TypeScript, modo <code>strict</code></td><td>Erros de tipo aparecem em compilação, não em produção</td></tr>
+          <tr><td>Framework</td><td>Nest.js 10</td><td>Módulos, injeção de dependências e <i>guards</i> nativos — a estrutura que o monólito precisa para não virar bolo de massa</td></tr>
+          <tr><td>Servidor HTTP</td><td>Express (adaptador padrão)</td><td>Compatível com o motor de <i>views</i> e com todo o ecossistema de <i>middleware</i></td></tr>
+          <tr><td>Banco de dados</td><td>MySQL 8</td><td>Requisito do projeto; transações ACID e <code>FULLTEXT</code> atendem catálogo e checkout</td></tr>
+          <tr><td>ORM</td><td>TypeORM</td><td>Requisito do projeto; entidades por decorador e migrações versionadas</td></tr>
+          <tr><td>Renderização</td><td>SSR com Handlebars (<code>hbs</code>)</td><td>Mantém a renderização dentro do monólito, atendendo SEO sem uma segunda aplicação</td></tr>
+          <tr><td>Estilo</td><td>CSS próprio ou Tailwind</td><td>Sem framework pesado de componentes na camada SSR</td></tr>
+          <tr><td>Interatividade</td><td>JavaScript progressivo no cliente</td><td>Carrinho e filtros funcionam com HTML puro e melhoram com JS</td></tr>
+          <tr><td>Fila</td><td>BullMQ sobre Redis</td><td>E-mail, push e relatórios fora do ciclo da requisição</td></tr>
+          <tr><td>Validação</td><td>class-validator e class-transformer</td><td>Integração nativa com os <i>pipes</i> do Nest</td></tr>
+          <tr><td>Testes</td><td>Jest e Supertest</td><td>Unidade nos serviços, integração (e2e) nos fluxos críticos</td></tr>
+          <tr><td>Documentação de API</td><td>Swagger (<code>@nestjs/swagger</code>)</td><td>Contrato gerado a partir do próprio código</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note note--info">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg>
+        Decisão em aberto — “frontend em Nest.js com SSR”
+      </div>
+      <p>Nest.js é um <i>framework</i> de <b>back-end</b>: ele não é um <i>framework</i> de <i>front-end</i>, mas <em>consegue</em> renderizar HTML no servidor por meio de um motor de <i>views</i> (Handlebars, EJS, Pug). Este documento adota essa leitura — <strong>uma única aplicação Nest que serve API e páginas SSR</strong> —, por ser a única compatível com o requisito de monólito.</p>
+      <p style="margin-bottom:0">Se a intenção era <strong>Next.js</strong> (framework React com SSR), mudam três coisas: passam a existir <b>duas</b> aplicações (Nest como API e Next como front), o <i>deploy</i> tem dois serviços, e a autenticação precisa de cuidado extra para trafegar o JWT entre elas. O restante deste documento — requisitos, modelo de dados, fluxos — permanece válido nos dois cenários. <b>Defina isso antes da primeira linha de código.</b></p>
+    </div>
+
+    <h3>6.3 Estrutura de pastas</h3>
+    <div class="snippet snippet--plain" data-numbers="off">
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">src/</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code>src/
+├── main.ts                  # bootstrap, pipes globais, view engine
+├── app.module.ts
+├── common/                  # guards, decorators, filters, interceptors
+│   ├── guards/              #   JwtAuthGuard, RolesGuard, StoreOwnerGuard
+│   ├── decorators/          #   @Roles(), @CurrentUser()
+│   └── filters/             #   HttpExceptionFilter
+├── config/                  # configuração tipada por ambiente
+├── database/
+│   ├── migrations/          # NUNCA synchronize: true
+│   └── seeds/               # admin inicial, categorias
+└── modules/
+    ├── auth/                # login, refresh, recuperação de senha
+    ├── users/               # perfil, endereços
+    ├── stores/              # lojas, aprovação, comissão
+    ├── catalog/             # categorias, produtos, variações, imagens
+    ├── cart/                # carrinho e itens
+    ├── checkout/            # criação de pedido, cálculo de frete
+    ├── payments/            # gateway, webhook, estorno
+    ├── orders/              # pedidos, subpedidos, máquina de estados
+    ├── reviews/             # avaliações e moderação
+    ├── notifications/       # e-mail, push, preferências
+    ├── admin/               # painel e relatórios
+    └── web/                 # controllers SSR e views (.hbs)
+</code></pre>
+    </div>
+
+    <h3>6.4 Modelo de dados</h3>
+    <p>Dezoito tabelas sustentam o MVP. Todas têm <code>id</code>, <code>created_at</code> e <code>updated_at</code>; as que podem ser removidas têm <code>deleted_at</code>.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Tabela</th><th>Colunas principais</th><th>Relacionamentos</th></tr></thead>
+        <tbody>
+          <tr><td><b>users</b></td><td>name, email (único), password_hash, role, email_verified_at, status</td><td>1:N addresses, 1:1 stores, 1:N orders</td></tr>
+          <tr><td><b>refresh_tokens</b></td><td>user_id, token_hash, expires_at, revoked_at, user_agent</td><td>N:1 users</td></tr>
+          <tr><td><b>addresses</b></td><td>user_id, recipient, zip, street, number, city, state, is_default</td><td>N:1 users</td></tr>
+          <tr><td><b>stores</b></td><td>owner_id, name, slug (único), document, description, status, commission_rate, rating_avg, rating_count</td><td>1:1 users, 1:N products</td></tr>
+          <tr><td><b>categories</b></td><td>name, slug (único), parent_id</td><td>auto-relacionamento, 1:N products</td></tr>
+          <tr><td><b>products</b></td><td>store_id, category_id, title, slug, description, status, rating_avg, rating_count</td><td>N:1 stores, 1:N variants, 1:N images</td></tr>
+          <tr><td><b>product_variants</b></td><td>product_id, sku (único), attributes (JSON), price, stock, weight</td><td>N:1 products</td></tr>
+          <tr><td><b>product_images</b></td><td>product_id, url, alt, position</td><td>N:1 products</td></tr>
+          <tr><td><b>carts</b></td><td>user_id (nulo), session_id, expires_at</td><td>1:N cart_items</td></tr>
+          <tr><td><b>cart_items</b></td><td>cart_id, variant_id, quantity</td><td>N:1 carts, N:1 product_variants</td></tr>
+          <tr><td><b>orders</b></td><td>user_id, address_snapshot (JSON), total, status, idempotency_key (único)</td><td>1:N sub_orders, 1:N payments</td></tr>
+          <tr><td><b>sub_orders</b></td><td>order_id, store_id, subtotal, shipping, commission, net_amount, status, tracking_code</td><td>N:1 orders, N:1 stores, 1:N order_items</td></tr>
+          <tr><td><b>order_items</b></td><td>sub_order_id, variant_id, title_snapshot, unit_price, quantity</td><td>N:1 sub_orders</td></tr>
+          <tr><td><b>order_status_history</b></td><td>sub_order_id, from_status, to_status, actor_id, reason</td><td>N:1 sub_orders</td></tr>
+          <tr><td><b>payments</b></td><td>order_id, gateway, gateway_id, method, amount, status, raw_payload (JSON)</td><td>N:1 orders</td></tr>
+          <tr><td><b>reviews</b></td><td>order_item_id (único), product_id, user_id, rating, comment, status, seller_reply</td><td>N:1 products, N:1 users</td></tr>
+          <tr><td><b>notification_preferences</b></td><td>user_id, channel, event_type, enabled</td><td>N:1 users</td></tr>
+          <tr><td><b>push_subscriptions</b></td><td>user_id, endpoint (único), p256dh, auth</td><td>N:1 users</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note note--danger">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        Os quatro erros que custam caro depois
+      </div>
+      <ol style="margin-bottom:0">
+        <li><b><code>synchronize: true</code> em produção.</b> O TypeORM altera o esquema sozinho comparando entidades com o banco — e apaga coluna com dado dentro. Use <code>synchronize: false</code> e <b>migrações</b> desde o primeiro dia.</li>
+        <li><b>Dinheiro em <code>float</code>.</b> Use <code>DECIMAL(10,2)</code> no MySQL. O TypeORM devolve <code>DECIMAL</code> como <i>string</i>: converta com transformador explícito ou trabalhe em centavos inteiros. Somar <i>float</i> em pedido gera diferença de centavos que ninguém consegue explicar na conciliação.</li>
+        <li><b>Item de pedido apontando só para o produto.</b> Se o vendedor mudar o título ou o preço, o pedido antigo muda junto. Grave <i>snapshot</i> de título e preço unitário em <code>order_items</code>.</li>
+        <li><b>Baixa de estoque fora de transação.</b> Criar pedido e debitar estoque precisam estar na <b>mesma transação</b>, com bloqueio pessimista na linha da variação. Sem isso, dois compradores simultâneos zeram o estoque abaixo de zero.</li>
+      </ol>
+    </div>
+
+    <h3>6.5 Padrão de API</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Método e rota</th><th>Descrição</th><th>Acesso</th></tr></thead>
+        <tbody>
+          <tr><td><code>POST /api/auth/register</code></td><td>Cria conta de comprador</td><td>Público</td></tr>
+          <tr><td><code>POST /api/auth/login</code></td><td>Autentica e devolve os tokens</td><td>Público</td></tr>
+          <tr><td><code>POST /api/auth/refresh</code></td><td>Rotaciona o <i>refresh token</i></td><td>Público (com token)</td></tr>
+          <tr><td><code>GET /api/products</code></td><td>Lista com busca, filtros e paginação</td><td>Público</td></tr>
+          <tr><td><code>GET /api/products/:slug</code></td><td>Detalhe com variações e avaliações</td><td>Público</td></tr>
+          <tr><td><code>POST /api/seller/products</code></td><td>Cria produto na loja do usuário</td><td>Vendedor</td></tr>
+          <tr><td><code>PATCH /api/seller/products/:id</code></td><td>Atualiza produto da própria loja</td><td>Vendedor (dono)</td></tr>
+          <tr><td><code>GET /api/cart</code></td><td>Carrinho atual, agrupado por loja</td><td>Qualquer</td></tr>
+          <tr><td><code>POST /api/cart/items</code></td><td>Adiciona variação e quantidade</td><td>Qualquer</td></tr>
+          <tr><td><code>POST /api/checkout</code></td><td>Cria pedido e inicia a cobrança</td><td>Autenticado</td></tr>
+          <tr><td><code>POST /api/payments/webhook</code></td><td>Recebe evento do gateway</td><td>Gateway (assinatura)</td></tr>
+          <tr><td><code>GET /api/orders</code></td><td>Pedidos do comprador</td><td>Autenticado</td></tr>
+          <tr><td><code>PATCH /api/seller/sub-orders/:id/status</code></td><td>Avança o estado do subpedido</td><td>Vendedor (dono)</td></tr>
+          <tr><td><code>POST /api/reviews</code></td><td>Avalia item entregue</td><td>Comprador</td></tr>
+          <tr><td><code>GET /api/admin/reports/overview</code></td><td>Indicadores consolidados</td><td>Admin</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Convenções: verbos HTTP corretos, <i>plural</i> nos recursos, paginação por <code>?page=&amp;limit=</code>, resposta de erro sempre no mesmo formato, e códigos 400 (validação), 401 (não autenticado), 403 (sem permissão), 404, 409 (conflito) e 422 (regra de negócio).</p>
+
+    <h3>6.6 Ambiente e implantação</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Ambiente</th><th>Finalidade</th><th>Branch</th><th>Banco</th></tr></thead>
+        <tbody>
+          <tr><td><b>Local</b></td><td>Desenvolvimento na máquina</td><td>qualquer</td><td>MySQL em Docker</td></tr>
+          <tr><td><b>Homologação</b></td><td>Validação antes de liberar</td><td><code>hml</code></td><td>Instância própria, dados fictícios</td></tr>
+          <tr><td><b>Produção</b></td><td>Uso real</td><td><code>main</code></td><td>Instância gerenciada, com backup</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li>Aplicação empacotada em <b>Docker</b>, com <i>build</i> em múltiplos estágios e imagem final sem dependências de desenvolvimento.</li>
+      <li><code>docker-compose.yml</code> em desenvolvimento sobe aplicação, MySQL e Redis com um comando.</li>
+      <li>Hospedagem em provedor gerenciado — Railway, Render ou AWS (ECS + RDS) — com HTTPS e domínio próprio.</li>
+      <li>Integração contínua no GitHub Actions: <i>lint</i>, testes e <i>build</i> em todo <i>push</i>; implantação automática em homologação a partir de <code>hml</code>.</li>
+      <li>Migrações executadas na implantação, antes de subir a versão nova.</li>
+      <li><i>Health check</i> em <code>/health</code>, verificando banco e fila.</li>
+      <li><i>Logs</i> estruturados em JSON, sem dado pessoal, e monitoramento de erros (Sentry).</li>
+      <li>Backup diário do banco com retenção de 7 dias e restauração testada ao menos uma vez.</li>
+    </ul>
+
+    <!-- ============================================================ -->
+    <h2 id="fluxos"><span class="num">Seção 07</span>Fluxos principais</h2>
+
+    <h3>7.1 Fluxo de compra — do produto ao pedido pago</h3>
+    <p>É o fluxo mais importante do sistema: se ele falhar, nada mais importa. Deve ser o primeiro a ter teste automatizado de ponta a ponta.</p>
+
+    <ol class="steps">
+      <li>
+        <b>Descoberta</b>
+        <span>O comprador chega pela busca do Google — a página do produto é renderizada no servidor com dados estruturados — ou navega pelo catálogo com filtros. A página mostra preço, disponibilidade, imagens, reputação da loja e avaliações.</span>
+      </li>
+      <li>
+        <b>Adição ao carrinho</b>
+        <span>Ele escolhe a variação e a quantidade. O servidor valida se a variação existe, está publicada e tem estoque; então cria ou atualiza o item do carrinho. O carrinho é do usuário autenticado ou da sessão de visitante. Nenhum preço vem do navegador.</span>
+      </li>
+      <li>
+        <b>Revisão do carrinho</b>
+        <span>Os itens aparecem <b>agrupados por loja</b>, cada grupo com subtotal e frete próprios. Preço e estoque são reconsultados: se algo mudou desde a inclusão, o comprador é avisado antes de seguir.</span>
+      </li>
+      <li>
+        <b>Identificação</b>
+        <span>Se for visitante, faz login ou se cadastra. O carrinho de visitante é mesclado ao da conta, somando quantidades e respeitando o estoque.</span>
+      </li>
+      <li>
+        <b>Endereço e frete</b>
+        <span>Escolhe um endereço salvo ou cadastra outro. O sistema calcula o frete de <b>cada loja</b> pela tabela por região, e oferece retirada quando a loja permitir.</span>
+      </li>
+      <li>
+        <b>Resumo</b>
+        <span>Última tela antes de pagar: itens, subtotais por loja, fretes e total geral. Aqui o comprador ainda pode voltar e alterar.</span>
+      </li>
+      <li>
+        <b>Criação do pedido</b>
+        <span>Em <b>uma única transação</b>: cria <code>orders</code>, cria um <code>sub_orders</code> por loja, grava <code>order_items</code> com <i>snapshot</i> de título e preço, e reserva o estoque com bloqueio na linha da variação. O pedido nasce em <code>aguardando_pagamento</code>. A requisição carrega chave de idempotência para que duplo clique não crie dois pedidos.</span>
+      </li>
+      <li>
+        <b>Pagamento</b>
+        <span>Os dados do cartão são capturados pelo componente do gateway <b>no navegador</b> e trocados por um <i>token</i>; a API recebe apenas esse <i>token</i> e solicita a cobrança. No Pix, o gateway devolve o código para pagamento. Nenhum dado de cartão passa pelo servidor da aplicação.</span>
+      </li>
+      <li>
+        <b>Confirmação assíncrona</b>
+        <span>O gateway chama o <i>webhook</i>. O sistema <b>verifica a assinatura</b>, checa se aquele evento já foi processado (idempotência) e, sendo aprovação, confirma o pagamento, efetiva a baixa de estoque, calcula a comissão de cada subpedido e passa tudo para <code>pago</code>. Recusa mantém o pedido aberto para nova tentativa.</span>
+      </li>
+      <li>
+        <b>Notificação</b>
+        <span>Enfileira e-mail e push: confirmação para o comprador, aviso de venda para cada vendedor envolvido. A falha de envio não desfaz o pedido.</span>
+      </li>
+      <li>
+        <b>Separação e envio</b>
+        <span>Cada vendedor vê o próprio subpedido, marca <code>em_separacao</code> e depois <code>enviado</code>, informando o código de rastreio. Cada transição notifica o comprador.</span>
+      </li>
+      <li>
+        <b>Entrega e avaliação</b>
+        <span>O comprador confirma o recebimento, ou o sistema marca como entregue após o prazo. Só então ele é convidado a avaliar — e só pode avaliar o que efetivamente comprou e recebeu.</span>
+      </li>
+    </ol>
+
+    <h3>7.2 Fluxo de expiração de reserva</h3>
+    <p>Pedido criado e não pago mantém estoque preso. Uma tarefa agendada roda a cada 5 minutos, busca pedidos em <code>aguardando_pagamento</code> criados há mais de 30 minutos, cancela cada um e devolve o estoque — sempre em transação, e sempre verificando antes se o pagamento não foi aprovado no intervalo, para não cancelar venda paga.</p>
+
+    <h3>7.3 Fluxo de publicação de produto</h3>
+    <ol class="steps">
+      <li><b>Solicitação de loja</b><span>O comprador pede abertura de loja informando nome, documento, descrição e dados bancários. A loja nasce em <code>pendente</code>.</span></li>
+      <li><b>Aprovação</b><span>O administrador analisa e aprova ou reprova com justificativa. O vendedor é notificado por e-mail. Só loja aprovada publica.</span></li>
+      <li><b>Cadastro do produto</b><span>Título, descrição, categoria, imagens, preço e estoque. Salvo como <code>rascunho</code>, quantas vezes for preciso.</span></li>
+      <li><b>Variações</b><span>Se houver tamanho ou cor, cada combinação recebe SKU, preço e estoque próprios.</span></li>
+      <li><b>Publicação</b><span>O sistema valida os campos obrigatórios e o estado da loja. Aprovado, o produto entra na vitrine, ganha <i>slug</i> e passa a constar no <code>sitemap.xml</code>.</span></li>
+    </ol>
+
+    <h3>7.4 Fluxo de devolução e reembolso</h3>
+    <ol class="steps">
+      <li><b>Solicitação</b><span>O comprador abre devolução em até 7 dias da entrega, com motivo. O subpedido vai para <code>devolucao_solicitada</code>.</span></li>
+      <li><b>Análise</b><span>O vendedor aceita ou recusa. Recusa sem acordo escala para o administrador, que decide.</span></li>
+      <li><b>Estorno</b><span>Aceita a devolução, o sistema solicita o estorno ao gateway, aguarda a confirmação por <i>webhook</i>, devolve o estoque e reverte a comissão.</span></li>
+      <li><b>Encerramento</b><span>O subpedido vai para <code>reembolsado</code> e ambas as partes são notificadas. O histórico registra quem decidiu e por quê.</span></li>
+    </ol>
+
+    <h3>7.5 Fluxo de autenticação e renovação de sessão</h3>
+    <p>No login, o servidor valida as credenciais, emite um <i>access token</i> de 15 minutos e um <i>refresh token</i> de 7 dias, guardando o <i>hash</i> deste último. Quando o <i>access token</i> expira, o cliente chama <code>/auth/refresh</code>: o servidor confere o <i>hash</i>, <b>invalida o token usado</b> e emite um par novo. Se um <i>refresh token</i> já invalidado for reapresentado, isso indica roubo — todas as sessões daquele usuário são derrubadas e ele é notificado.</p>
+
+    <!-- ============================================================ -->
+    <h2 id="consideracoes"><span class="num">Seção 08</span>Considerações finais</h2>
+
+    <h3>8.1 Ordem de desenvolvimento sugerida</h3>
+    <p>A sequência é deliberada: cada sprint entrega algo demonstrável e desbloqueia a seguinte. Não comece pelo painel administrativo — ele só faz sentido quando existem dados reais para exibir.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Sprint</th><th>Entrega</th><th>Demonstração possível ao final</th></tr></thead>
+        <tbody>
+          <tr><td><b>0</b></td><td>Projeto Nest, Docker, MySQL, TypeORM com migrações, CI, <i>layout</i> base SSR</td><td>Aplicação sobe e responde <code>/health</code></td></tr>
+          <tr><td><b>1</b></td><td>RF-01 — cadastro, login, JWT, <i>guards</i> e papéis</td><td>Login funcionando e rota protegida por papel</td></tr>
+          <tr><td><b>2</b></td><td>RF-09 parcial + RF-02 — loja, categorias, produtos e variações</td><td>Vendedor publica produto e ele aparece na vitrine</td></tr>
+          <tr><td><b>3</b></td><td>Catálogo público SSR: listagem, busca, filtros e página de produto</td><td>Navegação completa, com SEO e URL amigável</td></tr>
+          <tr><td><b>4</b></td><td>RF-03 — carrinho persistente com mesclagem no login</td><td>Carrinho com itens de duas lojas diferentes</td></tr>
+          <tr><td><b>5</b></td><td>RF-04 e RF-05 — checkout, gateway, <i>webhook</i>, pedidos e subpedidos</td><td><b>Uma venda real do início ao fim</b></td></tr>
+          <tr><td><b>6</b></td><td>Painel do vendedor: subpedidos, envio, rastreio e estoque</td><td>Ciclo operacional completo do vendedor</td></tr>
+          <tr><td><b>7</b></td><td>RF-06 e RF-08 — avaliações, moderação, e-mail e push</td><td>Comprador avalia; vendedor recebe push</td></tr>
+          <tr><td><b>8</b></td><td>RF-07 — painel administrativo e relatórios</td><td>GMV, comissão e curva ABC com dados reais</td></tr>
+          <tr><td><b>9</b></td><td>PWA, SEO, desempenho, teste de carga e endurecimento de segurança</td><td>Lighthouse ≥ 90 e aplicação instalável</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note note--ok">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+        A sprint 5 é o marco do projeto
+      </div>
+      <p>Ao fim da sprint 5 existe um sistema que <strong>vende</strong>. Tudo antes disso é fundação; tudo depois é melhoria. Se o prazo apertar, corte funcionalidades das sprints 6 a 9 — nunca antecipe painel ou relatório sacrificando o checkout.</p>
+    </div>
+
+    <h3>8.2 Riscos e mitigações</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Risco</th><th>Impacto</th><th>Mitigação</th></tr></thead>
+        <tbody>
+          <tr><td>Integração com o gateway mais lenta que o previsto</td><td>Alto — trava a sprint 5</td><td>Criar conta de teste e validar <i>webhook</i> já na sprint 1, com <code>ngrok</code> em ambiente local</td></tr>
+          <tr><td>Estoque negativo por concorrência</td><td>Alto — venda do que não existe</td><td>Transação com bloqueio pessimista e teste automatizado de compra simultânea</td></tr>
+          <tr><td><i>Webhook</i> duplicado ou fora de ordem</td><td>Alto — pedido confirmado duas vezes</td><td>Idempotência por identificador de evento e registro do <i>payload</i> bruto</td></tr>
+          <tr><td>Escopo crescendo (cupom, chat, frete real)</td><td>Alto — MVP não termina</td><td>Lista de fora de escopo assinada; novidade entra na fase 2</td></tr>
+          <tr><td>Vazamento entre lojas por consulta sem filtro</td><td>Crítico — falha de segurança</td><td><i>Guard</i> de dono do recurso e teste automatizado tentando acessar dado de outra loja</td></tr>
+          <tr><td>SSR e PWA deixados para o fim</td><td>Médio — retrabalho de arquitetura</td><td>Renderizar as páginas públicas no servidor desde a sprint 3</td></tr>
+          <tr><td>Migrações divergindo entre ambientes</td><td>Médio — implantação quebra</td><td><code>synchronize: false</code> desde o início e migração versionada em todo <i>merge</i></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>8.3 Definição de pronto</h3>
+    <p>Uma funcionalidade só é considerada concluída quando:</p>
+    <ul>
+      <li>atende a todos os critérios de aceite do requisito correspondente;</li>
+      <li>tem teste de unidade nas regras de negócio e teste de integração no caminho principal;</li>
+      <li>valida a entrada por DTO e trata os erros com o formato padrão da API;</li>
+      <li>respeita a matriz de permissões, com teste que tenta acessar recurso de outro dono;</li>
+      <li>funciona em tela de 360 px de largura;</li>
+      <li>passou por revisão de código em <i>pull request</i> aprovado;</li>
+      <li>está documentada no Swagger, quando for rota de API.</li>
+    </ul>
+
+    <h3>8.4 Decisões que precisam ser tomadas antes de começar</h3>
+    <ol>
+      <li><b>Nest com <i>views</i> SSR ou Nest + Next.js?</b> Muda a arquitetura inteira do <i>front</i> e o número de aplicações a implantar. Ver a nota da seção 6.2.</li>
+      <li><b>Qual gateway de pagamento?</b> Mercado Pago tem Pix nativo e documentação em português; Stripe tem ferramentas de teste melhores mas Pix limitado no Brasil.</li>
+      <li><b>Onde hospedar?</b> Railway e Render são mais simples para projeto acadêmico; AWS dá mais controle e mais trabalho.</li>
+      <li><b>O frete será tabela fixa ou integração real?</b> O MVP assume tabela por região.</li>
+      <li><b>Haverá Redis desde o início?</b> Se a fila entrar na sprint 1, e-mail e push já nascem assíncronos; se não, será preciso refatorar depois.</li>
+    </ol>
+
+    <div class="note note--ok">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+        O passo a passo está em outro documento
+      </div>
+      <p>Esta especificação diz <strong>o quê</strong> construir. O <a href="plano-desenvolvimento-mercado.html">Plano de desenvolvimento em 10 etapas</a> diz <strong>em que ordem</strong> e <strong>como</strong>, com passos, comandos e critérios de conclusão de cada etapa. O estado atual do trabalho fica em <code>PROGRESSO.md</code>.</p>
+    </div>
+
+    <h3>8.5 Encerramento</h3>
+    <p>Este documento descreve <b>o que</b> construir e <b>por que</b> cada decisão foi tomada — não substitui o código nem o desenho de telas. Ele deve ser tratado como documento vivo: toda mudança de escopo acordada é registrada aqui, com data, antes de virar código. Requisito alterado no meio do desenvolvimento e não registrado é a origem mais comum de divergência entre o que foi combinado e o que foi entregue.</p>
+    <p>A recomendação prática é começar pela sprint 0 ainda esta semana, mesmo sem todas as decisões da seção 8.4 fechadas: subir Nest, MySQL e a primeira migração não depende de nenhuma delas, e coloca o projeto em movimento com uma base sobre a qual as demais escolhas se apoiam.</p>
+
+    <div class="panel panel--case">
+      <div class="panel__hd">
+        <span class="panel__k">Primeiro commit sugerido</span>
+        <h3 style="margin:6px 0 0">Da pasta vazia ao <code>/health</code> respondendo</h3>
+      </div>
+      <div class="panel__bd">
+        <p style="margin-bottom:0"><code>nest new mercado</code> → configurar TypeORM com <code>synchronize: false</code> → primeira migração criando <code>users</code> → <i>endpoint</i> <code>GET /health</code> verificando a conexão com o banco → <code>docker-compose</code> com aplicação e MySQL → <i>workflow</i> de CI rodando <i>lint</i> e testes. Com isso pronto na branch <code>dev</code>, a sprint 1 começa sem atrito.</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<nav class="pager">
+  <a href="projeto-saas-mercado.html">
+    <span class="k">Contexto</span>
+    <span class="t">Estudo original do projeto Mercado</span>
+  </a>
+  <a class="next" href="projetos.html">
+    <span class="k">Voltar</span>
+    <span class="t">Todas as opções de projeto</span>
+  </a>
+</nav>
+
+<footer class="sitefoot">
+  <p>Projeto Mercado · Documento de especificação v1.0 — <span data-year></span></p>
+  <p>Documento vivo: registre aqui toda mudança de escopo antes de implementá-la.</p>
+</footer>
+
+<script src="aulas/assets/app.js"></script>
+</body>
+</html>
