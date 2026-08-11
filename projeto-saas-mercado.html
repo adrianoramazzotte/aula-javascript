@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opção 2 · SaaS para Mercado — Projetos em JavaScript</title>
+<meta name="description" content="Descritivo completo do projeto SaaS para Mercado: plataforma multiempresa para minimercados com frente de caixa, estoque por lote e validade, precificação por margem e curva ABC.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@100..900&family=JetBrains+Mono:wght@400..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="aulas/assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23f7df1e'/><text x='50' y='69' font-family='Helvetica,Arial' font-size='46' font-weight='bold' text-anchor='middle' fill='%2314171d'>JS</text></svg>">
+</head>
+<body>
+
+<div id="progress"></div>
+
+<header class="topbar">
+  <div class="topbar__in">
+    <a class="brand" href="projetos.html">
+      <span class="brand__mark">JS</span>
+      <span class="brand__txt">
+        <span class="brand__t">Desenvolvimento em JavaScript</span>
+        <span class="brand__s">Projetos práticos</span>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="aulas/index.html">Aulas</a>
+      <a href="projetos.html">Projetos</a>
+      <a href="projeto-controle-moveleiro.html">Moveleiro</a>
+      <a href="projeto-saas-mercado.html" aria-current="page">Mercado</a>
+      <a href="projeto-saas-panificadora.html">Panificadora</a>
+      <a href="guia-ambiente-e-ia.html">Guia</a>
+    </nav>
+    <button class="iconbtn" data-theme-toggle type="button" aria-label="Alternar tema claro/escuro" title="Alternar tema">
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="hero__eyebrow">Opção 2</span>
+  <h1>SaaS para Mercado</h1>
+  <p class="hero__lede">Uma plataforma multiempresa para minimercados e mercearias de bairro: frente de caixa rápida, estoque controlado por lote e validade, preço formado por margem e os relatórios que mostram onde o dinheiro está parado na prateleira.</p>
+  <div class="hero__meta">
+    <span class="chip chip--accent">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 1.9"/></svg>
+      MVP em 6 sprints
+    </span>
+    <span class="chip">PDV</span>
+    <span class="chip">Estoque FEFO</span>
+    <span class="chip">Multi-tenant</span>
+    <span class="chip">Curva ABC</span>
+  </div>
+</section>
+<div class="rule"><hr></div>
+
+<div class="shell">
+  <aside class="toc">
+    <div class="toc__t">Neste documento</div>
+    <ol></ol>
+  </aside>
+
+  <main class="doc">
+
+    <h2 id="problema"><span class="num">Seção 01</span>O problema</h2>
+    <p class="lead">O minimercado ganha centavos por item e perde reais por descuido. A margem líquida do setor gira em torno de 2% — não há espaço para produto vencido nem para gôndola vazia.</p>
+    <p>O dono do mercadinho conhece o próprio negócio de cor, mas conhece de memória. Ele sabe que arroz sai bem, sabe que o iogurte encalha, sabe quem deve fiado. O que ele não sabe é <em>quanto</em>: quantos pacotes de arroz venderam na terça, quantos litros de leite venceram no mês passado, qual fornecedor entrega mais caro que o concorrente. Sem número, a compra é feita pelo susto — compra-se demais do que acabou de faltar e de menos do que vende devagar e constante.</p>
+    <p>No caixa, o problema é outro: velocidade. Uma fila de seis pessoas às 18h faz o cliente largar o carrinho e ir ao concorrente. Sistemas de PDV tradicionais custam caro, exigem instalação, travam quando a internet cai e cobram por terminal. O mercadinho acaba com uma calculadora e um caderno — e a diferença de caixa aparece no fim do dia sem explicação.</p>
+
+    <div class="note note--danger">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        As três perdas do varejo alimentar
+      </div>
+      <p><strong>Ruptura</strong> — o produto acabou e o cliente foi embora; a venda perdida não aparece em relatório nenhum. <strong>Quebra</strong> — o produto venceu na prateleira e virou prejuízo integral. <strong>Diferença de inventário</strong> — o estoque diz 40 e existem 31; a diferença some sem registro. Um sistema que ataca essas três já paga a própria assinatura.</p>
+    </div>
+
+    <h2 id="publico"><span class="num">Seção 02</span>Público-alvo e personas</h2>
+    <p>O produto atende <strong>minimercados de bairro com 1 a 3 lojas</strong>, faturamento mensal entre R$ 80 mil e R$ 500 mil, de dois a seis funcionários e um ou dois caixas por loja. É o comerciante que hoje não usa sistema nenhum ou usa um sistema antigo que ninguém consegue mais atualizar.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>Persona</th><th>Momento de uso</th><th>O que precisa em um clique</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Dona Cida, operadora de caixa</b><br><span style="color:var(--muted)">o dia inteiro no PDV</span></td>
+            <td>Fila às 18h, leitor na mão</td>
+            <td>Passar o produto, receber, dar troco — sem esperar tela carregar</td>
+          </tr>
+          <tr>
+            <td><b>Wesley, repositor</b><br><span style="color:var(--muted)">gôndola e estoque</span></td>
+            <td>Manhã, conferindo prateleira com o celular</td>
+            <td>Ver o que vence esta semana e o que está abaixo do mínimo</td>
+          </tr>
+          <tr>
+            <td><b>Seu Nilson, dono</b><br><span style="color:var(--muted)">compra e precifica</span></td>
+            <td>Terça de manhã, com o representante na frente</td>
+            <td>Saber o giro e a margem do item antes de fechar o pedido</td>
+          </tr>
+          <tr>
+            <td><b>Equipe do SaaS</b><br><span style="color:var(--muted)">quem opera a plataforma</span></td>
+            <td>Suporte e faturamento</td>
+            <td>Ver quais lojas estão ativas, quantos PDVs e quem está inadimplente</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="escopo"><span class="num">Seção 03</span>Escopo do MVP</h2>
+    <p>O MVP resolve o ciclo <em>comprar → precificar → vender → repor</em>. É um ciclo maior que o das outras duas opções, e por isso o roadmap é mais longo.</p>
+
+    <h3>Entra na primeira versão</h3>
+    <ul>
+      <li><strong>Cadastro de produtos com código de barras (GTIN/EAN)</strong>, unidade de venda (unidade, quilo) e estoque mínimo.</li>
+      <li><strong>Frente de caixa</strong> — leitura por código, quantidade, cancelamento de item, subtotal e formas de pagamento (dinheiro, cartão, Pix), com cálculo de troco.</li>
+      <li><strong>Estoque por lote e validade</strong>, com baixa automática pela regra FEFO.</li>
+      <li><strong>Entrada de compra</strong> — lançamento de nota do fornecedor, atualização do custo médio e sugestão de preço pela margem.</li>
+      <li><strong>Alertas</strong> — produtos abaixo do mínimo e lotes vencendo em até 15 dias.</li>
+      <li><strong>Fechamento de caixa</strong> — abertura, sangria, suprimento e conferência de diferença.</li>
+      <li><strong>Relatórios</strong> — vendas por período, curva ABC de produtos e ranking de margem.</li>
+      <li><strong>Multi-tenant</strong> — cada mercado enxerga somente os próprios dados; assinatura por loja e por PDV.</li>
+    </ul>
+
+    <h3>Fica fora do MVP</h3>
+    <ul>
+      <li>Emissão de cupom fiscal (NFC-e/SAT). Exige certificado digital, homologação estadual e não se resolve em uma sprint — entra na fase 2, com integração a um emissor especializado.</li>
+      <li>Balança integrada por protocolo serial: o MVP aceita digitação do peso e leitura de etiqueta de balança.</li>
+      <li>E-commerce, delivery e aplicativo do cliente final.</li>
+      <li>Programa de fidelidade e clube de descontos.</li>
+      <li>Conciliação bancária automática das maquininhas.</li>
+    </ul>
+
+    <div class="note note--info">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg>
+        Sobre a emissão fiscal
+      </div>
+      <p>Vender sem emitir documento fiscal não é opção legal para o cliente. A estratégia do MVP é <strong>registrar a venda corretamente desde o primeiro dia</strong> e deixar a emissão para uma integração — quando ela chegar, todo o histórico já está estruturado para ser transmitido. Um sistema que registra mal a venda nunca conseguirá emitir bem o documento.</p>
+    </div>
+
+    <h2 id="modelo"><span class="num">Seção 04</span>Modelo de dados</h2>
+    <p>Duas decisões de modelagem definem este projeto. A primeira: <strong>toda entidade carrega o identificador do tenant</strong> — sem isso, uma consulta esquecida mostra o estoque de um mercado para outro. A segunda: <strong>estoque não é um número no produto, é a soma dos lotes</strong> — sem lote não há controle de validade, e sem validade não há controle de quebra.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>Entidade</th><th>Atributos principais</th><th>Relacionamento</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Tenant</b></td><td>razão social, CNPJ, plano, situação da assinatura</td><td>raiz de todos os dados</td></tr>
+          <tr><td><b>Loja</b></td><td>nome, endereço, quantidade de PDVs</td><td>pertence a Tenant</td></tr>
+          <tr><td><b>Usuario</b></td><td>nome, perfil (caixa, repositor, gerente, dono), PIN de acesso</td><td>pertence a Loja</td></tr>
+          <tr><td><b>Produto</b></td><td>GTIN, descrição, unidade, categoria, custo médio, preço, margem alvo, estoque mínimo</td><td>pertence a Tenant · possui Lotes</td></tr>
+          <tr><td><b>Lote</b></td><td>número, quantidade, validade, custo de entrada</td><td>pertence a Produto</td></tr>
+          <tr><td><b>Fornecedor</b></td><td>nome, CNPJ, prazo de entrega, condição de pagamento</td><td>pertence a Tenant · fornece Compras</td></tr>
+          <tr><td><b>Compra</b></td><td>número da nota, data, valor total</td><td>de Fornecedor · gera Lotes</td></tr>
+          <tr><td><b>Venda</b></td><td>número, data e hora, operador, PDV, total, situação</td><td>de Loja · possui Itens e Pagamentos</td></tr>
+          <tr><td><b>ItemVenda</b></td><td>produto, quantidade, preço praticado, custo no momento</td><td>pertence a Venda · baixa Lotes</td></tr>
+          <tr><td><b>Pagamento</b></td><td>forma, valor, troco</td><td>pertence a Venda</td></tr>
+          <tr><td><b>Caixa</b></td><td>abertura, fundo de troco, sangrias, fechamento, diferença</td><td>de Loja · agrupa Vendas do turno</td></tr>
+          <tr><td><b>Promocao</b></td><td>tipo, produto, preço promocional, vigência</td><td>aplicada em ItemVenda</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Note o campo <span class="kw">custo no momento</span> em <strong>ItemVenda</strong>: guardar o custo na hora da venda é o que permite calcular a margem histórica corretamente. Se o relatório usar o custo atual do produto, uma alteração de preço reescreve o lucro do mês passado.</p>
+
+    <div class="snippet" data-numbers="on" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">modelo-produto.js</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">const produto = {
+    tenant: "mercado-sao-jorge",
+    gtin: "7891000100103",
+    descricao: "Leite integral 1L",
+    unidade: "UN",
+    categoria: "Laticinios",
+    custoMedio: 4.18,
+    preco: 5.99,
+    margemAlvo: 0.28,
+    estoqueMinimo: 24,
+    lotes: [
+        { numero: "L2408", quantidade: 12, validade: "2026-08-14", custo: 4.05 },
+        { numero: "L2411", quantidade: 30, validade: "2026-09-02", custo: 4.18 },
+        { numero: "L2415", quantidade: 48, validade: "2026-09-27", custo: 4.25 }
+    ]
+}
+
+// Estoque nunca e um campo: e a soma dos lotes
+function estoqueTotal(p) {
+    let total = 0
+    p.lotes.forEach(function (l) { total = total + l.quantidade })
+    return total
+}
+
+const total = estoqueTotal(produto)
+
+console.log(produto.descricao + " (" + produto.gtin + ")")
+console.log("Estoque total: " + total + " " + produto.unidade)
+console.log("Estoque minimo: " + produto.estoqueMinimo)
+
+if (total &lt; produto.estoqueMinimo) {
+    console.log("ALERTA: abaixo do minimo, repor " + (produto.estoqueMinimo - total) + " unidades")
+} else {
+    console.log("Estoque saudavel — sobra de " + (total - produto.estoqueMinimo) + " unidades")
+}</code></pre>
+    </div>
+
+    <h2 id="regras"><span class="num">Seção 05</span>Regras de negócio</h2>
+
+    <h3>Regra 1 — Preço formado pela margem</h3>
+    <p>Como no projeto moveleiro, o erro clássico é confundir markup com margem. No varejo alimentar, onde a margem líquida é de 2%, esse erro não é acadêmico: é a diferença entre lucro e prejuízo.</p>
+
+    <div class="snippet" data-numbers="on" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">regra-preco.js</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">function precoPelaMargem(custo, margemAlvo) {
+    if (margemAlvo &lt;= 0 || margemAlvo &gt;= 1) { return custo }
+    return custo / (1 - margemAlvo)
+}
+
+function margemReal(preco, custo) {
+    if (preco &lt;= 0) { return 0 }
+    return (preco - custo) / preco
+}
+
+function arredondarVarejo(valor) {
+    // O varejo trabalha com precos terminados em 9: 5,99 em vez de 5,97
+    const inteiro = Math.floor(valor)
+    const centavos = valor - inteiro
+    if (centavos &lt;= 0.49) { return inteiro + 0.49 }
+    if (centavos &lt;= 0.79) { return inteiro + 0.79 }
+    return inteiro + 0.99
+}
+
+const catalogo = [
+    { descricao: "Leite integral 1L",   custo: 4.18, margem: 0.28, precoAtual: 5.99 },
+    { descricao: "Arroz tipo 1 5kg",    custo: 22.40, margem: 0.14, precoAtual: 24.90 },
+    { descricao: "Refrigerante 2L",     custo: 6.10, margem: 0.32, precoAtual: 7.49 },
+    { descricao: "Sabao em po 1kg",     custo: 11.80, margem: 0.25, precoAtual: 13.90 }
+]
+
+catalogo.forEach(function (p) {
+    const sugerido = arredondarVarejo(precoPelaMargem(p.custo, p.margem))
+    const real = margemReal(p.precoAtual, p.custo)
+
+    console.log(p.descricao)
+    console.log("  preco atual R$ " + p.precoAtual.toFixed(2) +
+                " -> margem real " + (real * 100).toFixed(1) + "%")
+    console.log("  preco sugerido R$ " + sugerido.toFixed(2) +
+                " (alvo " + (p.margem * 100).toFixed(0) + "%)")
+
+    if (real &lt; p.margem - 0.03) {
+        console.log("  ATENCAO: margem " + ((p.margem - real) * 100).toFixed(1) + " pontos abaixo do alvo")
+    }
+})</code></pre>
+    </div>
+
+    <h3>Regra 2 — Baixa de estoque em FEFO</h3>
+    <p><strong>FEFO</strong> — <em>first expired, first out</em> — significa que sai primeiro o lote que vence primeiro, e não o que chegou primeiro. É a regra que evita a quebra: o iogurte do fundo da geladeira precisa sair antes do que acabou de chegar. A venda pode consumir mais de um lote.</p>
+
+    <div class="snippet" data-numbers="on" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">regra-fefo.js</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">function baixarEstoqueFEFO(lotes, quantidade) {
+    // Ordena por validade crescente: vence antes, sai antes
+    const fila = lotes.slice().sort(function (a, b) {
+        return a.validade &lt; b.validade ? -1 : 1
+    })
+
+    let restante = quantidade
+    let custoTotal = 0
+    const consumo = []
+
+    for (let i = 0; i &lt; fila.length; i++) {
+        if (restante === 0) { break }
+
+        const lote = fila[i]
+        const retirar = Math.min(lote.quantidade, restante)
+
+        if (retirar &gt; 0) {
+            lote.quantidade = lote.quantidade - retirar
+            restante = restante - retirar
+            custoTotal = custoTotal + retirar * lote.custo
+            consumo.push({ lote: lote.numero, qtd: retirar, validade: lote.validade })
+        }
+    }
+
+    return {
+        atendido: quantidade - restante,
+        faltou: restante,
+        custoTotal: custoTotal,
+        consumo: consumo
+    }
+}
+
+const lotes = [
+    { numero: "L2415", quantidade: 48, validade: "2026-09-27", custo: 4.25 },
+    { numero: "L2408", quantidade: 12, validade: "2026-08-14", custo: 4.05 },
+    { numero: "L2411", quantidade: 30, validade: "2026-09-02", custo: 4.18 }
+]
+
+const r = baixarEstoqueFEFO(lotes, 20)
+
+console.log("Venda de 20 unidades de leite")
+r.consumo.forEach(function (c) {
+    console.log("  lote " + c.lote + " (vence " + c.validade + "): " + c.qtd + " un")
+})
+console.log("Atendido: " + r.atendido + " | Faltou: " + r.faltou)
+console.log("Custo da venda: R$ " + r.custoTotal.toFixed(2))
+console.log("---")
+console.log("Saldo por lote apos a venda:")
+lotes.forEach(function (l) { console.log("  " + l.numero + ": " + l.quantidade + " un") })</code></pre>
+    </div>
+
+    <h3>Regra 3 — Alerta de validade e sugestão de liquidação</h3>
+    <p>Produto que vence em poucos dias tem duas saídas: vender com desconto ou virar prejuízo integral. A regra classifica os lotes por urgência e sugere o desconto que ainda preserva o custo.</p>
+
+    <div class="snippet" data-numbers="on" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">regra-validade.js</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">function diasAteVencer(validade, hoje) {
+    const umDia = 1000 * 60 * 60 * 24
+    return Math.round((new Date(validade) - new Date(hoje)) / umDia)
+}
+
+function classificarLote(dias) {
+    if (dias &lt; 0)   { return "VENCIDO" }
+    if (dias &lt;= 3)  { return "CRITICO" }
+    if (dias &lt;= 15) { return "ATENCAO" }
+    return "NORMAL"
+}
+
+function descontoSugerido(situacao, preco, custo) {
+    if (situacao === "VENCIDO") { return null }
+
+    let desconto = 0
+    if (situacao === "CRITICO") { desconto = 0.40 }
+    else if (situacao === "ATENCAO") { desconto = 0.15 }
+    else { return null }
+
+    let precoPromo = preco * (1 - desconto)
+
+    // Nunca abaixo do custo: melhor girar no minimo do que dar prejuizo
+    if (precoPromo &lt; custo) { precoPromo = custo }
+
+    return precoPromo
+}
+
+const hoje = "2026-08-11"
+const estoque = [
+    { produto: "Iogurte morango 170g", qtd: 18, validade: "2026-08-12", preco: 3.49, custo: 2.30 },
+    { produto: "Leite integral 1L",    qtd: 12, validade: "2026-08-14", preco: 5.99, custo: 4.05 },
+    { produto: "Presunto fatiado 200g", qtd: 6, validade: "2026-08-08", preco: 12.90, custo: 9.10 },
+    { produto: "Arroz tipo 1 5kg",     qtd: 40, validade: "2027-02-20", preco: 24.90, custo: 22.40 }
+]
+
+estoque.forEach(function (item) {
+    const dias = diasAteVencer(item.validade, hoje)
+    const situacao = classificarLote(dias)
+    const promo = descontoSugerido(situacao, item.preco, item.custo)
+
+    let linha = "[" + situacao + "] " + item.produto + " — " + dias + " dia(s)"
+
+    if (situacao === "VENCIDO") {
+        linha = linha + " | RETIRAR DA GONDOLA, perda de R$ " + (item.qtd * item.custo).toFixed(2)
+    } else if (promo !== null) {
+        linha = linha + " | liquidar a R$ " + promo.toFixed(2) + " (de R$ " + item.preco.toFixed(2) + ")"
+    }
+
+    console.log(linha)
+})</code></pre>
+    </div>
+
+    <h3>Regra 4 — Curva ABC</h3>
+    <p>A curva ABC ordena os produtos pela participação no faturamento e revela onde está o negócio de verdade: cerca de 20% dos itens costumam responder por 80% das vendas. Esses itens <strong>nunca</strong> podem faltar; os da faixa C podem ter o espaço de gôndola revisto.</p>
+
+    <div class="snippet" data-numbers="on" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">regra-curva-abc.js</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">function curvaABC(vendas) {
+    const ordenado = vendas.slice().sort(function (a, b) {
+        return b.faturamento - a.faturamento
+    })
+
+    let total = 0
+    ordenado.forEach(function (v) { total = total + v.faturamento })
+
+    let acumulado = 0
+    const resultado = []
+
+    for (let i = 0; i &lt; ordenado.length; i++) {
+        acumulado = acumulado + ordenado[i].faturamento
+        const percAcumulado = acumulado / total
+
+        let classe = "C"
+        if (percAcumulado &lt;= 0.80) { classe = "A" }
+        else if (percAcumulado &lt;= 0.95) { classe = "B" }
+
+        resultado.push({
+            produto: ordenado[i].produto,
+            faturamento: ordenado[i].faturamento,
+            participacao: ordenado[i].faturamento / total,
+            acumulado: percAcumulado,
+            classe: classe
+        })
+    }
+
+    return resultado
+}
+
+const vendasDoMes = [
+    { produto: "Refrigerante 2L",    faturamento: 8420.00 },
+    { produto: "Arroz tipo 1 5kg",   faturamento: 7180.50 },
+    { produto: "Leite integral 1L",  faturamento: 6310.00 },
+    { produto: "Cerveja lata 350ml", faturamento: 5890.00 },
+    { produto: "Sabao em po 1kg",    faturamento: 2140.00 },
+    { produto: "Papel higienico",    faturamento: 1780.00 },
+    { produto: "Achocolatado 400g",  faturamento: 940.00 },
+    { produto: "Molho de tomate",    faturamento: 610.00 },
+    { produto: "Palito de dente",    faturamento: 90.00 }
+]
+
+curvaABC(vendasDoMes).forEach(function (r) {
+    console.log(r.classe + " | " + r.produto +
+                " | R$ " + r.faturamento.toFixed(2) +
+                " | " + (r.participacao * 100).toFixed(1) + "%" +
+                " | acumulado " + (r.acumulado * 100).toFixed(1) + "%")
+})
+
+console.log("---")
+console.log("Itens classe A nao podem faltar: ruptura neles derruba o faturamento do mes.")</code></pre>
+    </div>
+
+    <h2 id="prototipo"><span class="num">Seção 06</span>Protótipo básico</h2>
+    <p>O protótipo é uma frente de caixa funcional com catálogo, carrinho, pagamento e baixa de estoque em FEFO. Ao fechar a venda, o estoque é debitado lote a lote e o painel lateral mostra os alertas de validade e de estoque mínimo recalculados na hora.</p>
+
+    <div class="panel">
+      <div class="panel__hd">
+        <span class="panel__k">Executar</span>
+        <h3 style="margin:6px 0 0">Frente de caixa</h3>
+      </div>
+      <div class="panel__bd">
+        <p>Abra em <a href="projetos/saas-mercado/index.html">projetos/saas-mercado/index.html</a>. Digite o código de barras ou clique no produto do catálogo — o comportamento simula o leitor.</p>
+        <p style="margin-bottom:0"><a class="btn btn--primary" href="projetos/saas-mercado/index.html">
+          Abrir o protótipo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a></p>
+      </div>
+    </div>
+
+    <h3>O que o protótipo demonstra</h3>
+    <ul>
+      <li>Registro de venda por código de barras, com quantidade e cancelamento de item.</li>
+      <li>Baixa FEFO real: a venda mostra de quais lotes saiu cada unidade.</li>
+      <li>Cálculo de troco e conferência do total recebido.</li>
+      <li>Alertas de validade e de estoque mínimo atualizados a cada venda.</li>
+      <li>Resumo do turno com faturamento, custo das vendas e margem apurada.</li>
+    </ul>
+
+    <h3>O que ele deliberadamente não faz</h3>
+    <ul>
+      <li>Não emite documento fiscal — a venda é apenas registrada.</li>
+      <li>Não separa tenants: o protótipo simula uma única loja.</li>
+      <li>Não sincroniza entre dispositivos; tudo vive no navegador que o abriu.</li>
+    </ul>
+
+    <h2 id="arquitetura"><span class="num">Seção 07</span>Arquitetura e tecnologia</h2>
+    <p>Duas exigências moldam a arquitetura: <strong>o caixa não pode parar quando a internet cai</strong> e <strong>os dados de um mercado jamais podem vazar para outro</strong>.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Camada</th><th>Escolha</th><th>Por quê</th></tr></thead>
+        <tbody>
+          <tr><td>PDV</td><td>Aplicação web instalável (PWA) com <code>IndexedDB</code> e <em>service worker</em></td><td>Funciona sem rede e atualiza sozinha, sem visita técnica em cada loja</td></tr>
+          <tr><td>Retaguarda</td><td>React ou Vue</td><td>Telas de cadastro, compras e relatórios com muito estado e filtro</td></tr>
+          <tr><td>API</td><td>Node.js com Express, autenticação por token</td><td>Mesma linguagem do front; o token carrega o tenant do usuário</td></tr>
+          <tr><td>Banco</td><td>PostgreSQL com <em>schema</em> por tenant</td><td>Isolamento forte sem manter um servidor por cliente; backup e restauração por loja</td></tr>
+          <tr><td>Sincronização</td><td>Fila de vendas pendentes com identificador único gerado no PDV</td><td>Evita venda duplicada quando a rede volta e o envio é repetido</td></tr>
+          <tr><td>Cobrança</td><td>Assinatura mensal por loja + adicional por PDV</td><td>Preço acompanha o tamanho do cliente e o custo de suporte</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note note--warn">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        Isolamento entre tenants
+      </div>
+      <p>Em um SaaS, a falha mais grave não é o sistema cair — é o cliente A enxergar o dado do cliente B. Toda consulta precisa do filtro de tenant aplicado <strong>na camada de acesso a dados</strong>, nunca dependendo de o programador lembrar de escrevê-lo na tela. Um <code>WHERE</code> esquecido em uma única consulta compromete a plataforma inteira.</p>
+    </div>
+
+    <h2 id="roadmap"><span class="num">Seção 08</span>Roadmap</h2>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Sprint</th><th>Entrega</th><th>Resultado visível para o cliente</th></tr></thead>
+        <tbody>
+          <tr><td><b>1</b></td><td>Cadastro de produtos e importação de catálogo por planilha</td><td>O mercado vê os próprios produtos no sistema</td></tr>
+          <tr><td><b>2</b></td><td>Frente de caixa com pagamento e troco</td><td>A operadora registra a venda sem calculadora</td></tr>
+          <tr><td><b>3</b></td><td>Estoque por lote, entrada de compra e baixa FEFO</td><td>O saldo da prateleira aparece na tela</td></tr>
+          <tr><td><b>4</b></td><td>Alertas de validade e de mínimo</td><td>Cai a quebra por vencimento</td></tr>
+          <tr><td><b>5</b></td><td>Fechamento de caixa e relatórios de venda</td><td>Fim do dia fecha com diferença explicada</td></tr>
+          <tr><td><b>6</b></td><td>Multi-tenant, planos e painel do assinante</td><td>A plataforma passa a vender para o segundo cliente</td></tr>
+          <tr><td>7 <span style="color:var(--muted)">(fase 2)</span></td><td>Emissão fiscal integrada</td><td>Cupom fiscal sai do próprio PDV</td></tr>
+          <tr><td>8 <span style="color:var(--muted)">(fase 2)</span></td><td>Sugestão de compra por giro e cobertura de estoque</td><td>O pedido ao representante vem pronto</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="riscos"><span class="num">Seção 09</span>Riscos e indicadores</h2>
+
+    <h3>Riscos</h3>
+    <ul>
+      <li><strong>Cadastro inicial travando a adoção.</strong> Digitar 3 mil produtos é inviável. Mitigação: importação por planilha e base pública de GTIN para preencher a descrição a partir do código de barras.</li>
+      <li><strong>Lentidão no caixa.</strong> Se a leitura demorar mais de 300 ms, a operadora abandona o sistema. Mitigação: catálogo inteiro em memória no PDV, busca por índice de código.</li>
+      <li><strong>Divergência de estoque em pouco tempo.</strong> Toda saída não registrada (consumo interno, quebra, furto) corrói a confiança no saldo. Mitigação: telas rápidas de quebra e consumo interno, e inventário cíclico por categoria.</li>
+      <li><strong>Concorrência estabelecida.</strong> O mercado de PDV é maduro. Mitigação: preço acessível, instalação em minutos e foco em validade e margem — justamente onde o concorrente barato não entrega.</li>
+    </ul>
+
+    <h3>Indicadores de sucesso</h3>
+    <ul>
+      <li>Tempo médio por item no caixa, abaixo de 2 segundos.</li>
+      <li>Percentual de quebra por vencimento sobre o faturamento, com meta de queda pela metade em três meses.</li>
+      <li>Itens classe A em ruptura no dia, tendendo a zero.</li>
+      <li>Diferença de caixa por turno, em valor absoluto.</li>
+      <li>Retenção de assinantes ao final de 6 meses.</li>
+    </ul>
+
+    <div class="panel panel--case">
+      <div class="panel__hd">
+        <span class="panel__k">Exercício de projeto</span>
+        <h3 style="margin:6px 0 0">Sugestão de compra por cobertura</h3>
+      </div>
+      <div class="panel__bd">
+        <p>Some as vendas dos últimos 30 dias de cada produto, calcule a média diária e divida o estoque atual por essa média: o resultado é a <em>cobertura</em> em dias. Se a cobertura for menor que o prazo de entrega do fornecedor mais uma folga de segurança, o item entra na lista de compra com a quantidade sugerida. É um exercício de arrays, laços e média — e é a funcionalidade que o dono do mercado mais pede depois que começa a usar o sistema.</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<nav class="pager">
+  <a href="projeto-controle-moveleiro.html">
+    <span class="k">Anterior</span>
+    <span class="t">Opção 1 · Controle Moveleiro</span>
+  </a>
+  <a class="next" href="projeto-saas-panificadora.html">
+    <span class="k">Próximo</span>
+    <span class="t">Opção 3 · SaaS para Panificadora</span>
+  </a>
+</nav>
+
+<footer class="sitefoot">
+  <p>Desenvolvimento em JavaScript · Opção de projeto 2 — <span data-year></span></p>
+</footer>
+
+<script src="aulas/assets/app.js"></script>
+</body>
+</html>

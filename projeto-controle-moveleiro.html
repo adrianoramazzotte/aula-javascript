@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opção 1 · Controle Moveleiro — Projetos em JavaScript</title>
+<meta name="description" content="Descritivo completo do projeto Controle Moveleiro: sistema de gestão para marcenarias de móveis planejados, com orçamento por ambiente, consumo de chapas, ordem de produção e controle financeiro.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@100..900&family=JetBrains+Mono:wght@400..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="aulas/assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23f7df1e'/><text x='50' y='69' font-family='Helvetica,Arial' font-size='46' font-weight='bold' text-anchor='middle' fill='%2314171d'>JS</text></svg>">
+</head>
+<body>
+
+<div id="progress"></div>
+
+<header class="topbar">
+  <div class="topbar__in">
+    <a class="brand" href="projetos.html">
+      <span class="brand__mark">JS</span>
+      <span class="brand__txt">
+        <span class="brand__t">Desenvolvimento em JavaScript</span>
+        <span class="brand__s">Projetos práticos</span>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="aulas/index.html">Aulas</a>
+      <a href="projetos.html">Projetos</a>
+      <a href="projeto-controle-moveleiro.html" aria-current="page">Moveleiro</a>
+      <a href="projeto-saas-mercado.html">Mercado</a>
+      <a href="projeto-saas-panificadora.html">Panificadora</a>
+      <a href="guia-ambiente-e-ia.html">Guia</a>
+    </nav>
+    <button class="iconbtn" data-theme-toggle type="button" aria-label="Alternar tema claro/escuro" title="Alternar tema">
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="hero__eyebrow">Opção 1</span>
+  <h1>Controle Moveleiro</h1>
+  <p class="hero__lede">Um sistema de gestão para marcenarias de móveis planejados, que acompanha o pedido do primeiro esboço no cliente até a assistência técnica — passando pelo orçamento, pelo consumo de chapa, pela ordem de produção e pelas parcelas a receber.</p>
+  <div class="hero__meta">
+    <span class="chip chip--accent">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 1.9"/></svg>
+      MVP em 4 sprints
+    </span>
+    <span class="chip">Orçamento</span>
+    <span class="chip">Produção</span>
+    <span class="chip">Estoque</span>
+    <span class="chip">Financeiro</span>
+  </div>
+</section>
+<div class="rule"><hr></div>
+
+<div class="shell">
+  <aside class="toc">
+    <div class="toc__t">Neste documento</div>
+    <ol></ol>
+  </aside>
+
+  <main class="doc">
+
+    <h2 id="problema"><span class="num">Seção 01</span>O problema</h2>
+    <p class="lead">A marcenaria de móveis planejados vive de um cálculo que quase ninguém faz direito: quanto custa o móvel antes de ele existir.</p>
+    <p>O ciclo típico começa com o vendedor medindo o ambiente na casa do cliente, anotando as medidas em um caderno e prometendo “um orçamento até amanhã”. Esse orçamento sai de uma planilha herdada de outro vendedor, com preços de chapa desatualizados e um percentual de mão de obra estimado no olho. Se o preço sai alto, perde-se a venda; se sai baixo, fecha-se a venda e perde-se dinheiro em cada peça produzida.</p>
+    <p>Depois de fechado, o pedido vira um desenho e uma lista de peças que circula pelo galpão em folha impressa. O marceneiro corta, descobre que faltou uma corrediça, para a produção, alguém vai à loja de ferragens. A chapa que sobrou vira encosto de porta e ninguém sabe que ela existia. No fim do mês, o dono percebe que faturou bem e não tem caixa — mas não consegue apontar qual pedido consumiu o lucro.</p>
+
+    <div class="note note--danger">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        O custo do improviso
+      </div>
+      <p>Três perdas se repetem em praticamente toda marcenaria pequena: <strong>orçamento sem custo real</strong> (margem que existe só na planilha), <strong>desperdício de chapa</strong> (entre 10% e 25% de sobra evitável) e <strong>retrabalho por medida errada</strong> (a peça já cortada não serve). Nenhuma delas exige tecnologia sofisticada para ser reduzida — exige registro.</p>
+    </div>
+
+    <h2 id="publico"><span class="num">Seção 02</span>Público-alvo e personas</h2>
+    <p>O sistema é desenhado para a <strong>marcenaria de 5 a 30 funcionários</strong> que produz móveis sob medida — cozinhas, dormitórios, closets, lojas — e que hoje se organiza com planilha, WhatsApp e caderno.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>Persona</th><th>Momento de uso</th><th>O que precisa em um clique</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Rita, vendedora</b><br><span style="color:var(--muted)">visita clientes</span></td>
+            <td>Na casa do cliente, com o celular na mão</td>
+            <td>Lançar as medidas do ambiente e ver o preço na hora, com o desconto máximo que pode dar</td>
+          </tr>
+          <tr>
+            <td><b>Jonas, projetista</b><br><span style="color:var(--muted)">desenha e detalha</span></td>
+            <td>No escritório, depois do pedido fechado</td>
+            <td>Transformar o orçamento em lista de peças e ver quantas chapas serão consumidas</td>
+          </tr>
+          <tr>
+            <td><b>Seu Antônio, marceneiro</b><br><span style="color:var(--muted)">chão de fábrica</span></td>
+            <td>No galpão, com as mãos sujas, em um monitor fixo</td>
+            <td>Ver a próxima ordem de produção e marcar a etapa como concluída</td>
+          </tr>
+          <tr>
+            <td><b>Márcia, dona</b><br><span style="color:var(--muted)">decide preço e compra</span></td>
+            <td>Fim do dia, no escritório</td>
+            <td>Saber a margem real de cada pedido entregue e o que vence esta semana</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="escopo"><span class="num">Seção 03</span>Escopo do MVP</h2>
+    <p>O MVP resolve o ciclo <em>orçar → produzir → receber</em>. Tudo que não pertence a esse ciclo fica para depois, mesmo sendo desejável.</p>
+
+    <h3>Entra na primeira versão</h3>
+    <ul>
+      <li><strong>Cadastros básicos</strong> — clientes, materiais (chapas e fitas de borda), ferragens e serviços.</li>
+      <li><strong>Orçamento por ambiente</strong> — cada ambiente recebe área de chapa, ferragens e horas de mão de obra; o sistema calcula custo, aplica margem e devolve o preço.</li>
+      <li><strong>Regra de desconto</strong> — limite por perfil de usuário, bloqueando venda abaixo do custo.</li>
+      <li><strong>Consumo estimado de chapas</strong> — quantidade de chapas inteiras a comprar, considerando perda de recorte.</li>
+      <li><strong>Ordem de produção</strong> — o orçamento aprovado vira ordem com etapas em quadro: corte, usinagem, fita de borda, montagem, entrega.</li>
+      <li><strong>Estoque simples</strong> — entrada por compra, saída por ordem de produção, alerta de mínimo.</li>
+      <li><strong>Parcelas a receber</strong> — plano de pagamento do pedido e baixa manual.</li>
+    </ul>
+
+    <h3>Fica fora do MVP</h3>
+    <ul>
+      <li>Desenho 3D ou integração com Promob/SketchUp — o projetista continua desenhando onde já desenha.</li>
+      <li>Plano de corte otimizado real (algoritmo de <em>bin packing</em> bidimensional). O MVP estima área; a otimização vem na fase 2.</li>
+      <li>Emissão fiscal (NF-e, NFS-e) e integração contábil.</li>
+      <li>Folha de pagamento e ponto dos funcionários.</li>
+      <li>Aplicativo nativo — a versão móvel é a mesma página, responsiva.</li>
+    </ul>
+
+    <div class="note note--ok">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+        Critério de corte
+      </div>
+      <p>Uma funcionalidade só entra no MVP se a marcenaria <strong>já perde dinheiro por não tê-la</strong>. Desenho 3D é encantamento de venda; orçamento com custo real é sobrevivência.</p>
+    </div>
+
+    <h2 id="modelo"><span class="num">Seção 04</span>Modelo de dados</h2>
+    <p>Onze entidades sustentam o MVP. O relacionamento central é <span class="kw">Cliente → Projeto → Ambiente → Item</span>: um cliente tem vários projetos (a cozinha em janeiro, o quarto em junho), cada projeto tem ambientes e cada ambiente tem itens — os módulos, as ferragens e os serviços que compõem o preço.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>Entidade</th><th>Atributos principais</th><th>Relacionamento</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Cliente</b></td><td>nome, documento, telefone, endereço de entrega</td><td>possui muitos Projetos</td></tr>
+          <tr><td><b>Projeto</b></td><td>número, data, vendedor, status, desconto, valor final</td><td>pertence a Cliente · possui Ambientes</td></tr>
+          <tr><td><b>Ambiente</b></td><td>nome (cozinha, dormitório), área de chapa em m², observações</td><td>pertence a Projeto · possui Itens</td></tr>
+          <tr><td><b>Item</b></td><td>tipo (material, ferragem, serviço), quantidade, preço unitário</td><td>pertence a Ambiente · referencia Material/Ferragem</td></tr>
+          <tr><td><b>Material</b></td><td>descrição, espessura, cor, preço por chapa, dimensões da chapa</td><td>usado por Itens · movimenta Estoque</td></tr>
+          <tr><td><b>Ferragem</b></td><td>descrição, unidade, preço unitário, estoque mínimo</td><td>usada por Itens · movimenta Estoque</td></tr>
+          <tr><td><b>OrdemProducao</b></td><td>número, data de início, prazo, situação</td><td>gerada a partir de Projeto aprovado</td></tr>
+          <tr><td><b>Etapa</b></td><td>nome, responsável, início, término, situação</td><td>pertence a OrdemProducao</td></tr>
+          <tr><td><b>MovimentoEstoque</b></td><td>tipo (entrada/saída), quantidade, data, origem</td><td>referencia Material ou Ferragem</td></tr>
+          <tr><td><b>Parcela</b></td><td>número, vencimento, valor, situação, data de baixa</td><td>pertence a Projeto</td></tr>
+          <tr><td><b>Usuario</b></td><td>nome, perfil (vendedor, projetista, produção, gestor), desconto máximo</td><td>registra ações no sistema</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Em JavaScript, um projeto completo é representado por um objeto com arrays aninhados — exatamente as estruturas estudadas no Módulo 4:</p>
+
+    <div class="snippet" data-numbers="on" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">modelo-projeto.js</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">const projeto = {
+    numero: 2026001,
+    cliente: "Marcos Andrade",
+    vendedor: "Rita",
+    status: "orcamento",
+    ambientes: [
+        {
+            nome: "Cozinha",
+            areaChapa: 24.5,          // m2 de chapa a serem usinados
+            material: "MDF Branco 18mm",
+            ferragens: [
+                { descricao: "Corredica telescopica 450mm", qtd: 8,  preco: 34.90 },
+                { descricao: "Dobradica caneco 35mm",       qtd: 26, preco: 6.40 },
+                { descricao: "Puxador aluminio 160mm",      qtd: 14, preco: 12.00 }
+            ],
+            horasMaoDeObra: 38
+        },
+        {
+            nome: "Dormitorio casal",
+            areaChapa: 18.2,
+            material: "MDF Amendoa 18mm",
+            ferragens: [
+                { descricao: "Corredica telescopica 500mm", qtd: 6,  preco: 38.50 },
+                { descricao: "Dobradica caneco 35mm",       qtd: 18, preco: 6.40 }
+            ],
+            horasMaoDeObra: 26
+        }
+    ]
+}
+
+// Percorrendo a estrutura para conferir o que foi lancado
+let areaTotal = 0
+let pecasFerragem = 0
+
+projeto.ambientes.forEach(function (ambiente) {
+    areaTotal = areaTotal + ambiente.areaChapa
+    ambiente.ferragens.forEach(function (f) {
+        pecasFerragem = pecasFerragem + f.qtd
+    })
+    console.log(ambiente.nome + ": " + ambiente.areaChapa + " m2 de " + ambiente.material)
+})
+
+console.log("---")
+console.log("Area total de chapa: " + areaTotal.toFixed(2) + " m2")
+console.log("Pecas de ferragem: " + pecasFerragem)</code></pre>
+    </div>
+
+    <h2 id="regras"><span class="num">Seção 05</span>Regras de negócio</h2>
+    <p>As regras abaixo são o núcleo do sistema. Escritas como funções puras — entram números, sai um número —, elas podem ser testadas isoladamente e reaproveitadas na tela, no relatório e na API.</p>
+
+    <h3>Regra 1 — Consumo de chapas</h3>
+    <p>A chapa padrão de MDF mede 2,75 m × 1,85 m, o que dá <strong>5,0875 m²</strong> de área bruta. Nenhuma marcenaria aproveita 100% dessa área: o recorte gera sobras inevitáveis. O MVP adota um <strong>índice de perda</strong> configurável por marcenaria (padrão de 15%) e sempre arredonda para cima, porque não se compra meia chapa.</p>
+
+    <div class="snippet" data-numbers="on" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">regra-chapas.js</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">const CHAPA_LARGURA = 2.75   // metros
+const CHAPA_ALTURA  = 1.85   // metros
+const PERDA_PADRAO  = 0.15   // 15% de recorte nao aproveitavel
+
+function areaUtilDaChapa(perda) {
+    const areaBruta = CHAPA_LARGURA * CHAPA_ALTURA
+    return areaBruta * (1 - perda)
+}
+
+function chapasNecessarias(areaProjetada, perda) {
+    if (areaProjetada &lt;= 0) { return 0 }
+    const util = areaUtilDaChapa(perda)
+    return Math.ceil(areaProjetada / util)
+}
+
+// Conferindo com o projeto da secao anterior: 24.5 + 18.2 = 42.7 m2
+const area = 42.7
+
+console.log("Area bruta da chapa: " + (CHAPA_LARGURA * CHAPA_ALTURA).toFixed(4) + " m2")
+console.log("Area util com 15% de perda: " + areaUtilDaChapa(PERDA_PADRAO).toFixed(4) + " m2")
+console.log("Chapas necessarias: " + chapasNecessarias(area, PERDA_PADRAO))
+console.log("Com perda de 8%:    " + chapasNecessarias(area, 0.08))
+console.log("Em um projeto so, a diferenca some no arredondamento.")
+console.log("---")
+
+// O ganho aparece no volume do ano: 20 projetos como esse
+const areaAno = area * 20
+
+const com15 = chapasNecessarias(areaAno, 0.15)
+const com08 = chapasNecessarias(areaAno, 0.08)
+const PRECO_CHAPA = 289.00
+
+console.log("20 projetos = " + areaAno.toFixed(1) + " m2 de chapa")
+console.log("Com perda de 15%: " + com15 + " chapas")
+console.log("Com perda de 8%:  " + com08 + " chapas")
+console.log("Economia: " + (com15 - com08) + " chapas = R$ " +
+            ((com15 - com08) * PRECO_CHAPA).toFixed(2) + " por ano")</code></pre>
+    </div>
+
+    <h3>Regra 2 — Formação do preço</h3>
+    <p>O custo do ambiente soma três parcelas: material (chapas × preço da chapa), ferragens (quantidade × preço) e mão de obra (horas × valor da hora). Sobre o custo aplica-se a margem — e aqui mora o erro mais comum da marcenaria: <strong>somar a margem ao custo em vez de dividir</strong>.</p>
+
+    <div class="note note--warn">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        Markup não é margem
+      </div>
+      <p>Custo de R$ 1.000 com “40% de lucro” calculado como <code>1000 × 1,40 = 1.400</code> gera margem real de <strong>28,6%</strong>, não de 40%. Para margem de 40% sobre a venda, a conta é <code>1000 ÷ (1 − 0,40) = 1.666,67</code>. A diferença de R$ 266 por ambiente é o lucro que a marcenaria acha que tem e não tem.</p>
+    </div>
+
+    <div class="snippet" data-numbers="on" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">regra-preco.js</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">function custoDoAmbiente(ambiente, precoChapa, valorHora, perda) {
+    const areaUtil = (2.75 * 1.85) * (1 - perda)
+    const chapas = Math.ceil(ambiente.areaChapa / areaUtil)
+
+    const custoMaterial = chapas * precoChapa
+
+    let custoFerragens = 0
+    for (let i = 0; i &lt; ambiente.ferragens.length; i++) {
+        custoFerragens = custoFerragens + ambiente.ferragens[i].qtd * ambiente.ferragens[i].preco
+    }
+
+    const custoMaoDeObra = ambiente.horasMaoDeObra * valorHora
+
+    return {
+        chapas: chapas,
+        material: custoMaterial,
+        ferragens: custoFerragens,
+        maoDeObra: custoMaoDeObra,
+        total: custoMaterial + custoFerragens + custoMaoDeObra
+    }
+}
+
+function precoDeVenda(custo, margem) {
+    if (margem &lt;= 0 || margem &gt;= 1) { return custo }
+    return custo / (1 - margem)
+}
+
+const cozinha = {
+    nome: "Cozinha",
+    areaChapa: 24.5,
+    horasMaoDeObra: 38,
+    ferragens: [
+        { descricao: "Corredica", qtd: 8,  preco: 34.90 },
+        { descricao: "Dobradica", qtd: 26, preco: 6.40 },
+        { descricao: "Puxador",   qtd: 14, preco: 12.00 }
+    ]
+}
+
+const c = custoDoAmbiente(cozinha, 289.00, 45.00, 0.15)
+
+console.log("Chapas: " + c.chapas)
+console.log("Material:    R$ " + c.material.toFixed(2))
+console.log("Ferragens:   R$ " + c.ferragens.toFixed(2))
+console.log("Mao de obra: R$ " + c.maoDeObra.toFixed(2))
+console.log("CUSTO TOTAL: R$ " + c.total.toFixed(2))
+console.log("---")
+console.log("Preco correto (margem 40%):  R$ " + precoDeVenda(c.total, 0.40).toFixed(2))
+console.log("Preco errado (markup 1,40x): R$ " + (c.total * 1.40).toFixed(2))</code></pre>
+    </div>
+
+    <h3>Regra 3 — Limite de desconto por perfil</h3>
+    <p>O desconto é a válvula de escape do vendedor e o ralo do lucro. Cada perfil tem um teto, e nenhum desconto pode levar o preço abaixo do custo — nem com autorização do gestor.</p>
+
+    <div class="snippet" data-numbers="on" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">regra-desconto.js</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">const TETO_DESCONTO = {
+    vendedor: 0.05,
+    gerente:  0.12,
+    gestor:   0.20
+}
+
+function validarDesconto(perfil, desconto, precoTabela, custo) {
+    const teto = TETO_DESCONTO[perfil]
+
+    if (teto === undefined) {
+        return { ok: false, motivo: "Perfil desconhecido: " + perfil }
+    }
+    if (desconto &gt; teto) {
+        return { ok: false, motivo: "Desconto acima do teto do perfil (" + (teto * 100) + "%)" }
+    }
+
+    const precoFinal = precoTabela * (1 - desconto)
+    if (precoFinal &lt; custo) {
+        return { ok: false, motivo: "Preco final abaixo do custo — venda bloqueada" }
+    }
+
+    const margemFinal = (precoFinal - custo) / precoFinal
+    return { ok: true, precoFinal: precoFinal, margemFinal: margemFinal }
+}
+
+const custo = 5386.20
+const tabela = 8977.00
+
+const testes = [
+    { perfil: "vendedor", desconto: 0.05 },
+    { perfil: "vendedor", desconto: 0.10 },
+    { perfil: "gestor",   desconto: 0.20 },
+    { perfil: "gestor",   desconto: 0.45 },
+    { perfil: "estagiario", desconto: 0.02 }
+]
+
+testes.forEach(function (t) {
+    const r = validarDesconto(t.perfil, t.desconto, tabela, custo)
+    if (r.ok) {
+        console.log("OK  " + t.perfil + " " + (t.desconto * 100) + "% -> R$ " +
+                    r.precoFinal.toFixed(2) + " (margem " + (r.margemFinal * 100).toFixed(1) + "%)")
+    } else {
+        console.log("NAO " + t.perfil + " " + (t.desconto * 100) + "% -> " + r.motivo)
+    }
+})</code></pre>
+    </div>
+
+    <h3>Regra 4 — Fluxo da ordem de produção</h3>
+    <p>A ordem percorre cinco etapas em sequência, e cada uma só começa quando a anterior termina. A regra impede que alguém marque “montagem concluída” antes do corte — erro comum quando o quadro é um mural de papel.</p>
+
+    <div class="snippet" data-numbers="on" data-run>
+      <div class="snippet__bar">
+        <div class="snippet__dots"><i></i><i></i><i></i></div>
+        <span class="snippet__name">regra-producao.js</span>
+        <div class="snippet__acts"></div>
+      </div>
+      <pre><code data-lang="js">const ETAPAS = ["Corte", "Usinagem", "Fita de borda", "Montagem", "Entrega"]
+
+function criarOrdem(numero) {
+    const etapas = []
+    for (let i = 0; i &lt; ETAPAS.length; i++) {
+        etapas.push({ nome: ETAPAS[i], concluida: false })
+    }
+    return { numero: numero, etapas: etapas }
+}
+
+function concluirEtapa(ordem, nomeEtapa) {
+    const indice = ETAPAS.indexOf(nomeEtapa)
+
+    if (indice === -1) { return "Etapa inexistente: " + nomeEtapa }
+    if (ordem.etapas[indice].concluida) { return "Etapa ja concluida: " + nomeEtapa }
+
+    if (indice &gt; 0 &amp;&amp; !ordem.etapas[indice - 1].concluida) {
+        return "Bloqueado: conclua antes a etapa " + ETAPAS[indice - 1]
+    }
+
+    ordem.etapas[indice].concluida = true
+    return "Concluida: " + nomeEtapa
+}
+
+function progresso(ordem) {
+    let feitas = 0
+    ordem.etapas.forEach(function (e) { if (e.concluida) { feitas++ } })
+    return Math.round((feitas / ordem.etapas.length) * 100)
+}
+
+const ordem = criarOrdem(2026001)
+
+console.log(concluirEtapa(ordem, "Montagem"))
+console.log(concluirEtapa(ordem, "Corte"))
+console.log(concluirEtapa(ordem, "Usinagem"))
+console.log(concluirEtapa(ordem, "Corte"))
+console.log(concluirEtapa(ordem, "Fita de borda"))
+console.log(concluirEtapa(ordem, "Montagem"))
+console.log("---")
+console.log("Progresso da ordem: " + progresso(ordem) + "%")</code></pre>
+    </div>
+
+    <h2 id="prototipo"><span class="num">Seção 06</span>Protótipo básico</h2>
+    <p>O protótipo reúne as regras acima em uma aplicação de página única: cadastre ambientes com área, material e ferragens, e o sistema devolve o consumo de chapas, o custo aberto por componente, o preço com margem e o efeito do desconto na margem final. Os projetos ficam salvos no navegador.</p>
+
+    <div class="panel">
+      <div class="panel__hd">
+        <span class="panel__k">Executar</span>
+        <h3 style="margin:6px 0 0">Orçamento de ambientes</h3>
+      </div>
+      <div class="panel__bd">
+        <p>Abra em <a href="projetos/controle-moveleiro/index.html">projetos/controle-moveleiro/index.html</a>. Nenhuma instalação: o arquivo roda direto no navegador.</p>
+        <p style="margin-bottom:0"><a class="btn btn--primary" href="projetos/controle-moveleiro/index.html">
+          Abrir o protótipo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a></p>
+      </div>
+    </div>
+
+    <h3>O que o protótipo demonstra</h3>
+    <ul>
+      <li>Cálculo de chapas com índice de perda ajustável — mostrando ao cliente quanto vale reduzir o desperdício.</li>
+      <li>Custo aberto por componente, que é o argumento de venda quando o cliente pede desconto.</li>
+      <li>Bloqueio de desconto conforme o perfil, com a margem final recalculada a cada alteração.</li>
+      <li>Persistência local dos orçamentos e acompanhamento da ordem de produção com as etapas encadeadas.</li>
+    </ul>
+
+    <h3>O que ele deliberadamente não faz</h3>
+    <ul>
+      <li>Não valida quem é o usuário: o perfil é escolhido em um seletor, sem senha.</li>
+      <li>Não guarda dados fora do navegador — outro computador não vê os mesmos orçamentos.</li>
+      <li>Não otimiza o corte peça a peça, apenas estima área.</li>
+    </ul>
+
+    <h2 id="arquitetura"><span class="num">Seção 07</span>Arquitetura e tecnologia</h2>
+    <p>A marcenaria trabalha em galpão, e galpão tem internet ruim. Isso define a arquitetura: <strong>o sistema precisa funcionar com a rede caída</strong>, ao menos para consultar ordens e marcar etapas.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Camada</th><th>Escolha</th><th>Por quê</th></tr></thead>
+        <tbody>
+          <tr><td>Interface</td><td>HTML, CSS e JavaScript puro no MVP; React ou Vue quando a tela de projeto crescer</td><td>Sem build, a marcenaria roda o sistema abrindo um arquivo — reduz a barreira do piloto</td></tr>
+          <tr><td>Persistência local</td><td><code>localStorage</code> no protótipo, <code>IndexedDB</code> em produção</td><td>IndexedDB aguenta o volume de ordens e permite consulta offline</td></tr>
+          <tr><td>Servidor</td><td>Node.js com Express</td><td>Mesma linguagem do front — a equipe aprende um ecossistema só</td></tr>
+          <tr><td>Banco de dados</td><td>PostgreSQL</td><td>Relacionamentos fortes entre projeto, ambiente e item; consultas de margem por período</td></tr>
+          <tr><td>Sincronização</td><td>Fila de operações pendentes enviada quando a conexão volta</td><td>O marceneiro marca a etapa mesmo sem rede</td></tr>
+          <tr><td>Implantação</td><td>Instância única por marcenaria (single-tenant)</td><td>Cliente pequeno costuma exigir “meu sistema, meus dados” — e simplifica o backup</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="roadmap"><span class="num">Seção 08</span>Roadmap</h2>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Sprint</th><th>Entrega</th><th>Resultado visível para o cliente</th></tr></thead>
+        <tbody>
+          <tr><td><b>1</b></td><td>Cadastros e orçamento por ambiente</td><td>O vendedor para de usar a planilha</td></tr>
+          <tr><td><b>2</b></td><td>Aprovação, ordem de produção e quadro de etapas</td><td>O galpão sabe o que produzir sem folha impressa</td></tr>
+          <tr><td><b>3</b></td><td>Estoque de chapas e ferragens com alerta de mínimo</td><td>Acaba a parada de produção por falta de corrediça</td></tr>
+          <tr><td><b>4</b></td><td>Parcelas a receber e relatório de margem por pedido</td><td>A dona vê qual pedido deu lucro</td></tr>
+          <tr><td>5 <span style="color:var(--muted)">(fase 2)</span></td><td>Plano de corte otimizado</td><td>Perda de chapa cai de 15% para menos de 10%</td></tr>
+          <tr><td>6 <span style="color:var(--muted)">(fase 2)</span></td><td>Assistência técnica e pós-venda</td><td>Chamado de garantia deixa de se perder no WhatsApp</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="riscos"><span class="num">Seção 09</span>Riscos e indicadores</h2>
+
+    <h3>Riscos</h3>
+    <ul>
+      <li><strong>Cadastro incompleto de preços.</strong> Se a marcenaria não mantiver o preço da chapa atualizado, o orçamento erra igual à planilha. Mitigação: tela de atualização em massa e aviso quando o preço tiver mais de 30 dias.</li>
+      <li><strong>Rejeição do chão de fábrica.</strong> Marceneiro não gosta de digitar. Mitigação: tela de produção com botões grandes, uma ação por etapa, monitor fixo no galpão.</li>
+      <li><strong>Área de chapa lançada no olho.</strong> A precisão do orçamento depende de quem mede. Mitigação: biblioteca de módulos padrão (armário de 60 cm, gaveteiro de 40 cm) com área pré-calculada.</li>
+    </ul>
+
+    <h3>Indicadores de sucesso</h3>
+    <ul>
+      <li>Tempo entre a visita e a entrega do orçamento: de 1 dia para menos de 1 hora.</li>
+      <li>Margem real média dos pedidos entregues, comparada à margem orçada — desvio abaixo de 5 pontos.</li>
+      <li>Percentual de perda de chapa apurado por pedido.</li>
+      <li>Número de paradas de produção por falta de material no mês.</li>
+    </ul>
+
+    <div class="panel panel--case">
+      <div class="panel__hd">
+        <span class="panel__k">Exercício de projeto</span>
+        <h3 style="margin:6px 0 0">A biblioteca de módulos padrão</h3>
+      </div>
+      <div class="panel__bd">
+        <p>Estenda o protótipo com um catálogo de módulos prontos — armário aéreo 60×70, gaveteiro 40×80, torre quente — cada um com área de chapa e ferragens já definidas. O vendedor monta a cozinha escolhendo módulos, e a área deixa de ser digitada. Use um array de objetos, uma função que soma os módulos escolhidos e as mesmas regras de custo já implementadas.</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<nav class="pager">
+  <a href="projetos.html">
+    <span class="k">Anterior</span>
+    <span class="t">Todas as opções de projeto</span>
+  </a>
+  <a class="next" href="projeto-saas-mercado.html">
+    <span class="k">Próximo</span>
+    <span class="t">Opção 2 · SaaS para Mercado</span>
+  </a>
+</nav>
+
+<footer class="sitefoot">
+  <p>Desenvolvimento em JavaScript · Opção de projeto 1 — <span data-year></span></p>
+</footer>
+
+<script src="aulas/assets/app.js"></script>
+</body>
+</html>

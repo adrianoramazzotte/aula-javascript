@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opções de desenvolvimento — Três projetos em JavaScript</title>
+<meta name="description" content="Três opções de projeto prático para a disciplina de Desenvolvimento em JavaScript: controle moveleiro, SaaS para mercado e SaaS para panificadora. Escopo, modelo de dados, regras de negócio e protótipo executável de cada um.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@100..900&family=JetBrains+Mono:wght@400..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="aulas/assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23f7df1e'/><text x='50' y='69' font-family='Helvetica,Arial' font-size='46' font-weight='bold' text-anchor='middle' fill='%2314171d'>JS</text></svg>">
+</head>
+<body>
+
+<div id="progress"></div>
+
+<header class="topbar">
+  <div class="topbar__in">
+    <a class="brand" href="aulas/index.html">
+      <span class="brand__mark">JS</span>
+      <span class="brand__txt">
+        <span class="brand__t">Desenvolvimento em JavaScript</span>
+        <span class="brand__s">Projetos práticos</span>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="aulas/index.html">Aulas</a>
+      <a href="projetos.html" aria-current="page">Projetos</a>
+      <a href="projeto-controle-moveleiro.html">Moveleiro</a>
+      <a href="projeto-saas-mercado.html">Mercado</a>
+      <a href="projeto-saas-panificadora.html">Panificadora</a>
+      <a href="guia-ambiente-e-ia.html">Guia</a>
+    </nav>
+    <button class="iconbtn" data-theme-toggle type="button" aria-label="Alternar tema claro/escuro" title="Alternar tema">
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<section class="cover">
+  <div class="cover__grid">
+    <div>
+      <span class="hero__eyebrow">Opções de desenvolvimento</span>
+      <h1>Três projetos para <em>colocar o JavaScript para trabalhar</em></h1>
+      <p class="cover__lede">Terminada a Unidade 1, o conteúdo só vira competência quando resolve um problema real. Aqui estão três opções de projeto — cada uma com escopo definido, modelo de dados, regras de negócio documentadas e um protótipo básico que já roda no navegador. Escolha uma e leve até o fim.</p>
+      <div class="cover__cta">
+        <a class="btn btn--primary" href="#comparativo">
+          Comparar as três opções
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn btn--ghost" href="aulas/index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v18H6.5A2.5 2.5 0 0 0 4 19.5z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H19"/></svg>
+          Voltar às aulas
+        </a>
+      </div>
+    </div>
+
+    <div class="cover__art">
+      <div class="snippet" data-numbers="off" data-run>
+        <div class="snippet__bar">
+          <div class="snippet__dots"><i></i><i></i><i></i></div>
+          <span class="snippet__name">escolha.js</span>
+          <div class="snippet__acts"></div>
+        </div>
+        <pre><code data-lang="js">// Os três projetos usam exatamente o que a Unidade 1 ensinou:
+// variáveis, condicionais, laços, arrays, funções e objetos.
+
+const opcoes = [
+    { nome: "Controle Moveleiro",   tipo: "Desktop/local",  dificuldade: 2 },
+    { nome: "SaaS para Mercado",    tipo: "Multiempresa",   dificuldade: 3 },
+    { nome: "SaaS para Panificadora", tipo: "Multiempresa", dificuldade: 3 }
+]
+
+opcoes.forEach(function (p) {
+    let estrelas = ""
+    for (let i = 0; i < p.dificuldade; i++) { estrelas = estrelas + "*" }
+    console.log(p.nome + " [" + p.tipo + "] " + estrelas)
+})
+
+console.log("Escolha uma e desenvolva do orcamento ao relatorio.")</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="stat"><b>3</b><span>Opções de projeto</span></div>
+  <div class="stat"><b>3</b><span>Protótipos executáveis</span></div>
+  <div class="stat"><b>0</b><span>Dependências externas</span></div>
+  <div class="stat"><b>4</b><span>Sprints sugeridas</span></div>
+</section>
+
+<div class="rule"><hr></div>
+
+<section class="sectionhd">
+  <span class="hero__eyebrow">As opções</span>
+  <h2>Escolha o problema que você quer resolver</h2>
+  <p>Cada opção tem uma página própria com o descritivo completo: o problema de negócio, o escopo do MVP, as entidades do modelo de dados, as regras de cálculo em JavaScript executável, a arquitetura sugerida e o roadmap de entregas.</p>
+</section>
+
+<section class="lessons">
+  <a class="lesson" href="projeto-controle-moveleiro.html">
+    <span class="lesson__n">01</span>
+    <h3>Controle Moveleiro</h3>
+    <p>Sistema de gestão para marcenarias de móveis planejados: do orçamento por ambiente ao plano de corte da chapa e ao acompanhamento da ordem de produção.</p>
+    <div class="lesson__tags">
+      <span class="tag">orçamento</span><span class="tag">produção</span><span class="tag">plano de corte</span>
+    </div>
+    <div class="lesson__go">
+      <span class="lesson__time">Instalação única · offline</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </div>
+  </a>
+
+  <a class="lesson" href="projeto-saas-mercado.html">
+    <span class="lesson__n">02</span>
+    <h3>SaaS para Mercado</h3>
+    <p>Plataforma multiempresa para minimercados: PDV com leitura de código de barras, estoque por lote e validade, precificação por margem e curva ABC.</p>
+    <div class="lesson__tags">
+      <span class="tag">PDV</span><span class="tag">estoque FEFO</span><span class="tag">multi-tenant</span>
+    </div>
+    <div class="lesson__go">
+      <span class="lesson__time">Assinatura por loja</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </div>
+  </a>
+
+  <a class="lesson" href="projeto-saas-panificadora.html">
+    <span class="lesson__n">03</span>
+    <h3>SaaS para Panificadora</h3>
+    <p>Plataforma para padarias: ficha técnica com custo real por receita, plano de produção diário por média móvel, controle de sobra e encomendas.</p>
+    <div class="lesson__tags">
+      <span class="tag">ficha técnica</span><span class="tag">produção</span><span class="tag">encomendas</span>
+    </div>
+    <div class="lesson__go">
+      <span class="lesson__time">Assinatura por filial</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </div>
+  </a>
+</section>
+
+<div class="rule"><hr></div>
+
+<div class="shell">
+  <aside class="toc">
+    <div class="toc__t">Nesta página</div>
+    <ol></ol>
+  </aside>
+
+  <main class="doc">
+
+    <h2 id="comparativo"><span class="num">Seção 01</span>Comparativo das três opções</h2>
+    <p class="lead">As três resolvem problemas de gestão de pequenos negócios, mas exigem competências diferentes. Use a tabela para decidir com base no que você quer praticar.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Critério</th>
+            <th>Controle Moveleiro</th>
+            <th>SaaS Mercado</th>
+            <th>SaaS Panificadora</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Cliente típico</b></td>
+            <td>Marcenaria com 5 a 30 funcionários</td>
+            <td>Minimercado de bairro, 1 a 3 lojas</td>
+            <td>Padaria com produção própria</td>
+          </tr>
+          <tr>
+            <td><b>Dor central</b></td>
+            <td>Orçamento errado destrói a margem</td>
+            <td>Ruptura de gaveta e perda por validade</td>
+            <td>Sobra e falta na produção diária</td>
+          </tr>
+          <tr>
+            <td><b>Coração do sistema</b></td>
+            <td>Cálculo de orçamento e consumo de chapa</td>
+            <td>PDV rápido e baixa de estoque</td>
+            <td>Ficha técnica e previsão de produção</td>
+          </tr>
+          <tr>
+            <td><b>Modelo de entrega</b></td>
+            <td>Instalação única por marcenaria</td>
+            <td>Multi-tenant, assinatura mensal por loja</td>
+            <td>Multi-tenant, assinatura por filial</td>
+          </tr>
+          <tr>
+            <td><b>Complexidade de dados</b></td>
+            <td>Média — muitos relacionamentos</td>
+            <td>Alta — volume de transações</td>
+            <td>Média — receitas aninhadas</td>
+          </tr>
+          <tr>
+            <td><b>Desafio técnico principal</b></td>
+            <td>Algoritmo de aproveitamento de chapa</td>
+            <td>Funcionamento offline com sincronização</td>
+            <td>Previsão de demanda por média móvel</td>
+          </tr>
+          <tr>
+            <td><b>Conteúdo da Unidade 1 exercitado</b></td>
+            <td>Objetos, arrays, funções de cálculo</td>
+            <td>Laços, filtros, condicionais encadeadas</td>
+            <td>Arrays de arrays, reduções, média</td>
+          </tr>
+          <tr>
+            <td><b>Esforço estimado do MVP</b></td>
+            <td>4 sprints de 2 semanas</td>
+            <td>6 sprints de 2 semanas</td>
+            <td>5 sprints de 2 semanas</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note note--info">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg>
+        Qual escolher?
+      </div>
+      <p>Se você quer praticar <strong>lógica de cálculo</strong> e ver o resultado de cada fórmula, escolha o <strong>Controle Moveleiro</strong>. Se quer praticar <strong>volume de dados, filtros e velocidade de interface</strong>, escolha o <strong>SaaS para Mercado</strong>. Se quer praticar <strong>estruturas de dados aninhadas e estatística simples</strong>, escolha o <strong>SaaS para Panificadora</strong>.</p>
+    </div>
+
+    <h2 id="estrutura"><span class="num">Seção 02</span>Estrutura comum da documentação</h2>
+    <p>As três páginas seguem o mesmo roteiro, para que a comparação seja justa e para que o documento sirva como especificação real de projeto — o tipo de documento que se entrega a um cliente antes de escrever a primeira linha de código.</p>
+
+    <ol>
+      <li><strong>Problema e oportunidade</strong> — o que dói hoje no negócio e quanto isso custa.</li>
+      <li><strong>Público-alvo e personas</strong> — quem usa o sistema e em que momento do dia.</li>
+      <li><strong>Escopo do MVP</strong> — o que entra na primeira versão e, principalmente, o que fica de fora.</li>
+      <li><strong>Modelo de dados</strong> — entidades, atributos e relacionamentos, com exemplo em objeto JavaScript.</li>
+      <li><strong>Regras de negócio</strong> — as fórmulas e validações, escritas em código executável na própria página.</li>
+      <li><strong>Protótipo básico</strong> — uma aplicação mínima, em JavaScript puro, que já demonstra o núcleo do sistema.</li>
+      <li><strong>Arquitetura e tecnologia</strong> — como o protótipo evolui para produção.</li>
+      <li><strong>Roadmap, riscos e indicadores</strong> — o plano de entregas e como medir se deu certo.</li>
+    </ol>
+
+    <h2 id="prototipos"><span class="num">Seção 03</span>Os protótipos</h2>
+    <p>Cada projeto tem um protótipo funcional em <code>projetos/</code>, escrito em HTML, CSS e JavaScript puro — sem framework, sem build, sem instalação. Os dados ficam no <code>localStorage</code> do navegador, o que é suficiente para demonstrar as regras de negócio e insuficiente para produção (por isso o item de arquitetura em cada página).</p>
+
+    <section class="lessons">
+      <a class="lesson" href="projetos/controle-moveleiro/index.html">
+        <span class="lesson__n">▶</span>
+        <h3>Orçamento de ambientes</h3>
+        <p>Cadastre ambientes com área e material, veja o consumo de chapas, o custo e o preço final com margem e desconto.</p>
+        <div class="lesson__go"><span class="lesson__time">Protótipo 1</span></div>
+      </a>
+      <a class="lesson" href="projetos/saas-mercado/index.html">
+        <span class="lesson__n">▶</span>
+        <h3>Frente de caixa</h3>
+        <p>Registre vendas por código de barras, acompanhe a baixa de estoque em FEFO e os alertas de validade e de estoque mínimo.</p>
+        <div class="lesson__go"><span class="lesson__time">Protótipo 2</span></div>
+      </a>
+      <a class="lesson" href="projetos/saas-panificadora/index.html">
+        <span class="lesson__n">▶</span>
+        <h3>Produção do dia</h3>
+        <p>Calcule o custo de cada receita pela ficha técnica e gere o plano de produção do dia a partir do histórico de vendas.</p>
+        <div class="lesson__go"><span class="lesson__time">Protótipo 3</span></div>
+      </a>
+    </section>
+
+    <div class="note note--warn">
+      <div class="note__t">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        Protótipo não é produto
+      </div>
+      <p>Os três protótipos guardam dados apenas no navegador de quem os abre. Limpar o histórico apaga tudo, não há usuários nem permissões, e nada é validado no servidor — porque não existe servidor. Eles servem para validar as <em>regras</em> com o cliente antes de investir em infraestrutura.</p>
+    </div>
+
+    <h2 id="como-avaliar"><span class="num">Seção 04</span>Critérios de avaliação do projeto</h2>
+    <p>Independentemente da opção escolhida, um projeto bem entregue demonstra os mesmos pontos:</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>Critério</th><th>O que se espera</th><th>Peso</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Modelagem</td><td>Entidades coerentes, sem dado duplicado e sem campo inventado que ninguém preenche</td><td>20%</td></tr>
+          <tr><td>Regras de negócio</td><td>Fórmulas isoladas em funções puras, testáveis e com nome que explica o cálculo</td><td>25%</td></tr>
+          <tr><td>Código JavaScript</td><td>Uso correto de variáveis, condicionais, laços, arrays, funções e objetos</td><td>25%</td></tr>
+          <tr><td>Interface</td><td>Fluxo de uso completo, mensagens de erro claras, dado sempre visível</td><td>15%</td></tr>
+          <tr><td>Documentação</td><td>README explicando o problema, o escopo e como executar</td><td>15%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="proximo"><span class="num">Seção 05</span>Por onde começar</h2>
+    <p>Leia as três páginas antes de decidir — cada uma leva de oito a doze minutos. Depois, abra o protótipo da opção escolhida, use por cinco minutos como se fosse o dono do negócio e anote o que falta. Essa lista de faltas é o seu backlog da primeira sprint.</p>
+
+    <div class="panel panel--case">
+      <div class="panel__hd">
+        <span class="panel__k">Primeiro passo</span>
+        <h3 style="margin:6px 0 0">Escreva o problema em uma frase</h3>
+      </div>
+      <div class="panel__bd">
+        <p>Antes de qualquer código, complete esta frase sobre o negócio escolhido: <em>“Hoje, o dono de [negócio] perde [tempo ou dinheiro] porque [causa], e resolve isso com [solução atual improvisada]”</em>. Se a frase não sair, o problema ainda não está entendido — e nenhum sistema resolve um problema que ninguém sabe descrever.</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<nav class="pager">
+  <a href="aulas/index.html">
+    <span class="k">Anterior</span>
+    <span class="t">Voltar às aulas da Unidade 1</span>
+  </a>
+  <a class="next" href="projeto-controle-moveleiro.html">
+    <span class="k">Próximo</span>
+    <span class="t">Opção 1 · Controle Moveleiro</span>
+  </a>
+</nav>
+
+<footer class="sitefoot">
+  <p>Desenvolvimento em JavaScript · Opções de projeto — <span data-year></span></p>
+  <p>Documentação e protótipos elaborados como extensão prática do material da Unidade 1.</p>
+</footer>
+
+<script src="aulas/assets/app.js"></script>
+</body>
+</html>

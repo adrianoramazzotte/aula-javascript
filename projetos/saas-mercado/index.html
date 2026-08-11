@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Protótipo · SaaS para Mercado — Frente de caixa</title>
+<meta name="description" content="Protótipo funcional do projeto SaaS para Mercado: frente de caixa com baixa de estoque FEFO, alertas de validade e curva ABC.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@400..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/proto.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%232b5f9e'/><text x='50' y='70' font-family='Helvetica,Arial' font-size='52' font-weight='bold' text-anchor='middle' fill='%23fff'>S</text></svg>">
+</head>
+<body>
+
+<header class="pbar">
+  <div class="pbar__in">
+    <div>
+      <div class="pbar__t">SaaS para Mercado</div>
+      <div class="pbar__s">Protótipo · Mercado São Jorge · PDV 01</div>
+    </div>
+    <div class="pbar__sp"></div>
+    <a href="../../projeto-saas-mercado.html">← Documentação do projeto</a>
+  </div>
+</header>
+
+<div class="tabs" role="tablist">
+  <button role="tab" data-tab="caixa" aria-selected="true">Frente de caixa</button>
+  <button role="tab" data-tab="estoque" aria-selected="false">Estoque e alertas</button>
+  <button role="tab" data-tab="relatorios" aria-selected="false">Relatórios do turno</button>
+</div>
+
+<div class="wrap">
+
+  <!-- ============================ CAIXA ============================ -->
+  <section data-panel="caixa">
+    <div class="cols">
+
+      <div>
+        <div class="box">
+          <div class="box__hd">
+            <h2>Registrar item</h2>
+            <span class="pill pill--info">simula o leitor de código de barras</span>
+          </div>
+          <div class="box__bd">
+            <div class="row">
+              <div class="field">
+                <label for="pdv-codigo">Código de barras</label>
+                <input id="pdv-codigo" type="text" inputmode="numeric" placeholder="7891000100103" autocomplete="off">
+              </div>
+              <div class="field">
+                <label for="pdv-qtd">Quantidade</label>
+                <input id="pdv-qtd" type="number" min="0.001" step="0.001" value="1">
+              </div>
+            </div>
+            <div class="acts">
+              <button class="act" id="btn-add" type="button">Adicionar ao cupom</button>
+            </div>
+            <div class="msg" id="msg-pdv"></div>
+
+            <h3 class="sub">Catálogo — clique para lançar</h3>
+            <div class="grid" id="catalogo"></div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box__hd"><h2>Cupom</h2></div>
+          <div class="box__bd">
+            <div class="tbl">
+              <table>
+                <thead>
+                  <tr><th>Produto</th><th class="num">Qtd</th><th class="num">Unitário</th><th class="num">Total</th><th></th></tr>
+                </thead>
+                <tbody id="tb-cupom"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="box">
+          <div class="box__hd"><h2>Pagamento</h2></div>
+          <div class="box__bd">
+            <div class="kv"><span>Itens</span><b id="rs-itens">0</b></div>
+            <div class="kv kv--big"><span>Total</span><b id="rs-total">R$ 0,00</b></div>
+
+            <div class="field" style="margin-top:16px">
+              <label for="pg-forma">Forma de pagamento</label>
+              <select id="pg-forma">
+                <option value="dinheiro">Dinheiro</option>
+                <option value="pix">Pix</option>
+                <option value="debito">Cartão de débito</option>
+                <option value="credito">Cartão de crédito</option>
+              </select>
+            </div>
+            <div class="field" id="campo-recebido">
+              <label for="pg-recebido">Valor recebido (R$)</label>
+              <input id="pg-recebido" type="number" min="0" step="0.01" value="0">
+            </div>
+            <div class="kv"><span>Troco</span><b id="rs-troco">R$ 0,00</b></div>
+
+            <div class="acts" style="margin-top:14px">
+              <button class="act" id="btn-finalizar" type="button">Finalizar venda</button>
+              <button class="act act--ghost" id="btn-cancelar" type="button">Cancelar cupom</button>
+            </div>
+            <div class="msg" id="msg-venda"></div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box__hd"><h2>Baixa de estoque da última venda</h2></div>
+          <div class="box__bd">
+            <div id="ultima-baixa"><p class="empty">Finalize uma venda para ver de quais lotes o produto saiu.</p></div>
+            <p class="hint">A regra <b>FEFO</b> (<i>first expired, first out</i>) faz sair primeiro o lote que vence antes — é o que evita a quebra por vencimento.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================ ESTOQUE ============================ -->
+  <section data-panel="estoque" hidden>
+    <div class="box">
+      <div class="box__hd">
+        <h2>Alertas</h2>
+        <span class="pill" id="pill-alertas">0 alertas</span>
+      </div>
+      <div class="box__bd">
+        <div class="tbl">
+          <table>
+            <thead>
+              <tr><th>Situação</th><th>Produto</th><th>Lote</th><th class="num">Qtd</th><th>Validade</th><th class="num">Dias</th><th>Ação sugerida</th></tr>
+            </thead>
+            <tbody id="tb-alertas"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box__hd"><h2>Posição de estoque</h2></div>
+      <div class="box__bd">
+        <div class="tbl">
+          <table>
+            <thead>
+              <tr><th>Produto</th><th class="num">Preço</th><th class="num">Custo médio</th><th class="num">Margem</th><th class="num">Estoque</th><th class="num">Mínimo</th><th>Lotes</th></tr>
+            </thead>
+            <tbody id="tb-estoque"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ RELATÓRIOS ============================ -->
+  <section data-panel="relatorios" hidden>
+    <div class="box">
+      <div class="box__hd"><h2>Resumo do turno</h2></div>
+      <div class="box__bd">
+        <div class="stats">
+          <div class="stat"><b id="tr-vendas">0</b><span>Vendas</span></div>
+          <div class="stat"><b id="tr-fat">0,00</b><span>Faturamento</span></div>
+          <div class="stat"><b id="tr-custo">0,00</b><span>Custo das vendas</span></div>
+          <div class="stat"><b id="tr-lucro">0,00</b><span>Lucro bruto</span></div>
+          <div class="stat"><b id="tr-margem">0,0%</b><span>Margem apurada</span></div>
+          <div class="stat"><b id="tr-ticket">0,00</b><span>Ticket médio</span></div>
+        </div>
+        <p class="hint">A margem usa o custo do lote no momento da venda, não o custo atual do produto — só assim o lucro do passado não é reescrito quando o preço muda.</p>
+      </div>
+    </div>
+
+    <div class="cols cols--even">
+      <div class="box">
+        <div class="box__hd"><h2>Curva ABC do turno</h2></div>
+        <div class="box__bd">
+          <div class="tbl">
+            <table>
+              <thead>
+                <tr><th>Classe</th><th>Produto</th><th class="num">Faturamento</th><th class="num">Part.</th><th class="num">Acum.</th></tr>
+              </thead>
+              <tbody id="tb-abc"></tbody>
+            </table>
+          </div>
+          <p class="hint">Itens de classe A respondem por até 80% do faturamento: são os que nunca podem faltar na gôndola.</p>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="box__hd"><h2>Vendas registradas</h2></div>
+        <div class="box__bd">
+          <div class="tbl">
+            <table>
+              <thead>
+                <tr><th>Nº</th><th>Hora</th><th>Pagamento</th><th class="num">Itens</th><th class="num">Total</th></tr>
+              </thead>
+              <tbody id="tb-vendas"></tbody>
+            </table>
+          </div>
+          <div class="acts" style="margin-top:14px">
+            <button class="act act--danger" id="btn-reset" type="button">Reiniciar protótipo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="pfoot">
+  <p>Protótipo do projeto <b>SaaS para Mercado</b> · dados salvos apenas neste navegador · não emite documento fiscal.</p>
+  <p><a href="../../projetos.html">Todas as opções de projeto</a></p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
